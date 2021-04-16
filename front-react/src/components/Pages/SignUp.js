@@ -19,8 +19,22 @@ export default function SignUp() {
   }, [users])
 
   function handleFormSubmit(e) {
+    const firstName = firstNameRef.current.value
+    const lastName = lastNameRef.current.value
     const name = userNameRef.current.value
     const password = passwordRef.current.value
+
+    if (firstName === '') return //handle error
+    console.log("First Name: " + firstName) // access to password so we can add it to database
+    setUsername(currUser => {
+      return [{firstName: firstName, id: 1}]
+    })
+
+    if (lastName === '') return //handle error
+    console.log("Last Name: " + lastName) // access to password so we can add it to database
+    setUsername(currUser => {
+      return [{lastName: lastName, id: 1}]
+    })
     
     if (name === '') return //handle error
     console.log("Username: " + name) // access to name so we can add it to database
@@ -33,8 +47,11 @@ export default function SignUp() {
     setUsername(currUser => {
       return [{password: password, auth: false}]
     })
+    
 
     // reset values
+    firstNameRef.current.value = null
+    lastNameRef.current.value = null
     userNameRef.current.value = null
     passwordRef.current.value = null
   }
