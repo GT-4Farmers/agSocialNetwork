@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Users from './Users'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 import '../../App.css';
 import '../Button/Button.css';
@@ -10,6 +11,8 @@ export default function SignUp() {
   const [users, setUsername] = useState([])
   const userNameRef = useRef()
   const passwordRef = useRef()
+  const firstNameRef = useRef()
+  const lastNameRef = useRef()
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE, JSON.stringify(users))
@@ -42,7 +45,19 @@ export default function SignUp() {
         <div className='container'>
           <Users users={users} />
           <li className='sign-item-a'>
-            Username*
+            First Name*
+          </li>
+          <li className='sign-item-b'>
+            <input ref={firstNameRef} type="text" />
+          </li>
+          <li className='sign-item-a'>
+            Last Name*
+          </li>
+          <li className='sign-item-b'>
+            <input ref={lastNameRef} type="text" />
+          </li>
+          <li className='sign-item-a'>
+            Email*
           </li>
           <li className='sign-item-b'>
             <input ref={userNameRef} type="text" />
