@@ -1,7 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Users from './Users'
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-
 import '../../App.css';
 import '../Button/Button.css';
 
@@ -60,7 +57,9 @@ export default function SignUp() {
     <>
       <sign className='sign-up'>
         <div className='container'>
-          <Users users={users} />
+          <div className='sign-up'>
+              <h1>Sign Up</h1>
+          </div>
           <li className='sign-item-a'>
             First Name*
           </li>

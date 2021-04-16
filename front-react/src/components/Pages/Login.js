@@ -1,6 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import LoginUser from './LoginUser';
 import '../../App.css';
 import '../Button/Button.css';
 import { Link } from 'react-router-dom';
@@ -41,7 +39,10 @@ export default function Login() {
     <>
       <sign className='sign-up'>
         <div className='container'>
-          <LoginUser loginUser={loginUser} />
+            <div className='login'>
+                <h1>Log In</h1>
+            </div>
+          {/* <LoginUser loginUser={loginUser} /> */}
           <li className='sign-item-a'>
             Email*
           </li>
