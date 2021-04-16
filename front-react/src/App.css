@@ -8,12 +8,46 @@
 .home,
 .profile,
 .forums,
-.settings,
-.sign-up {
+.settings {
   display: flex;
   height: 90vh;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
+}
 
+.sign-up {
+  display: flex;
+  padding-top: 30px;
+  column-count: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.sign-item {
+  display: flex;
+  padding-top: 30px;
+  column-count: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.sign-item-a {
+  display: flex;
+  padding-top: 30px;
+  column-count: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.sign-item-b {
+  display: flex;
+  padding-top: 10px;
+  column-count: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
 }

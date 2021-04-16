@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from './Button';
-import './Navbar.css';
+import { Button } from '../Button/Button';
 import Logo from './logo_noName.png';
+import './Navbar.css';
+import '../Button/Button.css'
 
 function Navbar() {
 	const [click, setClick] = useState(false);
@@ -33,7 +34,8 @@ function Navbar() {
 			<nav className="navbar">
 				<div className="navbar-container">
 					<Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-						<img alt='logo' src={Logo}/> HAYSTACK
+						<img alt='logo' src={Logo}/>
+            <div className='home-name'>HAYSTACK</div>
 					</Link>
 					<div className='menu-icon' onClick={handleClick}>
 						{/* if click, X, otherwise hamburger */}

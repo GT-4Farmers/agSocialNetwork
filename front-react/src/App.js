@@ -9,6 +9,7 @@ import Forums from './components/Pages/Forums';
 import Settings from './components/Pages/Settings';
 import SignUp from './components/Pages/SignUp';
 
+
 function App() {
   return (
     <>
