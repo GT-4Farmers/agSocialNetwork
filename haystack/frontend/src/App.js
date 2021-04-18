@@ -63,7 +63,7 @@ class App extends React.Component {
   }
 
   render() {
-    UserStore.isLoggedIn = true;
+    //UserStore.isLoggedIn = true;
 
     if (UserStore.loading) {
       return (

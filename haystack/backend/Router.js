@@ -27,7 +27,7 @@ class Router {
             // Users table
             // select from email
             let cols = [email];
-            db.query('SELECT * FROM Users WHERE email = ? LIMIT 1', cols, (err, data, fields) => {
+            db.query('SELECT * FROM `Haystack-test`.Users WHERE email = ? LIMIT 1', cols, (err, data, fields) => {
                 if (err) {
                     res.json({
                         success: false,
@@ -89,7 +89,7 @@ class Router {
         app.post('/isLoggedIn', (req, res) => {
             if (req.session.userID) {
                 let cols = [req.session.userID];
-                db.query('SELECT * FROM Users WHERE idUsers = ? LIMIT 1', cols, (err, data, fields) => {
+                db.query('SELECT * FROM `Haystack-test`.Users WHERE idUsers = ? LIMIT 1', cols, (err, data, fields) => {
                     if (data && data.length === 1) {
                         res.json({
                             success: true,

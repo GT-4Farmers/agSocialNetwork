@@ -1,19 +1,19 @@
 body, html, #root, .app, .container {
   width: 100%;
-  padding: 0 0 0 65px;
+  /* padding: 0 0 0 65px; */
   height: 100%;
   /* height: 100%; */
 }
 
 .container {
-  padding: 0 0 0 65px;
+  padding: 0 0 0 315px;
   font-size: 2rem;
   color: black;
   display: block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: rgb(255, 255, 255);
 }
 
 .profile,
@@ -36,8 +36,8 @@ body, html, #root, .app, .container {
   background-color: #27AE60;
 }
 
-/* .inputField {
-  padding-top: 12px;
+.inputField {
+  padding-bottom: 12px;
 }
 
 .input {
@@ -50,14 +50,14 @@ body, html, #root, .app, .container {
   padding: 12px;
   font-size: 14px;
   background: rgba(255, 255, 255, 1);
-} */
+}
 
 /* .submitButton {
   padding-top: 16px;
 } */
 
 .btn {
-  width: 100px;
+  width: 200px;
   color: #292929;
   padding: 12px;
   font-size: 1.5rem;
