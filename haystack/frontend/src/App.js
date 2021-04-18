@@ -2,8 +2,13 @@ import React from 'react';
 import { observer } from 'mobx-react'
 import UserStore from './stores/UserStore';
 import Login from './Login';
-import SubmitButton from './SubmitButton';
 import './App.css';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import Profile from './Profile';
+import Navbar from './Navbar';
+import Home from './Home';
+import Forums from './Forums';
+import Settings from './Settings';
 
 class App extends React.Component {
   async componentDidMount() {
@@ -58,6 +63,8 @@ class App extends React.Component {
   }
 
   render() {
+    UserStore.isLoggedIn = true;
+
     if (UserStore.loading) {
       return (
         <div className="app">
@@ -66,31 +73,35 @@ class App extends React.Component {
           </div>
         </div>
       )
-    } else {
-      if (UserStore.isLoggedIn) {
+    } else if (UserStore.isLoggedIn) {
         return (
-          <div className="app">
-            <div className='container'>
-              Welcome {UserStore.email}
-
-              <SubmitButton
-                text={'Log out'}
-                disabled={false}
-                onClick={ () => this.doLogout() }
-              />
+          <>
+            <div className="app">
+              <div className='container'>
+                <Router>
+                  <Navbar />
+                    <Switch>
+                      <Route path='/' exact component={Home} />
+                      <Route path='/profile' component={Profile} />
+                      <Route path='/forums' component={Forums} />
+                      <Route path='/settings' component={Settings} />
+                    </Switch>
+                </Router>
+              </div>
             </div>
-          </div>
+          </>
         );
-      }
+    } else if (!(UserStore.isLoggedIn)) {
+      return (
+        <div className="login">
+          <Login />
+        </div>
+      );
     }
 
-    return (
-      <div className="app">
-        <div className='container'>
-          <Login />
-         </div>
-      </div>
-    );
+    // return (
+      
+    // );
   }
 }
 

@@ -1,0 +1,83 @@
+.navbar {
+  background: #27AE60;
+  height: 100%;
+  width: 290px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.2rem;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  overflow-x: hidden;
+  max-width: 290px;
+}
+
+.home-name {
+  margin-left: 10px;
+}
+
+/* .navbar-container {
+  height: 80px;
+  max-width: 1500px;
+} */
+
+.navbar-logo {
+  padding-top: 35px;
+  color: #fff;
+  justify-self: start;
+  /* margin-left: 20px; */
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.navbar-logo img {
+  width: 2.5rem;
+}
+
+.fa-typo3 {
+  margin-left: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.nav-menu {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-gap: 10px;
+  list-style: none;
+  text-align: center;
+  width: 60vw;
+  justify-content: end;
+  margin-right: 2rem;
+}
+
+.nav-links {
+  padding: 15px 0px 15px 0px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: #ffffff;
+  display: block;
+  transition: 0.3s;
+}
+
+.nav-links:hover {
+  color: black;
+  background-color: #fff;
+  transition: all 0.2s ease-out;
+}
+
+.fa-bars {
+  color: #fff;
+}
+
+.nav-links-mobile {
+  display: none;
+}
+
+.menu-icon {
+  display: none;
+}

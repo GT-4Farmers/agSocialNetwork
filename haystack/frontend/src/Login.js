@@ -2,6 +2,7 @@ import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
+// import Navbar from './Navbar';
 
 class Login extends React.Component {
     constructor(props) {
@@ -82,6 +83,8 @@ class Login extends React.Component {
 
     render() {
         return (
+            <>
+            {/* <Navbar /> */}
             <div className="login">
                 Log in
 
@@ -111,6 +114,7 @@ class Login extends React.Component {
                     onClick={ () => this.doLogin() }
                 />
             </div>
+            </>
         )
     }
 }
