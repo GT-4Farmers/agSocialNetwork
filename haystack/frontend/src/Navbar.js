@@ -71,16 +71,19 @@ class Navbar extends React.Component {
             </Link>
             <Link to="/profile" className="nav-links" >
               <div>
+                <i class="fas fa-user"></i>
                 Profile
               </div>
             </Link>
             <Link to="/forums" className="nav-links" >
               <div>
+                <i class="fas fa-comments"></i>
                 Forums
               </div>
             </Link>
             <Link to="/settings" className="nav-links" >
               <div>
+              <i class="fas fa-cog"></i>
                 Settings
               </div>
             </Link>

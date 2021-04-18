@@ -77,3 +77,7 @@ body, html, #root, .app, .container {
 .btn-gap {
   padding-top: 25px;
 }
+
+.fas {
+  padding-right: 10px;
+}
