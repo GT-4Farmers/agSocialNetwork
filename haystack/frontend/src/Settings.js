@@ -1,9 +1,13 @@
 import React from 'react'
 
-export default function Settings() {
-    return (
-        <div className='settings'>
-            Settings
-        </div>
-    )
+class Settings extends React.Component {
+	render() {
+		return (
+			<div className='settings'>
+				Settings
+			</div>
+		)
+	}
 }
+
+export default Settings

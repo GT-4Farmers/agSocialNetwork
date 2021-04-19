@@ -1,9 +1,14 @@
 import React from 'react'
 
-export default function Profile() {
-    return (
-        <div className='profile'>
-            Profile
-        </div>
-    )
+
+class Profile extends React.Component {
+	render() {
+		return (
+			<div className='profile'>
+				Profile
+			</div>
+		)
+	}
 }
+
+export default Profile

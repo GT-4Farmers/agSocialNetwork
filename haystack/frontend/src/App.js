@@ -1,11 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react'
 import UserStore from './stores/UserStore';
-import Login from './Login';
+
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import Profile from './Profile';
+
+//components
 import Navbar from './Navbar';
+import Profile from './Profile';
+import Login from './Login';
 import Home from './Home';
 import Forums from './Forums';
 import Settings from './Settings';
@@ -39,31 +42,8 @@ class App extends React.Component {
     }
   }
 
-  async doLogout() {
-    try {
-      let res = await fetch('/logout', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-
-      let result = await res.json();
-
-      if (result && result.success) {
-        UserStore.isLoggedIn = false;
-        UserStore.email = '';
-      }
-    }
-    
-    catch(e) {
-      console.log(e)
-    }
-  }
-
   render() {
-    //UserStore.isLoggedIn = true;
+    // UserStore.isLoggedIn = true;
 
     if (UserStore.loading) {
       return (
@@ -94,7 +74,9 @@ class App extends React.Component {
     } else if (!(UserStore.isLoggedIn)) {
       return (
         <div className="login">
-          <Login />
+          <Router>
+            <Route path='/' exact component={Login} />
+          </Router>
         </div>
       );
     }

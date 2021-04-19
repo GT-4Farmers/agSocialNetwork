@@ -1,10 +1,14 @@
 import React from 'react'
 import UserStore from './stores/UserStore';
 
-export default function Home() {
-    return (
-        <div className='home'>
-            Welcome {UserStore.email}
-        </div>
-    )
+class Home extends React.Component {
+	render() {
+		return (
+			<div className='home'>
+				Welcome {UserStore.email}
+			</div>
+		)
+	}
 }
+
+export default Home;
