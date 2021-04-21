@@ -10,10 +10,10 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json());
 
 const db = mysql.createConnection({
-    host: 'haystack-starter.cgwmhwqegcm0.us-east-1.rds.amazonaws.com',
-    user: 'dwilson74',
-    password: 'juniordesign2021',
-    database: 'Haystack'
+    host: 'haystackdb.cwuhnsyt464r.us-east-1.rds.amazonaws.com',
+    user: 'hayderson',
+    password: 'shellhb3311',
+    database: 'haystackdb'
 });
 
 db.connect(function(err) {

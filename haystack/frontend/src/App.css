@@ -1,19 +1,19 @@
 body, html, #root, .app, .container {
   width: 100%;
-  /* padding: 0 0 0 65px; */
   height: 100%;
-  /* height: 100%; */
+  box-sizing: border-box;
 }
 
 .container {
-  padding: 0 0 0 315px;
+  
+  padding: 0 0 0 270px;
   font-size: 2rem;
   color: black;
   display: block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(233, 255, 212);
 }
 
 .profile,
@@ -58,6 +58,7 @@ body, html, #root, .app, .container {
 
 .btn {
   width: 200px;
+  margin-top: 5vh;
   color: #292929;
   padding: 12px;
   font-size: 1.5rem;

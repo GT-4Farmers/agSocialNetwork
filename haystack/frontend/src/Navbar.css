@@ -1,7 +1,7 @@
 .navbar {
   background: #27AE60;
   height: 100%;
-  width: 290px;
+  width: 250px;
   display: flex;
   justify-content: center;
   font-size: 1.2rem;
@@ -55,6 +55,7 @@
 }
 
 .nav-links {
+  margin-top: 5vh;
   padding: 15px 0px 15px 0px;
   text-align: center;
   text-decoration: none;
@@ -80,4 +81,10 @@
 
 .menu-icon {
   display: none;
+}
+
+.active-page {
+  color: black;
+  background-color: #fff;
+  transition: all 0.2s ease-out;
 }

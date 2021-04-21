@@ -4,7 +4,7 @@ import UserStore from './stores/UserStore';
 export default function Home() {
     return (
         <div className='home'>
-            Welcome {UserStore.email}
+            🏠 Welcome {UserStore.email}
         </div>
     )
 }

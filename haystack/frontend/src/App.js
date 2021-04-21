@@ -39,6 +39,47 @@ class App extends React.Component {
     }
   }
 
+  async doLogin() {
+    if (!this.state.email) {
+        return;
+    }
+    if (!this.state.password) {
+        return;
+    }
+
+    this.setState({
+        buttonDisabled: true
+    })
+
+    try {
+        let res = await fetch('/login', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+                password: this.state.password
+            })
+        });
+
+        let result = await res.json();
+        if (result && result.success) {
+            UserStore.isLoggedIn = true;
+            UserStore.email = result.email;
+        } else if (result && result.success === false) {
+            this.resetForm();
+            alert(result.msg);
+        }
+    }
+
+    catch(e) {
+        console.log(e);
+        this.resetForm();
+    }
+  }
+
   async doLogout() {
     try {
       let res = await fetch('/logout', {
@@ -63,7 +104,7 @@ class App extends React.Component {
   }
 
   render() {
-    //UserStore.isLoggedIn = true;
+    // UserStore.isLoggedIn = true;
 
     if (UserStore.loading) {
       return (
@@ -93,6 +134,9 @@ class App extends React.Component {
         );
     } else if (!(UserStore.isLoggedIn)) {
       return (
+        // <Router className="login">
+        //   <Route path='/' component={Login} />
+        // </Router>
         <div className="login">
           <Login />
         </div>
