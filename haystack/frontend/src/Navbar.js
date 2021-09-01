@@ -5,31 +5,10 @@ import Logo from './logo_noName.png';
 import './Navbar.css';
 import UserStore from './stores/UserStore';
 import './App.css';
+import App from './App';
 
 class Navbar extends React.Component {
-  async doLogout() {
-    try {
-      let res = await fetch('/logout', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-
-      let result = await res.json();
-
-      if (result && result.success) {
-        UserStore.isLoggedIn = false;
-        UserStore.email = '';
-      }
-      
-    }
-    
-    catch(e) {
-      console.log(e)
-    }
-  }
+  app = new App()
 
   render() {
     return (
@@ -63,7 +42,7 @@ class Navbar extends React.Component {
               <SubmitButton 
                 text={'Log out'}
                 disabled={false}
-                onClick={ () => this.doLogout() }
+                onClick={ () => this.app.doLogout() }
               />
             </div>
           </div>
