@@ -12,22 +12,27 @@ class Router {
     signUp(app, db) {
         app.post('/signUp', (req, res) => {
             
-            var idUsers = 6;
+            var idUsers = 4;
             var firstName = req.body.firstName;
             var lastName = req.body.lastName;
             var email = req.body.email;
             var password = req.body.password;
         
-            var sql = `INSERT INTO Users (idUsers, firstName, lastName, email, password) VALUES (${idUsers}, ${firstName}, ${lastName}, ${email}, ${password})`;
+            var sql = `INSERT INTO Users (idUsers, firstName, lastName, email, password) VALUES (${idUsers}, '${firstName}', '${lastName}', '${email}', '${password}')`;
             var cols = [idUsers, firstName, lastName, email, password];
             db.query(sql, cols, function (err, data) {
                 if (err) {
-                    console.log('rip')
-                    console.log(req.body);
-                    console.log(firstName);
+                    res.json({
+                        success: false,
+                        msg: 'An error occured, please try again.'
+                    })
                 } else {
-                    console.log('aight bet')
+                    res.json({
+                        success: true,
+                        msg: 'ayy'
+                    })
                 }
+                
             })
         })
     }

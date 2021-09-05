@@ -2,7 +2,6 @@ import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
-// import Navbar from './Navbar';
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -70,7 +69,7 @@ class SignUp extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    idUsers: 6,
+                    idUsers: 4,
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     email: this.state.email,
