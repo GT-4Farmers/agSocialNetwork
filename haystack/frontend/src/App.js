@@ -9,6 +9,7 @@ import Navbar from './Navbar';
 import Home from './Home';
 import Forums from './Forums';
 import Settings from './Settings';
+import SignUp from './SignUp';
 
 class App extends React.Component {
   async componentDidMount() {
@@ -27,6 +28,8 @@ class App extends React.Component {
         UserStore.loading = false;
         UserStore.isLoggedIn = true;
         UserStore.email = result.email;
+        UserStore.firstName = result.firstName;
+        UserStore.lastName = result.lastName;
       } else {
         UserStore.loading = false;
         UserStore.isLoggedIn = false;
@@ -36,47 +39,6 @@ class App extends React.Component {
     catch(e) {
       UserStore.loading = false;
       UserStore.isLoggedIn = false;
-    }
-  }
-
-  async doLogin() {
-    if (!this.state.email) {
-        return;
-    }
-    if (!this.state.password) {
-        return;
-    }
-
-    this.setState({
-        buttonDisabled: true
-    })
-
-    try {
-        let res = await fetch('/login', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password
-            })
-        });
-
-        let result = await res.json();
-        if (result && result.success) {
-            UserStore.isLoggedIn = true;
-            UserStore.email = result.email;
-        } else if (result && result.success === false) {
-            this.resetForm();
-            alert(result.msg);
-        }
-    }
-
-    catch(e) {
-        console.log(e);
-        this.resetForm();
     }
   }
 
@@ -104,7 +66,7 @@ class App extends React.Component {
   }
 
   render() {
-    // UserStore.isLoggedIn = true;
+     //UserStore.isLoggedIn = true;
 
     if (UserStore.loading) {
       return (
@@ -138,7 +100,7 @@ class App extends React.Component {
         //   <Route path='/' component={Login} />
         // </Router>
         <div className="login">
-          <Login />
+          <SignUp />
         </div>
       );
     }

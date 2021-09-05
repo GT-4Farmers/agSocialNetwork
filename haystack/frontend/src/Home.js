@@ -5,7 +5,8 @@ export default function Home() {
     return (
         <div className='home'>
 
-            🏠 Welcome {UserStore.email}
+            🏠 Welcome {UserStore.firstName},
+            <br></br>
             Home news feed will be displayed here.
         </div>
     )
