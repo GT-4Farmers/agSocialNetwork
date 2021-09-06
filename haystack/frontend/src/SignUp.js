@@ -140,6 +140,12 @@ class SignUp extends React.Component {
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doSignUp() }
                 />
+                
+                <SubmitButton
+                    text='Cancel'
+                    disabled={this.state.buttonDisabled}
+                    onClick={ () => UserStore.isNewUser = false }
+                />
             </div>
             </>
         )

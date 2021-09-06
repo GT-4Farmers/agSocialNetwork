@@ -11,30 +11,51 @@ class Router {
 
     signUp(app, db) {
         app.post('/signUp', (req, res) => {
-            
-            var firstName = req.body.firstName;
-            var lastName = req.body.lastName;
             var email = req.body.email;
-            var password = bcrypt.hashSync(req.body.password, 9);
-        
-            var sql = `INSERT INTO Users (firstName, lastName, email, password) VALUES ('${firstName}', '${lastName}', '${email}', '${password}')`;
-            var cols = [firstName, lastName, email, password];
-            db.query(sql, cols, function (err, data) {
+
+            let cols = [email];
+            db.query(`SELECT * FROM Users WHERE email = '${email}' LIMIT 1`, cols, (err, data, fields) => {
                 if (err) {
                     res.json({
                         success: false,
                         msg: 'An error occured, please try again.'
                     })
-                } else {
-                    res.json({
-                        success: true,
-                        email: email,
-                        firstName: firstName,
-                        lastName: lastName
-                    })
                     return;
                 }
-            })
+
+                // if found 1 user
+                if (data && data.length === 1) {
+                    res.json({
+                        success: false,
+                        msg: "A user already exists with that email address."
+                    })
+                    return;
+                } else {
+                    var firstName = req.body.firstName;
+                    var lastName = req.body.lastName;
+                    var password = bcrypt.hashSync(req.body.password, 9);
+                
+                    var sql = `INSERT INTO Users (firstName, lastName, email, password) VALUES ('${firstName}', '${lastName}', '${email}', '${password}')`;
+                    var cols = [firstName, lastName, email, password];
+                    db.query(sql, cols, function (err, data) {
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: 'An error occured, please try again.'
+                            })
+                            return;
+                        } else {
+                            res.json({
+                                success: true,
+                                email: email,
+                                firstName: firstName,
+                                lastName: lastName
+                            })
+                            return;
+                        }
+                    });
+                }
+            });
         })
     }
 
