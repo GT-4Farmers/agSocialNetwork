@@ -28,10 +28,12 @@ class Router {
                 } else {
                     res.json({
                         success: true,
-                        msg: 'ayy'
+                        email: email,
+                        firstName: firstName,
+                        lastName: lastName
                     })
+                    return;
                 }
-                
             })
         })
     }

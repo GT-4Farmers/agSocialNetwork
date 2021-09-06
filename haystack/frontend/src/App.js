@@ -94,20 +94,22 @@ class App extends React.Component {
             </div>
           </>
         );
+      } else if (UserStore.isNewUser) {
+        return (
+          <div className = "login">
+          <SignUp />
+        </div>
+      );
     } else if (!(UserStore.isLoggedIn)) {
       return (
         // <Router className="login">
         //   <Route path='/' component={Login} />
         // </Router>
         <div className="login">
-          <SignUp />
+          <Login />
         </div>
       );
     }
-
-    // return (
-      
-    // );
   }
 }
 

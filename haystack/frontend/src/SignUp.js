@@ -78,7 +78,7 @@ class SignUp extends React.Component {
 
             let result = await res.json();
             if (result && result.success) {
-                UserStore.isLoggedIn = true;
+                UserStore.isNewUser = false;
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;
                 UserStore.lastName = result.lastName;

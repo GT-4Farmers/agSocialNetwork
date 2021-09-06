@@ -120,7 +120,7 @@ class Login extends React.Component {
                 <SubmitButton
                     text='Sign Up'
                     disabled={this.state.buttonDisabled}
-                    //onClick={ () => this.doLogin() }
+                    onClick={ () => UserStore.isNewUser = true }
                 />
             </div>
             </>
