@@ -12,14 +12,13 @@ class Router {
     signUp(app, db) {
         app.post('/signUp', (req, res) => {
             
-            var idUsers = 4;
             var firstName = req.body.firstName;
             var lastName = req.body.lastName;
             var email = req.body.email;
-            var password = req.body.password;
+            var password = bcrypt.hashSync(req.body.password, 9);
         
-            var sql = `INSERT INTO Users (idUsers, firstName, lastName, email, password) VALUES (${idUsers}, '${firstName}', '${lastName}', '${email}', '${password}')`;
-            var cols = [idUsers, firstName, lastName, email, password];
+            var sql = `INSERT INTO Users (firstName, lastName, email, password) VALUES ('${firstName}', '${lastName}', '${email}', '${password}')`;
+            var cols = [firstName, lastName, email, password];
             db.query(sql, cols, function (err, data) {
                 if (err) {
                     res.json({
@@ -69,7 +68,7 @@ class Router {
                 if (data && data.length === 1) {
                     bcrypt.compare(password, data[0].password, (bcryptErr, verified) => {
                         if (verified) {
-                            req.session.userID = data[0].idUsers;
+                            req.session.userID = data[0].email;
 
                             res.json({
                                 success:true,
@@ -120,7 +119,7 @@ class Router {
         app.post('/isLoggedIn', (req, res) => {
             if (req.session.userID) {
                 let cols = [req.session.userID];
-                db.query('SELECT * FROM Users WHERE idUsers = ? LIMIT 1', cols, (err, data, fields) => {
+                db.query('SELECT * FROM Users WHERE email = ? LIMIT 1', cols, (err, data, fields) => {
                     if (data && data.length === 1) {
                         res.json({
                             success: true,

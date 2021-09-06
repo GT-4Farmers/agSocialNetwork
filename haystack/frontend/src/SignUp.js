@@ -69,7 +69,6 @@ class SignUp extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    idUsers: 4,
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     email: this.state.email,
