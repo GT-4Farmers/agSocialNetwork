@@ -1,5 +1,9 @@
 const bcrypt = require('bcrypt');
 
+const url = require('url');
+const cors = require('cors');
+
+
 class Router {
 
     constructor(app, db) {
@@ -120,6 +124,8 @@ class Router {
         });
     }
 
+    
+
     logout(app, db) {
 
         app.post('/logout', (req, res) => {
@@ -127,6 +133,7 @@ class Router {
                 req.session.destroy();
                 res.json({
                     success: true
+                    
                 })
                 res.end();
                 return true;

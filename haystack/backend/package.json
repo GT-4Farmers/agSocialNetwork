@@ -8,9 +8,10 @@
     "start": "node Main"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.5",
     "express-session": "^1.17.1",

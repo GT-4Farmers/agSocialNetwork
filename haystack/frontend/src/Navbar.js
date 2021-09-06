@@ -1,14 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 import SubmitButton from './SubmitButton';
 import Logo from './logo_noName.png';
 import './Navbar.css';
 import UserStore from './stores/UserStore';
 import './App.css';
 import App from './App';
+import Login from './Login';
 
 class Navbar extends React.Component {
   app = new App()
+
+  async doLogout() {
+
+    try {
+      let res = await fetch('/logout', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      let result = await res.json();
+      
+      if (result && result.success) {
+        UserStore.isLoggedIn = false;
+        UserStore.email = '';
+        // <Router>
+        //   <Redirect from='/*' to='/login' />
+        //   <Route path='/login' component={Login} />
+        // </Router>
+      }
+    }
+    
+    catch(e) {
+      console.log(e)
+    }
+  }
 
   render() {
     return (
@@ -42,7 +71,7 @@ class Navbar extends React.Component {
               <SubmitButton 
                 text={'Log out'}
                 disabled={false}
-                onClick={ () => this.app.doLogout() }
+                onClick={ () => this.doLogout() }
               />
             </div>
           </div>

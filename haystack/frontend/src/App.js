@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import UserStore from './stores/UserStore';
 import Login from './Login';
 import './App.css';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Profile from './Profile';
 import Navbar from './Navbar';
 import Home from './Home';
@@ -42,29 +42,6 @@ class App extends React.Component {
     }
   }
 
-  async doLogout() {
-    try {
-      let res = await fetch('/logout', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-
-      let result = await res.json();
-
-      if (result && result.success) {
-        UserStore.isLoggedIn = false;
-        UserStore.email = '';
-      }
-    }
-    
-    catch(e) {
-      console.log(e)
-    }
-  }
-
   render() {
      //UserStore.isLoggedIn = true;
 
@@ -97,17 +74,26 @@ class App extends React.Component {
     } else if (UserStore.isNewUser) {
       return (
         <div className = "login">
-          <SignUp />
+          <Router>
+            <Redirect from='/login' to='/signup' />
+            <Route path='/signup' component={SignUp} />
+          </Router>
         </div>
+        // <div className = "login">
+        //   <SignUp />
+        // </div>
       );
     } else if (!(UserStore.isLoggedIn)) {
       return (
-        // <Router className="login">
-        //   <Route path='/' component={Login} />
-        // </Router>
-        <div className="login">
-          <Login />
+        <div className= "login">
+          <Router>
+            <Redirect from='/' to='/login' />
+            <Route path='/login' component={Login} />
+          </Router>
         </div>
+        // <div className="login">
+        //   <Login />
+        // </div>
       );
     }
   }
