@@ -2,13 +2,13 @@ import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
-import { Link } from 'react-router-dom';
-// import Navbar from './Navbar';
 
-class Login extends React.Component {
+class SignUp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             buttonDisabled: false
@@ -35,13 +35,21 @@ class Login extends React.Component {
 
     resetForm() {
         this.setState({
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             buttonDisabled: false
         })
     }
 
-    async doLogin() {
+    async doSignUp() {
+        if (!this.state.firstName) {
+            return;
+        }
+        if (!this.state.lastName) {
+            return;
+        }
         if (!this.state.email) {
             return;
         }
@@ -54,13 +62,15 @@ class Login extends React.Component {
         })
 
         try {
-            let res = await fetch('/login', {
+            let res = await fetch('/signUp', {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
                     email: this.state.email,
                     password: this.state.password
                 })
@@ -68,7 +78,7 @@ class Login extends React.Component {
 
             let result = await res.json();
             if (result && result.success) {
-                UserStore.isLoggedIn = true;
+                UserStore.isNewUser = false;
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;
                 UserStore.lastName = result.lastName;
@@ -88,8 +98,22 @@ class Login extends React.Component {
         return (
             <>
             {/* <Navbar /> */}
-            <div className="login">
-                Log in
+            <div className="signUp">
+                Sign Up
+
+                <InputField
+                    type='text'
+                    placeholder='First Name'
+                    value={this.state.firstName ? this.state.firstName : '' }
+                    onChange={ (val) => this.setInputValue('firstName', val) }
+                />
+
+                <InputField
+                    type='text'
+                    placeholder='Last Name'
+                    value={this.state.lastName ? this.state.lastName : '' }
+                    onChange={ (val) => this.setInputValue('lastName', val) }
+                />
 
                 <InputField
                     type='text'
@@ -105,22 +129,22 @@ class Login extends React.Component {
                     onChange={ (val) => this.setInputValue('password', val) }
                 />
 
-                <SubmitButton
+                { <SubmitButton
                     text='Show/Hide'
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.toggleShow() }
-                />
+                /> }
 
                 <SubmitButton
-                    text='Login'
+                    text='Submit'
                     disabled={this.state.buttonDisabled}
-                    onClick={ () => this.doLogin() }
+                    onClick={ () => this.doSignUp() }
                 />
-
+                
                 <SubmitButton
-                    text='Sign Up'
+                    text='Cancel'
                     disabled={this.state.buttonDisabled}
-                    onClick={ () => UserStore.isNewUser = true }
+                    onClick={ () => UserStore.isNewUser = false }
                 />
             </div>
             </>
@@ -128,4 +152,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default SignUp;

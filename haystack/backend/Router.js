@@ -6,6 +6,59 @@ class Router {
         this.login(app, db);
         this.logout(app, db);
         this.isLoggedIn(app, db);
+        this.signUp(app, db);
+    }
+
+    signUp(app, db) {
+        app.post('/signUp', (req, res) => {
+            var email = req.body.email;
+
+            let cols = [email];
+
+            // Check users table to see if email is already in use
+            db.query(`SELECT * FROM Users WHERE email = '${email}' LIMIT 1`, cols, (err, data, fields) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: 'An error occured, please try again.'
+                    })
+                    return;
+                }
+
+                // if found 1 user
+                if (data && data.length === 1) {
+                    res.json({
+                        success: false,
+                        msg: "A user already exists with that email address."
+                    })
+                    return;
+                } else { // if email is not found a new user can be made
+                    var firstName = req.body.firstName;
+                    var lastName = req.body.lastName;
+                    var password = bcrypt.hashSync(req.body.password, 9);
+                
+                    var sql = `INSERT INTO Users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)`;
+                    var cols = [firstName, lastName, email, password];
+                    db.query(sql, cols, function (err, data) {
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: 'An error occured, please try again.'
+                            })
+                            return;
+                        } else {
+                            res.json({
+                                success: true,
+                                email: email,
+                                firstName: firstName,
+                                lastName: lastName
+                            })
+                            return;
+                        }
+                    });
+                }
+            });
+        })
     }
 
     login(app, db) {
@@ -40,11 +93,13 @@ class Router {
                 if (data && data.length === 1) {
                     bcrypt.compare(password, data[0].password, (bcryptErr, verified) => {
                         if (verified) {
-                            req.session.userID = data[0].idUsers;
+                            req.session.userID = data[0].email;
 
                             res.json({
                                 success:true,
-                                email: data[0].email
+                                email: data[0].email,
+                                firstName: data[0].firstName,
+                                lastName: data[0].lastName
                             })
 
                             return;
@@ -73,7 +128,7 @@ class Router {
                 res.json({
                     success: true
                 })
-
+                res.end();
                 return true;
             } else {
                 res.json({
@@ -89,11 +144,13 @@ class Router {
         app.post('/isLoggedIn', (req, res) => {
             if (req.session.userID) {
                 let cols = [req.session.userID];
-                db.query('SELECT * FROM Users WHERE idUsers = ? LIMIT 1', cols, (err, data, fields) => {
+                db.query('SELECT * FROM Users WHERE email = ? LIMIT 1', cols, (err, data, fields) => {
                     if (data && data.length === 1) {
                         res.json({
                             success: true,
-                            email: data[0].email
+                            email: data[0].email,
+                            firstName: data[0].firstName,
+                            lastName: data[0].lastName
                         })
                         return true;
                     } else {
