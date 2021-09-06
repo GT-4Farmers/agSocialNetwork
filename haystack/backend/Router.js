@@ -14,6 +14,8 @@ class Router {
             var email = req.body.email;
 
             let cols = [email];
+
+            // Check users table to see if email is already in use
             db.query(`SELECT * FROM Users WHERE email = '${email}' LIMIT 1`, cols, (err, data, fields) => {
                 if (err) {
                     res.json({
@@ -30,12 +32,12 @@ class Router {
                         msg: "A user already exists with that email address."
                     })
                     return;
-                } else {
+                } else { // if email is not found a new user can be made
                     var firstName = req.body.firstName;
                     var lastName = req.body.lastName;
                     var password = bcrypt.hashSync(req.body.password, 9);
                 
-                    var sql = `INSERT INTO Users (firstName, lastName, email, password) VALUES ('${firstName}', '${lastName}', '${email}', '${password}')`;
+                    var sql = `INSERT INTO Users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)`;
                     var cols = [firstName, lastName, email, password];
                     db.query(sql, cols, function (err, data) {
                         if (err) {
