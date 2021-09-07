@@ -8,7 +8,11 @@ class UserStore {
             isNewUser: false,
             email: '',
             firstName: '',
-            lastName: ''
+            lastName: '',
+            bio: '',
+            birthday: '',
+            location: '',
+            phone: ''
         })
     }
 }

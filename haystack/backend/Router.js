@@ -11,6 +11,7 @@ class Router {
         this.logout(app, db);
         this.isLoggedIn(app, db);
         this.signUp(app, db);
+        this.getAbout(app, db);
     }
 
     signUp(app, db) {
@@ -172,6 +173,30 @@ class Router {
                 })
             }
         });
+    }
+
+    getAbout(app, db) {
+        app.get('/getAbout', (req, res) => {
+            let cols = [req.session.userID];
+            db.query('SELECT * FROM Profiles WHERE email = ?', cols, (err, data, fields) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: 'An error occured, please try again.'
+                    })
+                    return;
+                } else {
+                    res.json({
+                        success: true,
+                        bio: data[0].bio,
+                        birthday: data[0].birthday,
+                        location: data[0].location,
+                        phone: data[0].phone
+                    })
+                    return;
+                }
+            })
+        })
     }
 }
 
