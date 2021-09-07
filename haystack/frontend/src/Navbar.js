@@ -68,11 +68,13 @@ class Navbar extends React.Component {
               </div>
             </Link>
             <div className='btn-gap'>
-              <SubmitButton 
+              <a href={window.location.protocol + "//" + window.location.host}>
+                <SubmitButton 
                 text={'Log out'}
                 disabled={false}
                 onClick={ () => this.doLogout() }
-              />
+                />
+              </a>
             </div>
           </div>
         </nav>

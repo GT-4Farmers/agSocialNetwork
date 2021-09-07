@@ -75,7 +75,7 @@ class App extends React.Component {
       return (
         <div className = "login">
           <Router>
-            <Redirect from='/login' to='/signup' />
+            <Redirect from='/' to='/signup' />
             <Route path='/signup' component={SignUp} />
           </Router>
         </div>
@@ -84,16 +84,23 @@ class App extends React.Component {
         // </div>
       );
     } else if (!(UserStore.isLoggedIn)) {
+      if (window.location.pathname == '/signup') {
+        return (
+          <div className = "login">
+            <SignUp />
+          </div>
+        )
+      }
       return (
-        <div className= "login">
-          <Router>
-            <Redirect from='/' to='/login' />
-            <Route path='/login' component={Login} />
-          </Router>
-        </div>
-        // <div className="login">
-        //   <Login />
+        // <div className= "login">
+        //   <Router>
+        //     <Redirect from='/' to='/login' />
+        //     <Route path='/login' component={Login} />
+        //   </Router>
         // </div>
+        <div className="login">
+          <Login />
+        </div>
       );
     }
   }
