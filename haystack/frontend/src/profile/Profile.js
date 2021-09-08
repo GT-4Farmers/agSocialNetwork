@@ -39,16 +39,29 @@ class Profile extends React.Component {
             <div className='profile'>
                 {UserStore.firstName} {UserStore.lastName}
                 <Link to="/profile/about">
-                    <button onClick={this.getAbout}>
-                        About
-                    </button>
+                    <SubmitButton
+                        text='About'
+                        disabled={false}
+                        onClick={ () => this.getAbout() }
+                    />
                 </Link>
                 <Link to="/profile">
-                    <div>
-                        Photos
-                    </div>
+                    <SubmitButton
+                        text='Photos'
+                        disabled={false}
+                        onClick={ () => console.log('') }
+                    />
                 </Link>
-                🚀🚀🚀🌕 Profile for {UserStore.firstName}
+                <Link to="/profile">
+                    <SubmitButton
+                        text='Friends'
+                        disabled={false}
+                        onClick={ () => console.log('') }
+                    />
+                </Link>
+                <label>
+                    <input type="text" name="How are you feeling today?" />
+                </label>
             </div>
         )
     }
