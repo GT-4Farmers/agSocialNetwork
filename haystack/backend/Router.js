@@ -124,7 +124,49 @@ class Router {
         });
     }
 
-    
+    editProfile(app, db) {
+
+        app.post('/editProfile', (req, res) => {
+            
+            //make sure the id exists in the profiles database
+            var email = req.session.userID
+
+            var check_cols = [email]
+            var check_sql = 'SELECT * FROM Profiles WHERE email = ? LIMIT 1'
+            db.query(check_sql, check_cols, (err, data) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: 'An error occurred, please try again.'
+                    })
+                    return;
+                } else if (!data || data.length !== 1) {
+                    res.json({
+                        success: false,
+                        msg: 'The user does not exist in the profiles table.'
+                    })
+                }
+            })
+            
+            //update the profile
+            var bio = req.body.bio
+            var birthdate = req.body.birthdate
+            var location = req.body.location
+            var phone = req.body.phone
+
+            var update_sql = 'UPDATE Profiles SET bio = ?, birthdate = ?, location = ?, phone = ? WHERE email = ?'
+            var update_cols = [bio, birthdate, location, phone, email]
+            db.query(update_sql, update_cols, (err) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: "An error occurred, please try again."
+                    })
+                }
+            })
+        })
+
+    }
 
     logout(app, db) {
 
