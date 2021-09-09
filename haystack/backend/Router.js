@@ -221,7 +221,16 @@ class Router {
 
     editAbout(app, db) {
         app.put('/editAbout', (req, res) => {
-            db.query(`UPDATE Profiles SET bio = "${req.body.bio}", birthdate = "${req.body.birthday}", location = "${req.body.location}", phone = "${req.body.phone}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
+            var email = req.session.userID
+            var bio = req.body.bio
+            var birthdate = req.body.birthdate
+            var location = req.body.location
+            var phone = req.body.phone
+
+            var update_sql = 'UPDATE Profiles SET bio = ?, birthdate = ?, location = ?, phone = ? WHERE email = ?'
+            var update_cols = [bio, birthdate, location, phone, email]
+            db.query(update_sql, update_cols, (err) => {
+            //db.query(`UPDATE Profiles SET bio = "${req.body.bio}", birthdate = "${req.body.birthday}", location = "${req.body.location}", phone = "${req.body.phone}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
                 if (err) {
                     res.json({
                         success: false,
