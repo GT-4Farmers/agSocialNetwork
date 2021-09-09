@@ -223,7 +223,7 @@ class Router {
         app.put('/editAbout', (req, res) => {
             var email = req.session.userID
             var bio = req.body.bio
-            var birthdate = req.body.birthdate
+            var birthdate = req.body.birthday
             var location = req.body.location
             var phone = req.body.phone
 

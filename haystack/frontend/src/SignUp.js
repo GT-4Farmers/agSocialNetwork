@@ -2,6 +2,8 @@ import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
+import Logo from './logo_noName.png';
+import './Login.css';
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -98,56 +100,65 @@ class SignUp extends React.Component {
         return (
             <>
             {/* <Navbar /> */}
+            <header>
+                <img 
+                    alt='Haystack Logo' 
+                    src={Logo}
+                />
+                <h1>HAYSTACK</h1>
+            </header>
             <div className="signUp">
-                Sign Up
+                <h2>Sign Up</h2>
 
-                <InputField
-                    type='text'
-                    placeholder='First Name'
-                    value={this.state.firstName ? this.state.firstName : '' }
-                    onChange={ (val) => this.setInputValue('firstName', val) }
-                />
-
-                <InputField
-                    type='text'
-                    placeholder='Last Name'
-                    value={this.state.lastName ? this.state.lastName : '' }
-                    onChange={ (val) => this.setInputValue('lastName', val) }
-                />
-
-                <InputField
-                    type='text'
-                    placeholder='Email'
-                    value={this.state.email ? this.state.email : '' }
-                    onChange={ (val) => this.setInputValue('email', val) }
-                />
-
-                <InputField
-                    type={this.state.hidden ? 'password' : 'text'}
-                    placeholder='Password'
-                    value={this.state.password ? this.state.password : '' }
-                    onChange={ (val) => this.setInputValue('password', val) }
-                />
-
-                { <SubmitButton
-                    text='Show/Hide'
-                    disabled={this.state.buttonDisabled}
-                    onClick={ () => this.toggleShow() }
-                /> }
-
-                <SubmitButton
-                    text='Submit'
-                    disabled={this.state.buttonDisabled}
-                    onClick={ () => this.doSignUp() }
-                />
-                
-                <a href={window.location.protocol + "//" + window.location.host}>
-                    <SubmitButton
-                        text='Cancel'
-                        disabled={this.state.buttonDisabled}
-                        onClick={ () => UserStore.isNewUser = false }
+                <div className="loginBox">
+                    <InputField
+                        type='text'
+                        placeholder='First Name'
+                        value={this.state.firstName ? this.state.firstName : '' }
+                        onChange={ (val) => this.setInputValue('firstName', val) }
                     />
-                </a>
+
+                    <InputField
+                        type='text'
+                        placeholder='Last Name'
+                        value={this.state.lastName ? this.state.lastName : '' }
+                        onChange={ (val) => this.setInputValue('lastName', val) }
+                    />
+
+                    <InputField
+                        type='text'
+                        placeholder='Email'
+                        value={this.state.email ? this.state.email : '' }
+                        onChange={ (val) => this.setInputValue('email', val) }
+                    />
+
+                    <InputField
+                        type={this.state.hidden ? 'password' : 'text'}
+                        placeholder='Password'
+                        value={this.state.password ? this.state.password : '' }
+                        onChange={ (val) => this.setInputValue('password', val) }
+                    />
+
+                    { <SubmitButton
+                        text='Show/Hide'
+                        disabled={this.state.buttonDisabled}
+                        onClick={ () => this.toggleShow() }
+                    /> }
+
+                    <SubmitButton
+                        text='Submit'
+                        disabled={this.state.buttonDisabled}
+                        onClick={ () => this.doSignUp() }
+                    />
+                    
+                    <a href={window.location.protocol + "//" + window.location.host}>
+                        <SubmitButton
+                            text='Cancel'
+                            disabled={this.state.buttonDisabled}
+                            onClick={ () => UserStore.isNewUser = false }
+                        />
+                    </a>
+                </div>
             </div>
             </>
         )
