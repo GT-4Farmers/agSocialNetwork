@@ -3,6 +3,8 @@ import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
 import { Link } from 'react-router-dom';
+import Logo from './logo_noName.png';
+import './Login.css';
 // import Navbar from './Navbar';
 
 class Login extends React.Component {
@@ -88,9 +90,15 @@ class Login extends React.Component {
         return (
             <>
             {/* <Navbar /> */}
-            <div className="login">
-                Log in
-
+            <header>
+                <img 
+                    alt='Haystack Logo' 
+                    src={Logo}
+                />
+                <h1>HAYSTACK</h1>
+            </header>
+            <h2>Login</h2>
+            <div className="loginBox">
                 <InputField
                     type='text'
                     placeholder='Email'
@@ -105,18 +113,20 @@ class Login extends React.Component {
                     onChange={ (val) => this.setInputValue('password', val) }
                 />
 
-                <SubmitButton
+                <SubmitButton 
                     text='Show/Hide'
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.toggleShow() }
                 />
-
+        
                 <SubmitButton
                     text='Login'
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doLogin() }
                 />
-
+            </div>
+            <div className="signUp">
+                <h3>Don't have an account?</h3>
                 <SubmitButton
                     text='Sign Up'
                     disabled={this.state.buttonDisabled}
