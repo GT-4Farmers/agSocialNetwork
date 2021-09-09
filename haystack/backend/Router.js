@@ -12,10 +12,7 @@ class Router {
         this.isLoggedIn(app, db);
         this.signUp(app, db);
         this.getAbout(app, db);
-        this.editBio(app, db);
-        this.editBirthday(app, db);
-        this.editLocation(app, db);
-        this.editPhone(app, db);
+        this.editAbout(app, db);
     }
 
     signUp(app, db) {
@@ -222,66 +219,9 @@ class Router {
         })
     }
 
-    editBio(app, db) {
-        app.put('/editBio', (req, res) => {
-            db.query(`UPDATE Profiles SET bio = "${req.body.bio}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'An error occured, please try again.'
-                    })
-                    return;
-                } else {
-                    res.json({
-                        success: true
-                    })
-                    return;
-                }
-            })
-        })
-    }
-
-    editBirthday(app, db) {
-        app.put('/editBirthday', (req, res) => {
-            db.query(`UPDATE Profiles SET birthdate = "${req.body.birthday}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'An error occured, please try again.'
-                    })
-                    return;
-                } else {
-                    res.json({
-                        success: true
-                    })
-                    return;
-                }
-            })
-        })
-    }
-
-    editLocation(app, db) {
-        app.put('/editLocation', (req, res) => {
-            db.query(`UPDATE Profiles SET location = "${req.body.location}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'An error occured, please try again.'
-                    })
-                    return;
-                } else {
-                    res.json({
-                        success: true
-                    })
-                    return;
-                }
-            })
-        })
-    }
-
-    editPhone(app, db) {
-        app.put('/editPhone', (req, res) => {
-            db.query(`UPDATE Profiles SET phone = "${req.body.phone}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
+    editAbout(app, db) {
+        app.put('/editAbout', (req, res) => {
+            db.query(`UPDATE Profiles SET bio = "${req.body.bio}", birthdate = "${req.body.birthday}", location = "${req.body.location}", phone = "${req.body.phone}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
                 if (err) {
                     res.json({
                         success: false,

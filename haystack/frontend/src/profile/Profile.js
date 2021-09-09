@@ -2,10 +2,33 @@ import React, { useEffect, useState } from 'react'
 import UserStore from '../stores/UserStore';
 import { Link, BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 import SubmitButton from '../SubmitButton';
+import InputField from '../InputField';
 
 class Profile extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            post: ''
+        }
+        this.state = {
+            hidden: true
+        };
+    }
+
+    setInputValue(property, val) {
+        val = val.trim();
+        if (val.length > 45) {
+            return;
+        }
+        this.setState({
+            [property]: val
+        })
+    }
+
+    resetForm() {
+        this.setState({
+            post: ''
+        })
     }
 
     async getAbout() {
@@ -59,9 +82,12 @@ class Profile extends React.Component {
                         onClick={ () => console.log('') }
                     />
                 </Link>
-                <label>
-                    <input type="text" name="How are you feeling today?" />
-                </label>
+                <InputField
+                    type='text'
+                    placeholder='How are you feeling today?'
+                    value={this.state.post ? this.state.post : '' }
+                    onChange={ (val) => this.setInputValue('post', val) }
+                />
             </div>
         )
     }

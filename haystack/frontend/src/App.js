@@ -11,6 +11,7 @@ import Home from './Home';
 import Forums from './Forums';
 import Settings from './Settings';
 import SignUp from './SignUp';
+import EditAbout from './profile/EditAbout';
 
 class App extends React.Component {
   async componentDidMount() {
@@ -63,6 +64,7 @@ class App extends React.Component {
                   <Navbar />
                     <Switch>
                       <Route path='/' exact component={Home} />
+                      <Route path='/profile/editabout' component={EditAbout} />
                       <Route path='/profile/about' component={About} />
                       <Route path='/profile' component={Profile} />
                       <Route path='/forums' component={Forums} />
