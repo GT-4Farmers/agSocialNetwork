@@ -4,12 +4,14 @@ import UserStore from './stores/UserStore';
 import Login from './Login';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
-import Profile from './Profile';
+import Profile from './profile/Profile';
+import About from './profile/About';
 import Navbar from './Navbar';
 import Home from './Home';
 import Forums from './Forums';
 import Settings from './Settings';
 import SignUp from './SignUp';
+import EditAbout from './profile/EditAbout';
 
 class App extends React.Component {
   async componentDidMount() {
@@ -62,6 +64,8 @@ class App extends React.Component {
                   <Navbar />
                     <Switch>
                       <Route path='/' exact component={Home} />
+                      <Route path='/profile/editabout' component={EditAbout} />
+                      <Route path='/profile/about' component={About} />
                       <Route path='/profile' component={Profile} />
                       <Route path='/forums' component={Forums} />
                       <Route path='/settings' component={Settings} />

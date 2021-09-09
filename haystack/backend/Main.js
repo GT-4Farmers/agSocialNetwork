@@ -5,6 +5,7 @@ const mysql = require('mysql');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const Router = require('./Router');
+const cors = require('cors');
 
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json());
@@ -24,6 +25,8 @@ db.connect(function(err) {
     }
     console.log('Connected!')
 });
+
+app.use(cors());
 
 const sessionStore = new MySQLStore({
     expiration: (1825 * 86400 * 1000),
