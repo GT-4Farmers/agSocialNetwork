@@ -55,6 +55,22 @@ class Router {
                                 msg: 'An error occured, please try again.'
                             })
                             return;
+                        }
+                    });
+
+                    var bio = '';
+                    var birthdate = '';
+                    var location = '';
+                    var phone = ''
+                    var sql = `INSERT INTO Profiles (email, bio, birthdate, location, phone) VALUES (?, ?, ?, ?, ?)`;
+                    var cols = [email, bio, birthdate, location, phone];
+                    db.query(sql, cols, function (err, data) {
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: 'An error occured, please try again.'
+                            })
+                            return;
                         } else {
                             res.json({
                                 success: true,
