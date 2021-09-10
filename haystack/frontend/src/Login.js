@@ -1,10 +1,11 @@
+import './Login.css';
 import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
 import { Link } from 'react-router-dom';
 import Logo from './logo_noName.png';
-import './Login.css';
+
 // import Navbar from './Navbar';
 
 class Login extends React.Component {
@@ -97,7 +98,7 @@ class Login extends React.Component {
                 />
                 <h1>HAYSTACK</h1>
             </header>
-            <h2>Login</h2>
+            <h2>Log In</h2>
             <div className="loginBox">
                 <InputField
                     type='text'
@@ -114,13 +115,14 @@ class Login extends React.Component {
                 />
 
                 <SubmitButton 
-                    text='Show/Hide'
+                    text='Show/Hide Password'
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.toggleShow() }
                 />
         
-                <SubmitButton
-                    text='Login'
+                <SubmitButton   
+                    className = "loginbtn"
+                    text='Log In'
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doLogin() }
                 />

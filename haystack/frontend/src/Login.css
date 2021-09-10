@@ -39,16 +39,36 @@ input {
     outline: none;
     border-radius: 10em;
     color: #219653;
-    width: 70%;
-    margin: 1% 15%;
-    padding: 0.5em;
-    font-size: 1.2em;
+    width: 65%;
+    height: 1.8em;
+    margin: .5% 17.5%;
+    padding: 0.4em;
+    font-size: 1.4em;
     background: #DEDEDE;
     border-style: none;
     box-shadow: 0em 0em .12em black;
 }
 
-button {
-    margin: 2% 35%;
-}
+::placeholder {
+    color: #219653;
+    opacity: 1;
+  }
 
+button {
+    margin: 1% 25%;
+    width: 50%;
+    color: #FFF;
+    background: #166C3B;
+    border-radius: 2em;
+    padding: .5em;
+    font-size: 1.7rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+  }
+  
+  button:hover {
+    background: #6FCF97;
+    color: #fff;
+    transition: all 0.3s ease-out;
+  }
