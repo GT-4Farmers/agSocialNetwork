@@ -140,7 +140,7 @@ class SignUp extends React.Component {
                     />
 
                     { <SubmitButton
-                        text='Show/Hide'
+                        text='Show/Hide Password' 
                         disabled={this.state.buttonDisabled}
                         onClick={ () => this.toggleShow() }
                     /> }

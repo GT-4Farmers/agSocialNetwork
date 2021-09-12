@@ -45,7 +45,8 @@ input {
   padding-top: 16px;
 } */
 
-.btn {
+/*
+button {
   width: 30%;
   color: #292929;
   padding: 12px;
@@ -57,11 +58,12 @@ input {
   transition: all 0.3s ease-out;
 }
 
-.btn:hover {
+button:hover {
   background: #6FCF97;
   color: #fff;
   transition: all 0.3s ease-out;
 }
+*/
 
 .btn-gap {
   padding-top: 25px;

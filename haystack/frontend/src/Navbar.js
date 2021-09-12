@@ -70,7 +70,7 @@ class Navbar extends React.Component {
             <div className='btn-gap'>
               <a href={window.location.protocol + "//" + window.location.host}>
                 <SubmitButton 
-                text={'Log out'}
+                text={'Log Out'}
                 disabled={false}
                 onClick={ () => this.doLogout() }
                 />

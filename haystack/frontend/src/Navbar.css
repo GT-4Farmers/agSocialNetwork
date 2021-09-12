@@ -56,7 +56,7 @@
 
 .nav-links {
   margin-top: 5vh;
-  padding: 15px 0px 15px 0px;
+  padding: 5% 0;
   text-align: center;
   text-decoration: none;
   font-size: 1.5rem;
@@ -88,3 +88,23 @@
   background-color: #fff;
   transition: all 0.2s ease-out;
 }
+
+/*
+button {
+  margin: 2% 0%;
+  padding: 5% 0;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #ffffff;
+  width: 100%;
+  transition: 0.3s;
+  border-radius: 0;
+  background-color: #27AE60;
+}
+
+button:hover {
+  color: black;
+  background-color: #fff;
+  transition: all 0.2s ease-out;
+}
+*/
