@@ -60,7 +60,7 @@ class Profile extends React.Component {
     render() {
         return (
             <div className='profile'>
-                {UserStore.firstName} {UserStore.lastName}
+                <h2>{UserStore.firstName} {UserStore.lastName}</h2>
                 <Link to="/profile/about">
                     <SubmitButton
                         text='About'

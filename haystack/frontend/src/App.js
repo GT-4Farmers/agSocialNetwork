@@ -89,11 +89,19 @@ class App extends React.Component {
       );
     } else if (!(UserStore.isLoggedIn)) {
       if (window.location.pathname == '/signup') {
-        return (
-          <div className = "login">
-            <SignUp />
-          </div>
-        )
+        if (!UserStore.isNewUser) {
+          return (
+            <div className="login">
+              <Login />
+            </div>
+          )
+        } else {
+          return (
+            <div className = "login">
+              <SignUp />
+            </div>
+          )
+        }
       }
       return (
         // <div className= "login">

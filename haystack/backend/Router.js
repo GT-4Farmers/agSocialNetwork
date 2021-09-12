@@ -52,32 +52,33 @@ class Router {
                                 msg: 'An error occured, please try again.'
                             })
                             return;
+                        } else {
+                            var bio = '';
+                            var birthdate = '';
+                            var location = '';
+                            var phone = ''
+                            var sql = `INSERT INTO Profiles (email, bio, birthdate, location, phone) VALUES (?, ?, ?, ?, ?)`;
+                            var cols = [email, bio, birthdate, location, phone];
+                            db.query(sql, cols, function (err, data) {
+                                if (err) {
+                                    res.json({
+                                        success: false,
+                                        msg: 'An error occured, please try again.'
+                                    })
+                                    return;
+                                } else {
+                                    res.json({
+                                        success: true,
+                                        email: email,
+                                        firstName: firstName,
+                                        lastName: lastName
+                                    })
+                                    return;
+                                }
+                            });
                         }
                     });
 
-                    var bio = '';
-                    var birthdate = '';
-                    var location = '';
-                    var phone = ''
-                    var sql = `INSERT INTO Profiles (email, bio, birthdate, location, phone) VALUES (?, ?, ?, ?, ?)`;
-                    var cols = [email, bio, birthdate, location, phone];
-                    db.query(sql, cols, function (err, data) {
-                        if (err) {
-                            res.json({
-                                success: false,
-                                msg: 'An error occured, please try again.'
-                            })
-                            return;
-                        } else {
-                            res.json({
-                                success: true,
-                                email: email,
-                                firstName: firstName,
-                                lastName: lastName
-                            })
-                            return;
-                        }
-                    });
                 }
             });
         })
@@ -230,7 +231,6 @@ class Router {
             var update_sql = 'UPDATE Profiles SET bio = ?, birthdate = ?, location = ?, phone = ? WHERE email = ?'
             var update_cols = [bio, birthdate, location, phone, email]
             db.query(update_sql, update_cols, (err) => {
-            //db.query(`UPDATE Profiles SET bio = "${req.body.bio}", birthdate = "${req.body.birthday}", location = "${req.body.location}", phone = "${req.body.phone}" WHERE email = "${req.session.userID}"`, (err, data, fields) => {
                 if (err) {
                     res.json({
                         success: false,
