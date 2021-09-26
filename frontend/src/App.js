@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useParams } from 'react-router-dom';
 import Axios from 'axios';
 
 import AuthContext from './states/AuthContext';
@@ -32,17 +32,26 @@ function App() {
     return () => { unmounted = true };
   });
 
+  function BlogPost() {
+    let { slug } = useParams();
+    return <div>Now showing post {slug}</div>;
+  }
+  
+
   return (
     <Router>
-      <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser}}>
+      <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser, slug}}>
         <Header />
         <Switch>
           <Route exact path="/" component={Login} />
           <Route path="/home" component={Home} />
           <Route path="/profile/about" component={About} />
-          <Route path="/profile" component={Profile} />
           <Route path="/searchUser" component={SearchUser} />
           <Route path="/register" component={Register} />
+          <Route path="/:slug" component={Profile} />
+          <Route path="/blog/:slug">
+            <BlogPost />
+          </Route>
         </Switch>
       </AuthContext.Provider>
     </Router>
