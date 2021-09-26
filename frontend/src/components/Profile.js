@@ -19,7 +19,7 @@ function Profile() {
         Axios.get("http://localhost:3001/profile")
         .then(res => {
             if (!unmounted) {
-                setEmail(res.data.email)
+                setEmail(res.data.email);
                 setFirstName(res.data.firstName);
                 setLastName(res.data.lastName);
             }
@@ -30,6 +30,10 @@ function Profile() {
 
     const handleAbout = () => {
         history.push("/profile/about");
+    }
+
+    const handleFriends = () => {
+        history.push("/profile/friends");
     }
 
     if (!isLoggedIn) {
@@ -48,10 +52,10 @@ function Profile() {
         </div>
         {/* <div>
             <button onClick={handlePhotos}>Photos</button>
-        </div>
+        </div>*/}
         <div>
             <button onClick={handleFriends}>Friends</button>
-        </div> */}
+        </div>
     </div>
     )
 }

@@ -9,6 +9,7 @@ import Register from './components/Register';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import About from './components/About';
+import Friends from './components/Friends';
 import SearchUser from './components/SearchUser';
 import './App.css';
 
@@ -39,6 +40,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Login} />
           <Route path="/home" component={Home} />
+          <Route path="/profile/friends" component={Friends} />
           <Route path="/profile/about" component={About} />
           <Route path="/profile" component={Profile} />
           <Route path="/searchUser" component={SearchUser} />
