@@ -32,26 +32,17 @@ function App() {
     return () => { unmounted = true };
   });
 
-  function BlogPost() {
-    let { slug } = useParams();
-    return <div>Now showing post {slug}</div>;
-  }
-  
-
   return (
     <Router>
-      <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser, slug}}>
+      <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser}}>
         <Header />
         <Switch>
           <Route exact path="/" component={Login} />
           <Route path="/home" component={Home} />
-          <Route path="/profile/about" component={About} />
           <Route path="/searchUser" component={SearchUser} />
           <Route path="/register" component={Register} />
-          <Route path="/:slug" component={Profile} />
-          <Route path="/blog/:slug">
-            <BlogPost />
-          </Route>
+          <Route path="/:uid/about" component={About} />
+          <Route path="/:uid" component={Profile} />
         </Switch>
       </AuthContext.Provider>
     </Router>

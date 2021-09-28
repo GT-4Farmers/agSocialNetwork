@@ -13,12 +13,17 @@ function About() {
     const [birthdate, setBirthdate] = useState("");
     const [location, setLocation] = useState("");
     const [phone, setPhone] = useState("");
+    let profileRoute = (window.location.pathname).substring(1, 35)
+    var pathArray = profileRoute.split('/');
+    profileRoute = (pathArray[0]);
 
     const [showElement, setShowText] = useState(false);
     const onClick = () => setShowText(!showElement);
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/profile/about")
+        Axios.post("http://localhost:3001/profile/about", {
+            profileRoute: profileRoute
+        })
         .then(res => {
             setEmail(res.data.email)
             setBio(res.data.bio);
@@ -97,7 +102,7 @@ function About() {
     }
 
     const handleBack = () => {
-        history.push("/profile");
+        history.goBack();
     }
 
     const BioButton = () => <button id="bioBtn" onClick={editBio}>Save</button>;

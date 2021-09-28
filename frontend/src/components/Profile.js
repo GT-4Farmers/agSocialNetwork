@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import '../App.css';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
@@ -9,17 +9,23 @@ function Profile() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
     
+    const [uuid, setUuid] = useState("");
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [profileRoute, setProfileRoute] = useState((window.location.pathname).substring(1))
+    let {uid} = useParams()
+    
 
     useEffect(() => {
         let unmounted = false;
-
-        Axios.get("http://localhost:3001/profile")
+        Axios.post("http://localhost:3001/profile", {
+            profileRoute: profileRoute
+        })
         .then(res => {
             if (!unmounted) {
-                setEmail(res.data.email)
+                setUuid(res.data.uuid);
+                setEmail(res.data.email);
                 setFirstName(res.data.firstName);
                 setLastName(res.data.lastName);
             }
@@ -27,9 +33,10 @@ function Profile() {
 
         return () => { unmounted = true };
     }, []);
+    uid = uuid
 
     const handleAbout = () => {
-        history.push("/profile/about");
+        history.push(`/${uid}/about`);
     }
 
     if (!isLoggedIn) {

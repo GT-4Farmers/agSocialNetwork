@@ -9,12 +9,15 @@ exports.searchUserController = (req, res) => {
         // if at least 1 user exists
         if (data[0]) {
             let users = [];
+            let uniqueIds = [];
             for (const key in data) {
                 users.push(`${data[key].firstName} ${data[key].lastName}`);
+                uniqueIds.push(`${data[key].uuid}`);
             }
 
             res.json({
                 success: true,
+                uniqueIds: [uniqueIds],
                 users: [users]
             })
         } else {
