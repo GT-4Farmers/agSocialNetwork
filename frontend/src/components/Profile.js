@@ -39,6 +39,10 @@ function Profile() {
         history.push(`/${uid}/about`);
     }
 
+    const handleFriends = () => {
+        history.push(`/${uid}/friends`);
+    }
+
     if (!isLoggedIn) {
         return (
             <AuthService />
@@ -55,10 +59,10 @@ function Profile() {
         </div>
         {/* <div>
             <button onClick={handlePhotos}>Photos</button>
-        </div>
+        </div>*/}
         <div>
             <button onClick={handleFriends}>Friends</button>
-        </div> */}
+        </div>
     </div>
     )
 }

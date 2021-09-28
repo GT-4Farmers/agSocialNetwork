@@ -13,9 +13,10 @@ function About() {
     const [birthdate, setBirthdate] = useState("");
     const [location, setLocation] = useState("");
     const [phone, setPhone] = useState("");
-    let profileRoute = (window.location.pathname).substring(1, 35)
+    let profileRoute = (window.location.pathname).substring(1)
     var pathArray = profileRoute.split('/');
     profileRoute = (pathArray[0]);
+    console.log(profileRoute)
 
     const [showElement, setShowText] = useState(false);
     const onClick = () => setShowText(!showElement);

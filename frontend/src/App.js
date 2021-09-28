@@ -9,6 +9,7 @@ import Register from './components/Register';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import About from './components/About';
+import Friends from './components/Friends';
 import SearchUser from './components/SearchUser';
 import './App.css';
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="/home" component={Home} />
           <Route path="/searchUser" component={SearchUser} />
           <Route path="/register" component={Register} />
+          <Route path="/:uid/friends" component={Friends} />
           <Route path="/:uid/about" component={About} />
           <Route path="/:uid" component={Profile} />
         </Switch>
