@@ -14,7 +14,6 @@ function Home() {
     let unmounted = false;
     Axios.get("http://localhost:3001/login")
     .then((res) => {
-      console.log(res);
       if (res && !unmounted) {
         setEmail(res.data.email);
       }

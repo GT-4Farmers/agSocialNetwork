@@ -8,7 +8,6 @@ import AuthService from '../auth/AuthService';
 function Friends() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
-    
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -41,4 +40,4 @@ function Friends() {
     )
 }
 
-export default Friends;
+export default Friends; 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useParams } from 'react-router-dom';
 import Axios from 'axios';
 
 import AuthContext from './states/AuthContext';
@@ -40,11 +40,11 @@ function App() {
         <Switch>
           <Route exact path="/" component={Login} />
           <Route path="/home" component={Home} />
-          <Route path="/profile/friends" component={Friends} />
-          <Route path="/profile/about" component={About} />
-          <Route path="/profile" component={Profile} />
           <Route path="/searchUser" component={SearchUser} />
           <Route path="/register" component={Register} />
+          <Route path="/:uid/friends" component={Friends} />
+          <Route path="/:uid/about" component={About} />
+          <Route path="/:uid" component={Profile} />
         </Switch>
       </AuthContext.Provider>
     </Router>
