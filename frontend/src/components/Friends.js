@@ -28,7 +28,6 @@ function Friends() {
                 if (res.data.success) {
                     friendsListVar = res.data.friendsList[0];
                     setFriendListRoutes(friendsListVar);
-                    console.log(friendListRoutes)
                     Axios.post("http://localhost:3001/profile/friends/friendslist", {
                         friendsUuids: friendsListVar
                     })
@@ -37,7 +36,6 @@ function Friends() {
                             if (res.data.success) {
                                 friendsListNames = res.data.friendsList[0];
                                 setFriendList(friendsListNames);
-                                console.log(friendsListNames)
                             }
                         }
                     })
@@ -46,7 +44,7 @@ function Friends() {
         })
         return () => { unmounted = true };
     }, []);
-    
+
     if (!isLoggedIn) {
         return (
             <AuthService />

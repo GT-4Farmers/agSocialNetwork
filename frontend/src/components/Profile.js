@@ -57,9 +57,10 @@ function Profile() {
         <div>
             <button onClick={handleAbout}>About</button>
         </div>
-        {/* <div>
-            <button onClick={handlePhotos}>Photos</button>
-        </div>*/}
+        <div>
+            {/* <button onClick={handlePhotos}>Photos</button> */}
+            <button>Photos</button>
+        </div>
         <div>
             <button onClick={handleFriends}>Friends</button>
         </div>
