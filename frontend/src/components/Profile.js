@@ -43,10 +43,6 @@ function Profile() {
         history.push(`/${uid}/friends`);
     }
 
-    const handleFriends = () => {
-        history.push("/profile/friends");
-    }
-
     if (!isLoggedIn) {
         return (
             <AuthService />
