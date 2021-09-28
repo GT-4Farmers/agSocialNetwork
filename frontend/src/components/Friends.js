@@ -10,13 +10,15 @@ function Friends() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
     const [friendList, setFriendList] = useState([])
+    const [friendListRoutes, setFriendListRoutes] = useState([])
     let profileRoute = (window.location.pathname).substring(1)
     var pathArray = profileRoute.split('/');
     profileRoute = (pathArray[0]);
-    console.log(profileRoute)
 
     useEffect(() => {
         let unmounted = false;
+        let friendsListVar = []
+        let friendsListNames = []
 
         Axios.post("http://localhost:3001/profile/friends", {
             profileRoute: profileRoute
@@ -24,22 +26,31 @@ function Friends() {
         .then(res => {
             if (!unmounted) {
                 if (res.data.success) {
-                    setFriendList(res.data.friendsList[0]);
+                    friendsListVar = res.data.friendsList[0];
+                    setFriendListRoutes(friendsListVar);
+                    console.log(friendListRoutes)
+                    Axios.post("http://localhost:3001/profile/friends/friendslist", {
+                        friendsUuids: friendsListVar
+                    })
+                    .then(res => {
+                        if (!unmounted) {
+                            if (res.data.success) {
+                                friendsListNames = res.data.friendsList[0];
+                                setFriendList(friendsListNames);
+                                console.log(friendsListNames)
+                            }
+                        }
+                    })
                 }
             }
         })
         return () => { unmounted = true };
-    }, [friendList]);
-    console.log("same",friendList)
-
+    }, []);
+    
     if (!isLoggedIn) {
         return (
             <AuthService />
         )
-    }
-
-    const handleFriendClicked = (friendUrl) => {
-        history.push(`/${friendUrl}`)
     }
 
     return (
@@ -48,15 +59,13 @@ function Friends() {
                 <h1> Friends </h1>
             </div>
             <div className="registration">
-                {(!(friendList.length === 0)) ? friendList.map((val, key) => {
+            {(!(friendList.length === 0)) ? friendList.map((val, key) => {
                 return(
-                    <button key={key} onClick={handleFriendClicked(friendList[key])}>
-                        {/* <button onClick={handleFriendClicked(friendList[key])}> */}
-                            {val}
-                        {/* </button> */}
-                    </button>
+                    <Link key={key} to={`/${friendListRoutes[key]}`}>
+                        {val}
+                    </Link>
                 )
-            }) : <div>User has no friends... :(</div> }
+            }) : <div>User has no friends... :(</div>}
             </div>
         </div>
     )

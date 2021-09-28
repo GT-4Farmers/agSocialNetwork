@@ -2,7 +2,6 @@ exports.getFriendsController = (req, res) => {
     const db = require("../server");
     
     let route = req.body.profileRoute;
-    // console.log("userToSearch:",userToSearch);
 
     db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND Relationship = ? UNION SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND Relationship = ?', [route, 'Accepted', route, 'Accepted'], (err, data, fields) => {
 
@@ -10,9 +9,12 @@ exports.getFriendsController = (req, res) => {
         if (data[0]) {
             let friendsList = [];
             for (const key in data) {
-                friendsList.push(`${data[key].RequesterID}`);
+                if (data[key].RequesterID == route) {
+                    friendsList.push(`${data[key].RequesteeID}`);
+                } else {
+                    friendsList.push(`${data[key].RequesterID}`);
+                }
             }
-            console.log(friendsList)
 
             res.json({
                 success: true,

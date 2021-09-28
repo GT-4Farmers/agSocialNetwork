@@ -16,7 +16,6 @@ function About() {
     let profileRoute = (window.location.pathname).substring(1)
     var pathArray = profileRoute.split('/');
     profileRoute = (pathArray[0]);
-    console.log(profileRoute)
 
     const [showElement, setShowText] = useState(false);
     const onClick = () => setShowText(!showElement);
