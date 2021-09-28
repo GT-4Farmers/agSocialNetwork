@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import '../App.css';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
+import { Link } from "react-router-dom";
 
 function Friends() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
@@ -14,20 +15,22 @@ function Friends() {
     profileRoute = (pathArray[0]);
     console.log(profileRoute)
 
-    // useEffect(() => {
-    //     let unmounted = false;
+    useEffect(() => {
+        let unmounted = false;
 
-    //     Axios.get("http://localhost:3001/profile")
-    //     .then(res => {
-    //         if (!unmounted) {
-    //             setEmail(res.data.email)
-    //             setFirstName(res.data.firstName);
-    //             setLastName(res.data.lastName);
-    //         }
-    //     })
-
-    //     return () => { unmounted = true };
-    // }, []);
+        Axios.post("http://localhost:3001/profile/friends", {
+            profileRoute: profileRoute
+        })
+        .then(res => {
+            if (!unmounted) {
+                if (res.data.success) {
+                    setFriendList(res.data.friendsList[0]);
+                }
+            }
+        })
+        return () => { unmounted = true };
+    }, [friendList]);
+    console.log("same",friendList)
 
     if (!isLoggedIn) {
         return (
@@ -35,10 +38,27 @@ function Friends() {
         )
     }
 
+    const handleFriendClicked = (friendUrl) => {
+        history.push(`/${friendUrl}`)
+    }
+
     return (
-    <div className="App">
-        <h1>Friends</h1>
-    </div>
+        <div className="App">
+            <div>
+                <h1> Friends </h1>
+            </div>
+            <div className="registration">
+                {(!(friendList.length === 0)) ? friendList.map((val, key) => {
+                return(
+                    <button key={key} onClick={handleFriendClicked(friendList[key])}>
+                        {/* <button onClick={handleFriendClicked(friendList[key])}> */}
+                            {val}
+                        {/* </button> */}
+                    </button>
+                )
+            }) : <div>User has no friends... :(</div> }
+            </div>
+        </div>
     )
 }
 
