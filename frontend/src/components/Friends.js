@@ -8,9 +8,11 @@ import AuthService from '../auth/AuthService';
 function Friends() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [friendList, setFriendList] = useState([])
+    let profileRoute = (window.location.pathname).substring(1)
+    var pathArray = profileRoute.split('/');
+    profileRoute = (pathArray[0]);
+    console.log(profileRoute)
 
     // useEffect(() => {
     //     let unmounted = false;

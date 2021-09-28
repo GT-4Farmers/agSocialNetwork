@@ -21,7 +21,7 @@ function Header(props) {
     })
 
     return () => { unmounted = true };
-  }, []);
+  });
   uid = uuid;
 
   function renderNav() {

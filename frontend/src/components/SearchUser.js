@@ -13,7 +13,7 @@ function SearchUser() {
   const [userToSearch, setUserToSearch] = useState("");
 
   const [foundUser, setFoundUser] = useState([]);
-  const [foundUserIds, setFoundUserIds] = useState([1]);
+  const [foundUserIds, setFoundUserIds] = useState([]);
 
   useEffect(() => {
     let unmounted = false;
@@ -36,6 +36,7 @@ function SearchUser() {
   const handleChange = (e) => {
     if (e.target.value === "") {
       setFoundUser([]);
+      setFoundUserIds([]);
     }
     setUserToSearch(e.target.value);
   }
