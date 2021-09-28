@@ -38,6 +38,12 @@ function Profile() {
         )
     }
 
+    async function sendFriendRequest() {
+        // console.log("Friend Request Sent!");
+        const res = await fetch("/friends");
+        console.log(res);
+    }
+
     return (
     <div className="App">
         <h1>Profile</h1>
@@ -52,6 +58,9 @@ function Profile() {
         <div>
             <button onClick={handleFriends}>Friends</button>
         </div> */}
+        <div>
+            <button onClick={sendFriendRequest}>Send Friend Request</button>
+        </div>
     </div>
     )
 }

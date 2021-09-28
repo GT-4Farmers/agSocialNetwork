@@ -4,7 +4,7 @@ import Axios from 'axios'
 import '../App.css';
 import AuthContext from '../states/AuthContext';
 
-function Login(props) {
+function Login() {
 
     let history = useHistory();
 
@@ -38,7 +38,7 @@ function Login(props) {
                 alert(response.data.msg);
             } else {
                 setIsLoggedIn(true);
-                console.log("successful login");
+                // console.log("successful login");
                 history.push("/home");
             }
         })

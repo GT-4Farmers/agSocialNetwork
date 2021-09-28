@@ -6,7 +6,6 @@ import '../App.css';
 import AuthService from '../auth/AuthService';
 
 function Home() {
-  let history = useHistory();
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const [email, setEmail] = useState("");
 
