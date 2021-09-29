@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
 
@@ -8,22 +8,19 @@ function About() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
     const history = useHistory();
+    let {uid} = useParams()
+    const [uuid, setUuid] = useState(uid)
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState("");
     const [birthdate, setBirthdate] = useState("");
     const [location, setLocation] = useState("");
     const [phone, setPhone] = useState("");
-    let profileRoute = (window.location.pathname).substring(1)
-    var pathArray = profileRoute.split('/');
-    profileRoute = (pathArray[0]);
-    console.log(profileRoute)
-
     const [showElement, setShowText] = useState(false);
     const onClick = () => setShowText(!showElement);
 
     useEffect(() => {
         Axios.post("http://localhost:3001/profile/about", {
-            profileRoute: profileRoute
+            profileRoute: uuid
         })
         .then(res => {
             setEmail(res.data.email)
