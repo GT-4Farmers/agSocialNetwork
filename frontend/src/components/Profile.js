@@ -8,19 +8,16 @@ import AuthService from '../auth/AuthService';
 function Profile() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
-    
-    const [uuid, setUuid] = useState("");
+    let {uid} = useParams()
+    const [uuid, setUuid] = useState(uid);
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [profileRoute, setProfileRoute] = useState((window.location.pathname).substring(1))
-    let {uid} = useParams()
-    
 
     useEffect(() => {
         let unmounted = false;
         Axios.post("http://localhost:3001/profile", {
-            profileRoute: profileRoute
+            profileRoute: uid
         })
         .then(res => {
             if (!unmounted) {
@@ -33,14 +30,13 @@ function Profile() {
 
         return () => { unmounted = true };
     }, []);
-    uid = uuid
 
     const handleAbout = () => {
-        history.push(`/${uid}/about`);
+        history.push(`/${uuid}/about`);
     }
 
     const handleFriends = () => {
-        history.push(`/${uid}/friends`);
+        history.push(`/${uuid}/friends`);
     }
 
     if (!isLoggedIn) {
