@@ -1,7 +1,6 @@
 exports.getAboutController = (req, res) => {
     const db = require("../server");
     let same = req.body.profileRoute;
-    // console.log(req.session.userID);
     db.query("SELECT * FROM Profiles WHERE uuid = ?", same, (err, data) => {
         if (data) {
             res.json({

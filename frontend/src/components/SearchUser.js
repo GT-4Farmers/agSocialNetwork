@@ -4,7 +4,7 @@ import '../App.css';
 import AuthContext from '../states/AuthContext';
 import { useHistory } from 'react-router';
 import AuthService from '../auth/AuthService';
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function SearchUser() {
 
