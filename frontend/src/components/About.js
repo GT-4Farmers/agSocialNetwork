@@ -16,6 +16,8 @@ function About() {
     const [location, setLocation] = useState("");
     const [phone, setPhone] = useState("");
     const [showElement, setShowText] = useState(false);
+    const [isProfileOwner, setIsProfileOwner] = useState(true) //these need to be set somehow
+    const [isFriend, setIsFriend] = useState(false)
     const onClick = () => setShowText(!showElement);
 
     useEffect(() => {
@@ -116,49 +118,54 @@ function About() {
         )
     }
 
-    return (
+    console.log(isFriend)
+
+    return ( //Bio is visible to all, other fields visible to profile owner/friends only, editing is only for the profile owner
     <div className="registration">
         <h1>About</h1>
         <ul>
             <li>Bio: {showElement ? null : bio}
-                {showElement ? <input
+                {showElement && isProfileOwner ? <input
                     type="text"
                     id="bio"
                     value={bio ? bio : ""}
                     onChange={handleBioChange}
                 /> : null}
-                {showElement ? <BioButton /> : null}
+                {showElement && isProfileOwner ? <BioButton /> : null}
             </li>
+            {isProfileOwner || isFriend ?
             <li>Birthday: {showElement ? null : birthdate}
-                {showElement ? <input
+                {showElement && isProfileOwner ? <input
                     type="text"
                     id="birthdate"
                     value={birthdate ? birthdate : ""}
                     onChange={handleBirthdateChange}
                 /> : null}
-                {showElement ? <BirthdayButton /> : null}
-            </li>
+                {showElement && isProfileOwner ? <BirthdayButton /> : null}
+            </li> : null}
+            {isProfileOwner || isFriend ?
             <li>Location: {showElement ? null : location}
-                {showElement ? <input
+                {showElement && isProfileOwner ? <input
                     type="text"
                     id="location"
                     value={location ? location : ""}
                     onChange={handleLocationChange}
                 /> : null}
                 {showElement ? <LocationButton /> : null}
-            </li>
+            </li> : null}
+            {isProfileOwner || isFriend ?
             <li>Phone: {showElement ? null : phone}
-                {showElement ? <input
+                {showElement&& isProfileOwner ? <input
                     type="text"
                     id="phone"
                     value={phone ? phone : ""}
                     onChange={handlePhoneChange}
                 /> : null}
-                {showElement ? <PhoneButton /> : null}
-            </li>
+                {showElement && isProfileOwner ? <PhoneButton /> : null}
+            </li> : null}
         </ul>
         <div>
-            <button onClick={onClick}>{value}</button>
+            {isProfileOwner ? <button onClick={onClick}>{value}</button> : null}
         </div>
         <div>
             <button onClick={handleBack}>Back</button>
