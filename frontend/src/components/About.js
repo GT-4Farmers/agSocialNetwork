@@ -16,7 +16,7 @@ function About() {
     const [location, setLocation] = useState("");
     const [phone, setPhone] = useState("");
     const [showElement, setShowText] = useState(false);
-    const [isProfileOwner, setIsProfileOwner] = useState(true) //these need to be set somehow
+    const [isProfileOwner, setIsProfileOwner] = useState(false)
     const [isFriend, setIsFriend] = useState(false)
     const onClick = () => setShowText(!showElement);
 
@@ -32,6 +32,20 @@ function About() {
             setPhone(res.data.phone);
         })
     }, []);
+
+    useEffect(() => {
+        Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
+            profileRoute: uuid
+        })
+        .then(res => {
+            if (res.data.success) {
+                setIsProfileOwner(res.data.isUser)
+                setIsFriend(res.data.isFriend)
+            } else {
+                alert(res.data.msg)
+            }
+        })
+    }, [])
 
     const editBio = () => {
         Axios.put('http://localhost:3001/profile/about/bio', {
@@ -118,7 +132,6 @@ function About() {
         )
     }
 
-    console.log(isFriend)
 
     return ( //Bio is visible to all, other fields visible to profile owner/friends only, editing is only for the profile owner
     <div className="registration">

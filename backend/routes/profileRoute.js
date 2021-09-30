@@ -9,6 +9,7 @@ editBioRoute = require("../controllers/editBioController");
 editBirthdateRoute = require("../controllers/editBirthdateController");
 editLocationRoute = require("../controllers/editLocationController");
 editPhoneRoute = require("../controllers/editPhoneController");
+uuidIsUserOrFriendRoute = require("../controllers/uuidIsUserOrFriendController")
 
 router.put("/about/phone", editPhoneRoute.editPhoneController)
 router.put("/about/location", editLocationRoute.editLocationController)
@@ -17,6 +18,7 @@ router.put("/about/bio", editBioRoute.editBioController)
 router.post("/about/", aboutRoute.getAboutController)
 router.post("/friends/friendslist", friendsListRoute.getFriendsListController)
 router.post("/friends/", friendsRoute.getFriendsController)
+router.post("/uuidIsUserOrFriend", uuidIsUserOrFriendRoute.uuidIsUserOrFriendController)
 router.get("/", profileHeaderRoute.profileHeaderController)
 router.post("/", profileRoute.profileController)
 
