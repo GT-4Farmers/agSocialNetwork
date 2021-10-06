@@ -32,7 +32,6 @@ exports.loginController = (req, res) => {
             bcrypt.compare(password, data[0].password, (bcryptErr, verified) => {
                 if (verified) {
                     req.session.userID = data[0].uuid;
-                    // console.log(req.session.userID);
 
                     res.json({
                         success:true,

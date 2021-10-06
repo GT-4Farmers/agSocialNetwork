@@ -4,6 +4,7 @@ import '../App.css';
 import AuthContext from '../states/AuthContext';
 import { useHistory } from 'react-router';
 import AuthService from '../auth/AuthService';
+import { Link } from "react-router-dom";
 
 function SearchUser() {
 
@@ -12,7 +13,7 @@ function SearchUser() {
   const [userToSearch, setUserToSearch] = useState("");
 
   const [foundUser, setFoundUser] = useState([]);
-  let a = [];
+  const [foundUserIds, setFoundUserIds] = useState([]);
 
   useEffect(() => {
     let unmounted = false;
@@ -24,6 +25,7 @@ function SearchUser() {
         if (!unmounted) {
           if (res.data.success) {
             setFoundUser(res.data.users[0]);
+            setFoundUserIds(res.data.uniqueIds[0])
           }
         }
       })
@@ -34,6 +36,7 @@ function SearchUser() {
   const handleChange = (e) => {
     if (e.target.value === "") {
       setFoundUser([]);
+      setFoundUserIds([]);
     }
     setUserToSearch(e.target.value);
   }
@@ -60,12 +63,9 @@ function SearchUser() {
       <div className="registration">
         {(!(foundUser.length === 0)) ? foundUser.map((val, key) => {
           return(
-
-            // TODO: Change divs to Links
-
-            <li key={key}>
+            <Link key={key} to={foundUserIds[key]}>
               {val}
-            </li>
+            </Link>
           )
         }) : <div>No user found with that name</div> }
       </div>

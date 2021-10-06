@@ -1,6 +1,5 @@
 exports.isLoggedInController = (req, res) => {
     const db = require("../server");
-    // console.log("is logged in: ", req.session.userID);
 
     if (req.session.userID) {
         let cols = [req.session.userID];

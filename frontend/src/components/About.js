@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
 
@@ -8,17 +8,22 @@ function About() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
     const history = useHistory();
+    let {uid} = useParams()
+    const [uuid, setUuid] = useState(uid)
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState("");
     const [birthdate, setBirthdate] = useState("");
     const [location, setLocation] = useState("");
     const [phone, setPhone] = useState("");
-
     const [showElement, setShowText] = useState(false);
+    const [isProfileOwner, setIsProfileOwner] = useState(false)
+    const [isFriend, setIsFriend] = useState(false)
     const onClick = () => setShowText(!showElement);
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/profile/about")
+        Axios.post("http://localhost:3001/profile/about", {
+            profileRoute: uuid
+        })
         .then(res => {
             setEmail(res.data.email)
             setBio(res.data.bio);
@@ -27,6 +32,20 @@ function About() {
             setPhone(res.data.phone);
         })
     }, []);
+
+    useEffect(() => {
+        Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
+            profileRoute: uuid
+        })
+        .then(res => {
+            if (res.data.success) {
+                setIsProfileOwner(res.data.isUser)
+                setIsFriend(res.data.isFriend)
+            } else {
+                alert(res.data.msg)
+            }
+        })
+    }, [])
 
     const editBio = () => {
         Axios.put('http://localhost:3001/profile/about/bio', {
@@ -97,7 +116,7 @@ function About() {
     }
 
     const handleBack = () => {
-        history.push("/profile");
+        history.goBack();
     }
 
     const BioButton = () => <button id="bioBtn" onClick={editBio}>Save</button>;
@@ -113,49 +132,53 @@ function About() {
         )
     }
 
-    return (
+
+    return ( //Bio is visible to all, other fields visible to profile owner/friends only, editing is only for the profile owner
     <div className="registration">
         <h1>About</h1>
         <ul>
             <li>Bio: {showElement ? null : bio}
-                {showElement ? <input
+                {showElement && isProfileOwner ? <input
                     type="text"
                     id="bio"
                     value={bio ? bio : ""}
                     onChange={handleBioChange}
                 /> : null}
-                {showElement ? <BioButton /> : null}
+                {showElement && isProfileOwner ? <BioButton /> : null}
             </li>
+            {isProfileOwner || isFriend ?
             <li>Birthday: {showElement ? null : birthdate}
-                {showElement ? <input
+                {showElement && isProfileOwner ? <input
                     type="text"
                     id="birthdate"
                     value={birthdate ? birthdate : ""}
                     onChange={handleBirthdateChange}
                 /> : null}
-                {showElement ? <BirthdayButton /> : null}
-            </li>
+                {showElement && isProfileOwner ? <BirthdayButton /> : null}
+            </li> : null}
+            {isProfileOwner || isFriend ?
             <li>Location: {showElement ? null : location}
-                {showElement ? <input
+                {showElement && isProfileOwner ? <input
                     type="text"
                     id="location"
                     value={location ? location : ""}
                     onChange={handleLocationChange}
                 /> : null}
                 {showElement ? <LocationButton /> : null}
-            </li>
+            </li> : null}
+            {isProfileOwner || isFriend ?
             <li>Phone: {showElement ? null : phone}
-                {showElement ? <input
+                {showElement&& isProfileOwner ? <input
                     type="text"
                     id="phone"
                     value={phone ? phone : ""}
                     onChange={handlePhoneChange}
                 /> : null}
-                {showElement ? <PhoneButton /> : null}
-            </li>
+                {showElement && isProfileOwner ? <PhoneButton /> : null}
+            </li> : null}
         </ul>
         <div>
-            <button onClick={onClick}>{value}</button>
+            {isProfileOwner ? <button onClick={onClick}>{value}</button> : null}
         </div>
         <div>
             <button onClick={handleBack}>Back</button>

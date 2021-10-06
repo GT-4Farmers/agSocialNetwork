@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import '../App.css';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
@@ -8,18 +8,21 @@ import AuthService from '../auth/AuthService';
 function Profile() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
-    
+    let {uid} = useParams()
+    const [uuid, setUuid] = useState(uid);
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
 
     useEffect(() => {
         let unmounted = false;
-
-        Axios.get("http://localhost:3001/profile")
+        Axios.post("http://localhost:3001/profile", {
+            profileRoute: uid
+        })
         .then(res => {
             if (!unmounted) {
-                setEmail(res.data.email)
+                setUuid(res.data.uuid);
+                setEmail(res.data.email);
                 setFirstName(res.data.firstName);
                 setLastName(res.data.lastName);
             }
@@ -29,7 +32,11 @@ function Profile() {
     }, []);
 
     const handleAbout = () => {
-        history.push("/profile/about");
+        history.push(`/${uuid}/about`);
+    }
+
+    const handleFriends = () => {
+        history.push(`/${uuid}/friends`);
     }
 
     if (!isLoggedIn) {
@@ -46,12 +53,13 @@ function Profile() {
         <div>
             <button onClick={handleAbout}>About</button>
         </div>
-        {/* <div>
-            <button onClick={handlePhotos}>Photos</button>
+        <div>
+            {/* <button onClick={handlePhotos}>Photos</button> */}
+            <button>Photos</button>
         </div>
         <div>
             <button onClick={handleFriends}>Friends</button>
-        </div> */}
+        </div>
     </div>
     )
 }
