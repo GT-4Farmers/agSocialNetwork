@@ -51,6 +51,10 @@ function Friends() {
         )
     }
 
+    const handleBack = () => {
+        history.goBack();
+    }
+
     return (
         <div className="App">
             <div>
@@ -64,6 +68,9 @@ function Friends() {
                     </Link>
                 )
             }) : <div>User has no friends... :(</div>}
+            </div>
+            <div>
+                <button onClick={handleBack}>Back</button>
             </div>
         </div>
     )

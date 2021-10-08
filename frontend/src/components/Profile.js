@@ -17,7 +17,7 @@ function Profile() {
     useEffect(() => {
         let unmounted = false;
         Axios.post("http://localhost:3001/profile", {
-            profileRoute: uid
+            profileRoute: uuid
         })
         .then(res => {
             if (!unmounted) {
