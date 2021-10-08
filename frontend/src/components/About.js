@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { useHistory, useParams } from 'react-router';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
+import '../css/App.css';
 
 function About() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);

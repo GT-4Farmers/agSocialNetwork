@@ -11,7 +11,7 @@ import Profile from './components/Profile';
 import About from './components/About';
 import Friends from './components/Friends';
 import SearchUser from './components/SearchUser';
-import './App.css';
+import './css/App.css';
 
 function App() {
   
