@@ -1,7 +1,6 @@
 /* CSS SPECIFIC TO HEADER / NAV BAR */
 .navBox {
     position: fixed;
-    list-style-type: none;
     margin: 0;
     padding: 2em 0 1em 2em;
     width: 14em;
@@ -11,7 +10,7 @@
   
   .navButton {
     display: block;
-    padding: 1.5em 3em;
+    padding: 1.5em 1.5em;
     margin: 1em 0;
     background-color: #27AE60;
     border-radius:  2em 0 0 2em;

@@ -43,6 +43,11 @@
   padding-top: 1%;
 }
 
+
+.block {
+  display: block;
+}
+
 .row {
   display: flex;
   flex-direction: row;

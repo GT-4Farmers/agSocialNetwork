@@ -54,9 +54,9 @@ function Notifications() {
     }
 
     return (
-        <div className="App">
+        <div className="content">
             <div>
-                <h1> Notifications </h1>
+                <h2> Notifications </h2>
             </div>
             <div className="registration">
             {(!(incomingRequests.length === 0)) ? incomingRequests.map((val, key) => {
