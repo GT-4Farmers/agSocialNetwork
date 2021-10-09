@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
-import '../App.css';
+import '../css/App.css';
 import { useHistory } from 'react-router';
 import uuid from 'react-uuid';
+import logo from './logo.png';
 
 function Register() {
     let uniqueID = uuid();
@@ -67,54 +68,55 @@ function Register() {
 
     return (
         <div className="App">
-            <div className = "registration">
-                <h1>Sign Up</h1>
-                <label>First Name</label>
-                <input
-                    type="text"
-                    placeholder="First Name"
-                    id="firstNameReg"
-                    value={state.firstNameReg ? state.firstNameReg : ""}
-                    onChange={handleChange}
-                />
-                <label>Last Name</label>
-                <input
-                    type="text"
-                    placeholder="Last Name"
-                    id="lastNameReg"
-                    value={state.lastNameReg ? state.lastNameReg : ""}
-                    onChange={handleChange}
-                />
-                <label>Email</label>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    id="emailReg"
-                    value={state.emailReg ? state.emailReg : ""}
-                    onChange={handleChange}
-                />
-                <label>Password</label>
-                <input
-                    type={hidden ? "password" : "text"}
-                    placeholder="Password"
-                    id="passwordReg"
-                    value={state.passwordReg ? state.passwordReg : ""}
-                    onChange={handleChange}
-                />
-                <label>Confirm Password</label>
-                <input
-                    type={hidden ? "password" : "text"}
-                    placeholder="Confirm Password"
-                    id="confirmPasswordReg"
-                    value={state.confirmPasswordReg ? state.confirmPasswordReg : ""}
-                    onChange={handleChange}
-                />
-                <button onClick={toggleShow}> Show/Hide </button>
-                <button onClick={handleRegister}> Sign Up! </button>
+            <header>
+                <img alt='Haystack Logo' src={logo}/>
+                <h1>HAYSTACK</h1>
+            </header>
+            <h2>Sign Up</h2>
+            <div className = "column">
+                <div className="loginBox">
+                    <input
+                        type="text"
+                        placeholder="First Name"
+                        id="firstNameReg"
+                        value={state.firstNameReg ? state.firstNameReg : ""}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Last Name"
+                        id="lastNameReg"
+                        value={state.lastNameReg ? state.lastNameReg : ""}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        id="emailReg"
+                        value={state.emailReg ? state.emailReg : ""}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type={hidden ? "password" : "text"}
+                        placeholder="Password"
+                        id="passwordReg"
+                        value={state.passwordReg ? state.passwordReg : ""}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type={hidden ? "password" : "text"}
+                        placeholder="Confirm Password"
+                        id="confirmPasswordReg"
+                        value={state.confirmPasswordReg ? state.confirmPasswordReg : ""}
+                        onChange={handleChange}
+                    />
+                    <button onClick={toggleShow} id="showhide">Show/Hide</button>
+                </div>
+                <button onClick={handleRegister}>Sign Up</button>
 
                 <div>
                     <span>Already have an account? </span>
-                    <button onClick={handleHistory}>Login here</button>
+                    <a id="logIn" onClick={handleHistory}>Login here</a>
                 </div>
             </div>
         </div>

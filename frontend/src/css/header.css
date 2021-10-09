@@ -1,0 +1,48 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 2em 0 1em 2em;
+    width: max-content;
+    background-color: #27AE60;
+    border-radius: 0 1em 1em 0;
+  }
+  
+  .navButton {
+    display: block;
+    padding: 1.5em 3em;
+    margin: 1em 0;
+    background-color: #27AE60;
+    border-radius:  2em 0 0 2em;
+    color: #F2F2F2;;
+    fill: #F2F2F2;;
+  }
+  
+  .navButton a {
+    color: inherit;
+    font-size: 1.5em;
+    text-decoration: none;
+    padding-left: .5em;
+  }
+  
+  #navLogOut {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    padding: 0 0 0 .5em;
+    transition: 0s;
+    font-size: 1.5em;
+    width: 100%;
+    text-align: left;
+  }
+   
+  .navButton:hover {
+    background-color: #F2F2F2;
+    fill: #000000;
+    color: #000000;
+    transition: all 0.3s ease-out;
+  }
+  
+  #headerLogo {
+    margin-left: 2em;
+  }

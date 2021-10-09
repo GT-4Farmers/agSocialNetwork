@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import Axios from 'axios';
-import '../App.css';
+import '../css/App.css';
 import AuthContext from '../states/AuthContext';
 import { useHistory } from 'react-router';
 import AuthService from '../auth/AuthService';

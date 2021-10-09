@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import Axios from 'axios';
 import AuthContext from '../states/AuthContext';
 import { useHistory } from 'react-router';
-import '../App.css';
+import '../css/App.css';
 import AuthService from '../auth/AuthService';
 
 function Home() {

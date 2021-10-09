@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router';
-import '../App.css';
+import '../css/App.css';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
