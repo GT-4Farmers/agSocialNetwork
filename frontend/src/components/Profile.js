@@ -45,6 +45,13 @@ function Profile() {
         )
     }
 
+    const handleFriendRequest = () => {
+        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            profileRoute: uid,
+            mode: 'request'
+        })
+    }
+
     return (
     <div className="App">
         <h1>Profile</h1>
@@ -52,13 +59,10 @@ function Profile() {
         
         <div>
             <button onClick={handleAbout}>About</button>
-        </div>
-        <div>
             {/* <button onClick={handlePhotos}>Photos</button> */}
             <button>Photos</button>
-        </div>
-        <div>
             <button onClick={handleFriends}>Friends</button>
+            <button onClick={handleFriendRequest}>Send Friend Request</button>
         </div>
     </div>
     )
