@@ -60,9 +60,9 @@ function Notifications() {
             </div>
             <div className="registration">
             {(!(incomingRequests.length === 0)) ? incomingRequests.map((val, key) => {
-                var requester = <Link key={key} to={`/${incomingRequestsRoutes[key]}`}>{val}</Link>
-                var acceptBtn = <button onClick = {() => {handleAccept(incomingRequestsRoutes[key])}}>Accept</button>
-                var rejectBtn = <button onClick = {() => {handleReject(incomingRequestsRoutes[key])}}>Reject</button>
+                let requester = <Link key={key} to={`/${incomingRequestsRoutes[key]}`}>{val}</Link>
+                let acceptBtn = <button onClick = {() => {handleAccept(incomingRequestsRoutes[key])}}>Accept</button>
+                let rejectBtn = <button onClick = {() => {handleReject(incomingRequestsRoutes[key])}}>Reject</button>
                 return(
                     <div>{requester} has sent you a friend request {acceptBtn} {rejectBtn}</div>
                 )

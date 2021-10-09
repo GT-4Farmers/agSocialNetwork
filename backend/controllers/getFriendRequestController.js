@@ -10,8 +10,8 @@ exports.getFriendRequestController = (req, res) => {
             let incomingRequests = [];
             let incomingRequestsRoutes = [];
             for (const key in data) {
-                incomingRequests.push(`${data[0].firstName} ${data[0].lastName}`);
-                incomingRequestsRoutes.push(`${data[0].RequesterID}`);
+                incomingRequests.push(`${data[key].firstName} ${data[key].lastName}`);
+                incomingRequestsRoutes.push(`${data[key].RequesterID}`);
             }
             res.json({
                 success: true,
