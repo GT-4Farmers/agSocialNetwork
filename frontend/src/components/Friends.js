@@ -51,13 +51,20 @@ function Friends() {
         )
     }
 
+    const handleBack = () => {
+        history.goBack();
+    }
+
     return (
 
         <div className="content">
             <div>
                 <h2> Friends </h2>
             </div>
-            <div className="registration">
+            <div>
+                <button onClick={handleBack}>Back</button>
+            </div>
+            <div className="column">
             {(!(friendList.length === 0)) ? friendList.map((val, key) => {
                 return(
                     <Link key={key} to={`/${friendListRoutes[key]}`}>

@@ -17,7 +17,7 @@ function Profile() {
     useEffect(() => {
         let unmounted = false;
         Axios.post("http://localhost:3001/profile", {
-            profileRoute: uid
+            profileRoute: uuid
         })
         .then(res => {
             if (!unmounted) {
@@ -45,6 +45,13 @@ function Profile() {
         )
     }
 
+    const handleFriendRequest = () => {
+        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            profileRoute: uid,
+            mode: 'request'
+        })
+    }
+
     return (
     <div className="content">
         <div className="greyBox">  
@@ -57,6 +64,7 @@ function Profile() {
             {/* <button onClick={handlePhotos}>Photos</button> */}
             <button>Photos</button>
             <button onClick={handleFriends}>Friends</button>
+            <button onClick={handleFriendRequest}>Send Friend Request</button>
         </div>
 
         <p>User posts displayed here</p>
