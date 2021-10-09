@@ -39,11 +39,11 @@ function Header(props) {
                 <Link to={`/${uid}`}>Profile</Link>
               </li>
               <li>
+                <Link to='/notifications'>Notifications</Link>
+              </li>
+              <li>
                 <Link to='/searchUser'>Search User</Link>
               </li>
-              {/* <li>
-                <Link to='/profile'>Profile</Link>
-              </li> */}
             </ul>
           </nav>
         </div>
