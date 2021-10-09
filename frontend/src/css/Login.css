@@ -1,0 +1,32 @@
+/*CSS SPECIFIC TO LOGIN AND REGISTRATION*/
+
+.loginText {
+    margin: 1.5% 0 1% 15%;
+    font-size: 4em;;
+}
+
+#logIn {
+    color: #166C3B;
+    margin-bottom: 2em;
+  }
+
+#showhide {
+margin: 0 auto;
+background-color: #C8C8C8;
+color: #166C3B;
+padding: 0;
+}
+
+.loginBox {
+margin: 0 auto;
+padding: 4% 10%;
+width: 60%;
+height: 100%;
+color: #27AE60;
+background-color: #C8C8C8;
+border-radius: 3em;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+  

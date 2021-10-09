@@ -52,9 +52,10 @@ function Friends() {
     }
 
     return (
-        <div className="App">
+
+        <div className="content">
             <div>
-                <h1> Friends </h1>
+                <h2> Friends </h2>
             </div>
             <div className="registration">
             {(!(friendList.length === 0)) ? friendList.map((val, key) => {

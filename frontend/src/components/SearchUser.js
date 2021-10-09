@@ -48,9 +48,9 @@ function SearchUser() {
   }
 
   return (
-    <div className="App">
+    <div className="content">
       <div>
-        <h1> Search User </h1>
+        <h2>Search User</h2>
       </div>
       <div>
         <input

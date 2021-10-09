@@ -31,9 +31,8 @@ function Header(props) {
       uid = uuid;
       return (
         <>
-        <div>
           <nav>
-            <ul>
+            <ul className="navBox">
               <li>
                 <div id="headerLogo">
                   <img alt='Haystack Logo' src={logo}/>
@@ -73,7 +72,6 @@ function Header(props) {
               </li> */}
             </ul>
           </nav>
-        </div>
         </>
       )
     }
@@ -96,9 +94,8 @@ function Header(props) {
   }
 
   return (
-    <div className="registration">
-      {renderNav()}
-    </div>
+     <> {renderNav()}
+     </>
   )
 }
 export default withRouter(Header);

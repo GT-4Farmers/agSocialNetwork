@@ -46,20 +46,20 @@ function Profile() {
     }
 
     return (
-    <div className="App">
-        <h1>Profile</h1>
-        <h2>{firstName} {lastName}</h2>
-        
-        <div>
-            <button onClick={handleAbout}>About</button>
+    <div className="content">
+        <div className="greyBox">  
+             <h2>{firstName} {lastName}</h2>
         </div>
-        <div>
+        <h3>This is a user's bio.</h3>
+        
+        <div className="">
+            <button onClick={handleAbout}>About</button>
             {/* <button onClick={handlePhotos}>Photos</button> */}
             <button>Photos</button>
-        </div>
-        <div>
             <button onClick={handleFriends}>Friends</button>
         </div>
+
+        <p>User posts displayed here</p>
     </div>
     )
 }

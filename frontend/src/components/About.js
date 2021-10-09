@@ -3,7 +3,6 @@ import Axios from 'axios';
 import { useHistory, useParams } from 'react-router';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
-import '../css/App.css';
 
 function About() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
@@ -135,8 +134,8 @@ function About() {
 
 
     return ( //Bio is visible to all, other fields visible to profile owner/friends only, editing is only for the profile owner
-    <div className="registration">
-        <h1>About</h1>
+    <div className="content">
+        <h2>About</h2>
         <ul>
             <li>Bio: {showElement ? null : bio}
                 {showElement && isProfileOwner ? <input

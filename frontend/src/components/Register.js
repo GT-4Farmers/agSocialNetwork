@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
 import '../css/App.css';
+import '../css/Login.css';
 import { useHistory } from 'react-router';
 import uuid from 'react-uuid';
 import logo from './logo.png';
@@ -72,7 +73,7 @@ function Register() {
                 <img alt='Haystack Logo' src={logo}/>
                 <h1>HAYSTACK</h1>
             </header>
-            <h2>Sign Up</h2>
+            <h2 className="loginText">Sign Up</h2>
             <div className = "column">
                 <div className="loginBox">
                     <input

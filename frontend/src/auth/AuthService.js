@@ -23,9 +23,7 @@ function AuthService() {
 
     if (!isLoggedIn) {
         return (
-            <div className="registration">
-                <button onClick={() => history.push("/")}>Not logged in?</button>
-            </div>
+            <button className="center" onClick={() => history.push("/")}>Not logged in?</button>
         )
     } else {
         return (

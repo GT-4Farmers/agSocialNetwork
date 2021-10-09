@@ -28,9 +28,12 @@ function Home() {
   }
 
   return (
-    <div className="App">
-      <h1>Home</h1>
-      Hi {email}
+    <div className="content">
+      <h2>Home</h2>
+      <p>Hey {email}!</p>
+      <p>Dashboard displayed here.</p>
+
+
     </div>
   )
 }
