@@ -17,6 +17,7 @@ exports.uuidIsUserOrFriendController = (req, res) => { //Is the currently logged
             if (data[0]) {
                 db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ? AND Relationship = ? UNION SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND RequesterID = ? AND Relationship = ?', [user_id, test_id, 'Accepted', user_id, test_id, 'Accepted'], (err, data, fields) => {
                     if (data[0]) {
+                        // console.log("accepted is true", data[0]);
                         res.json({
                             success: true,
                             isUser: false,
@@ -24,11 +25,24 @@ exports.uuidIsUserOrFriendController = (req, res) => { //Is the currently logged
                             isPending: false
                         })
                     } else {
-                        res.json({
-                            success: true,
-                            isUser: false,
-                            isFriend: false,
-                            isPending: true
+                        db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ? AND Relationship = ?', [user_id, test_id, 'Pending'], (err, data, fields) => {
+                            if (data[0]) {
+                                // console.log("pending is true", data[0]);
+                                res.json({
+                                    success: true,
+                                    isUser: false,
+                                    isFriend: false,
+                                    isPending: true
+                                })
+                            } else {
+                                // console.log("pending is false", data[0]);
+                                res.json({
+                                    success: true,
+                                    isUser: false,
+                                    isFriend: false,
+                                    isPending: false
+                                })
+                            }
                         })
                     }
                 })
