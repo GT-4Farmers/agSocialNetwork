@@ -39,7 +39,7 @@
 }
   
 .navButton:hover {
-  background-color: #F2F2F2;
+  background-color: #eeeeee;
   fill: #000000;
   color: #000000;
   transition: all 0.3s ease-out;
