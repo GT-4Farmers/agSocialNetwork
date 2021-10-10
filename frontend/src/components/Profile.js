@@ -52,7 +52,7 @@ function Profile() {
             })
 
         return () => { unmounted = true };
-    }, []);
+    });
 
     const handleAbout = () => {
         history.push(`/${uuid}/about`);
