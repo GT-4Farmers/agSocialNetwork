@@ -18,7 +18,11 @@ function About() {
     const [showElement, setShowText] = useState(false);
     const [isProfileOwner, setIsProfileOwner] = useState(false)
     const [isFriend, setIsFriend] = useState(false)
-    const onClick = () => setShowText(!showElement);
+    const [saveChanges, setSaveChanges] = useState(false);
+    const onClick = () => {
+        setShowText(!showElement);
+        setSaveChanges(false);
+    }
 
     useEffect(() => {
         Axios.post("http://localhost:3001/profile/about", {
@@ -54,7 +58,7 @@ function About() {
             if (!response.data.success) {
                 alert(response.data.msg);
             } else {
-                alert('Bio updated successfully')
+                // alert('Bio updated successfully')
                 console.log(response.data.success);
             }
         })
@@ -67,7 +71,7 @@ function About() {
             if (!response.data.success) {
                 alert(response.data.msg);
             } else {
-                alert('Birthday updated successfully')
+                // alert('Birthday updated successfully')
                 console.log(response.data.success);
             }
         })
@@ -80,7 +84,7 @@ function About() {
             if (!response.data.success) {
                 alert(response.data.msg);
             } else {
-                alert('Location updated successfully')
+                // alert('Location updated successfully')
                 console.log(response.data.success);
             }
         })
@@ -93,7 +97,7 @@ function About() {
             if (!response.data.success) {
                 alert(response.data.msg);
             } else {
-                alert('Phone updated successfully')
+                // alert('Phone updated successfully')
                 console.log(response.data.success);
             }
         })
@@ -119,10 +123,20 @@ function About() {
         history.goBack();
     }
 
-    const BioButton = () => <button id="bioBtn" onClick={editBio}>Save</button>;
-    const BirthdayButton = () => <button id="birthdayBtn" onClick={editBirthdate}>Save</button>;
-    const LocationButton = () => <button id="locationBtn" onClick={editLocation}>Save</button>;
-    const PhoneButton = () => <button id="phoneBtn" onClick={editPhone}>Save</button>;
+    const handleButton = () => {
+        editBio();
+        editBirthdate();
+        editLocation();
+        editPhone();
+        setSaveChanges(true);
+    }
+
+    const SaveButton = () => <button onClick={handleButton}>{saveChanges ? "Changes saved" : "Save Changes"}</button>;
+
+    // const BioButton = () => <button id="bioBtn" onClick={editBio}>Save</button>;
+    // const BirthdayButton = () => <button id="birthdayBtn" onClick={editBirthdate}>Save</button>;
+    // const LocationButton = () => <button id="locationBtn" onClick={editLocation}>Save</button>;
+    // const PhoneButton = () => <button id="phoneBtn" onClick={editPhone}>Save</button>;
 
     let value = !showElement ? "Edit About" : "Done";
 
@@ -144,7 +158,7 @@ function About() {
                     value={bio ? bio : ""}
                     onChange={handleBioChange}
                 /> : null}
-                {showElement && isProfileOwner ? <BioButton /> : null}
+                {/* {showElement && isProfileOwner ? <BioButton /> : null} */}
             </li>
             {isProfileOwner || isFriend ?
             <li>Birthday: {showElement ? null : birthdate}
@@ -154,7 +168,7 @@ function About() {
                     value={birthdate ? birthdate : ""}
                     onChange={handleBirthdateChange}
                 /> : null}
-                {showElement && isProfileOwner ? <BirthdayButton /> : null}
+                {/* {showElement && isProfileOwner ? <BirthdayButton /> : null} */}
             </li> : null}
             {isProfileOwner || isFriend ?
             <li>Location: {showElement ? null : location}
@@ -164,7 +178,7 @@ function About() {
                     value={location ? location : ""}
                     onChange={handleLocationChange}
                 /> : null}
-                {showElement ? <LocationButton /> : null}
+                {/* {showElement ? <LocationButton /> : null} */}
             </li> : null}
             {isProfileOwner || isFriend ?
             <li>Phone: {showElement ? null : phone}
@@ -174,8 +188,11 @@ function About() {
                     value={phone ? phone : ""}
                     onChange={handlePhoneChange}
                 /> : null}
-                {showElement && isProfileOwner ? <PhoneButton /> : null}
+                {/* {showElement && isProfileOwner ? <PhoneButton /> : null} */}
             </li> : null}
+        <div>
+            {showElement && isProfileOwner ? <SaveButton /> : null}
+        </div>
         </ul>
         <div>
             {isProfileOwner ? <button onClick={onClick}>{value}</button> : null}
