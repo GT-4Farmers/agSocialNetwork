@@ -99,13 +99,15 @@ function Profile() {
         )
     }
 
-    const Notif = () =>
-    <div>
-        {firstName} {lastName}
-        <p className="inline"> has sent you a friend request.</p>
+    const ReversePendingNotif = () =>
+    <div className="greyBox">
+        <p className="inline">{firstName} {lastName} has sent you a friend request.</p>
         <button onClick = {() => {handleAccept(uid)}}>Accept</button>
         <button onClick = {() => {handleReject(uid)}}>Reject</button>
     </div>
+
+    const FRSent = () => <button onClick={handleFriendRequest}>Friend Request Sent</button>;
+    const SendFR = () => <button onClick={handleFriendRequest}>Send Friend Request</button>;
 
     return (
         <div className="content">
@@ -120,7 +122,7 @@ function Profile() {
                 <button>Photos</button>
                 <button onClick={handleFriends}>Friends</button>
                 <br></br>
-                {(interactFR || isProfileOwner || isFriend) ? null : <button onClick={handleFriendRequest}> {isPending ? "Friend Request Sent" : reversePending ? <Notif /> : "Send Friend Request" } </button>}
+                {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
                 
                 
             </div>
