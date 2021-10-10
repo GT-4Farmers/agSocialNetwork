@@ -42,12 +42,12 @@ function Profile() {
                 if (!unmounted) {
                     setIsFriend(res.data.isFriend);
                     setIsProfileOwner(res.data.isUser);
-                    // setIsPending(res.data.isPending);
+                    setIsPending(res.data.isPending);
                 }
             })
 
         return () => { unmounted = true };
-    }, [isPending]);
+    }, []);
 
     const handleAbout = () => {
         history.push(`/${uuid}/about`);
@@ -68,21 +68,6 @@ function Profile() {
             profileRoute: uid,
             mode: 'request'
         })
-        pendingHandler();
-    }
-
-    const pendingHandler = () => {
-        let unmounted = false;
-        Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
-            profileRoute: uuid
-        })
-        .then(res => {
-            if (!unmounted) {
-                setIsPending(res.data.isPending);
-            }
-        })
-
-        return () => { unmounted = true };
     }
 
     return (
