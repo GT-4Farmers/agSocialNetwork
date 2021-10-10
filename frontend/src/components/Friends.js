@@ -61,6 +61,9 @@ function Friends() {
             <div>
                 <h2> Friends </h2>
             </div>
+            <div>
+                <button onClick={handleBack}>Back</button>
+            </div>
             <div className="block">
             {(!(friendList.length === 0)) ? friendList.map((val, key) => {
                 return(
@@ -71,9 +74,6 @@ function Friends() {
                     </div>
                 )
             }) : <div>User has no friends... :(</div>}
-            </div>
-            <div>
-                <button onClick={handleBack}>Back</button>
             </div>
         </div>
     )
