@@ -68,6 +68,11 @@ function Profile() {
             profileRoute: uid,
             mode: 'request'
         })
+        handlePending();
+    }
+
+    const handlePending = () => {
+        setIsPending(true);
     }
 
     return (
