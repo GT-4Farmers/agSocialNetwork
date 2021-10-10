@@ -60,7 +60,7 @@ function Notifications() {
             </div>
             <div className="registration">
             {(!(incomingRequests.length === 0)) ? incomingRequests.map((val, key) => {
-                let requester = <Link key={key} to={`/${incomingRequestsRoutes[key]}`}>{val}</Link>
+                let requester = <Link key={key} to={`/${incomingRequestsRoutes[key]}`} className="link">{val}</Link>
                 let acceptBtn = <button onClick = {() => {handleAccept(incomingRequestsRoutes[key])}}>Accept</button>
                 let rejectBtn = <button onClick = {() => {handleReject(incomingRequestsRoutes[key])}}>Reject</button>
                 return(

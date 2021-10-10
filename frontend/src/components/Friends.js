@@ -64,10 +64,10 @@ function Friends() {
             <div>
                 <button onClick={handleBack}>Back</button>
             </div>
-            <div className="column">
+            <div className="searchResults">
             {(!(friendList.length === 0)) ? friendList.map((val, key) => {
                 return(
-                    <Link key={key} to={`/${friendListRoutes[key]}`}>
+                    <Link key={key} to={`/${friendListRoutes[key]}`} className="link">
                         {val}
                     </Link>
                 )

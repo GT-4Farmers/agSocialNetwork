@@ -48,12 +48,31 @@
   display: block;
 }
 
+.searchResults {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1%;
+  margin-left: 3em;
+}
+
 .row {
   display: flex;
   flex-direction: row;
   align-items: left;
   padding-top: 1%;
   margin: 0 auto;
+}
+
+.link {
+  color: #166C3B;
+  text-align: left;
+  margin: 0em;
+  font-size: 1.5em;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #6FCF97
 }
 
 body {
