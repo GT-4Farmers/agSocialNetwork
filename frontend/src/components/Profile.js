@@ -15,8 +15,9 @@ function Profile() {
     const [lastName, setLastName] = useState("");
     const [isFriend, setIsFriend] = useState(false);
     const [isProfileOwner, setIsProfileOwner] = useState(false);
+    const [interactFR, setInteractFR] = useState(false);
     const [isPending, setIsPending] = useState('');
-    // const [reversePending, setReversePending] = useState('');
+    const [reversePending, setReversePending] = useState('');
 
     useEffect(() => {
 
@@ -47,7 +48,7 @@ function Profile() {
                     setIsFriend(res.data.isFriend);
                     setIsProfileOwner(res.data.isUser);
                     setIsPending(res.data.isPending);
-                    // setReversePending(res.data.reversePending);
+                    setReversePending(res.data.reversePending);
                 }
             })
 
@@ -80,19 +81,33 @@ function Profile() {
         setIsPending(true);
     }
 
-    // const handleReversePending = () => {
-    //     let acceptBtn = <button onClick = {() => {handleAccept(uid)}}>Accept</button>
-    //     let rejectBtn = <button onClick = {() => {handleReject(uid)}}>Reject</button>
-    // }
+    const handleAccept = (route) => {
+        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            profileRoute: route,
+            mode: 'accept'
+        }).then(
+            setInteractFR(true)
+        )
+    }
 
-    // const notif = () =>
-    // {handleReversePending}
-    // <div>
-    //     {firstName} {lastName}
-    //     <p className="inline"> has sent you a friend request.</p>
-    //     {acceptBtn} 
-    //     {rejectBtn}
-    // </div>
+    const handleReject = (route) => {
+        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            profileRoute: route,
+            mode: 'reject'
+        }).then(
+            setInteractFR(true)
+        )
+    }
+
+    const ReversePendingNotif = () =>
+    <div className="greyBox">
+        <p className="inline">{firstName} {lastName} has sent you a friend request.</p>
+        <button onClick = {() => {handleAccept(uid)}}>Accept</button>
+        <button onClick = {() => {handleReject(uid)}}>Reject</button>
+    </div>
+
+    const FRSent = () => <button onClick={handleFriendRequest}>Friend Request Sent</button>;
+    const SendFR = () => <button onClick={handleFriendRequest}>Send Friend Request</button>;
 
     return (
         <div className="content">
@@ -107,9 +122,9 @@ function Profile() {
                 <button>Photos</button>
                 <button onClick={handleFriends}>Friends</button>
                 <br></br>
-                {(isProfileOwner || isFriend) ? null : <button onClick={handleFriendRequest}> {isPending ? "Friend Request Sent" : "Send Friend Request"} </button>}
+                {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
                 
-                {/* {reversePending ? notif : null } */}
+                
             </div>
 
             <p>User posts displayed here</p>
