@@ -1,5 +1,4 @@
 /* CSS FOR ENTIRE APP */
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -76,7 +75,8 @@
 }
 
 body {
-  background-color: #F2F2F2;
+  margin-top: 0px;
+  background-color: #eeeeee;
   width: 100%;
 }
 
@@ -109,7 +109,7 @@ h2 {
   text-align: left;
   padding: 0em;
   font-size: 2.5em;
-  margin: 2% 0;
+  margin: 0% 0;
 }
 
 ul {
@@ -118,7 +118,7 @@ ul {
 
 .greyBox {
   padding: .5% 0 .5% 2%;
-  margin: 2% 2em 0 0em;
+  margin: 0% 2em 0 0em;
   background-color: #C4C4C4;
   border-radius: 1em;
 }
