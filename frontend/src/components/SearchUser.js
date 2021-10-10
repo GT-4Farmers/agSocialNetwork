@@ -63,7 +63,7 @@ function SearchUser() {
       <div className="searchResults">
         {(!(foundUser.length === 0)) ? foundUser.map((val, key) => {
           return(
-            <Link className="block" key={key} to={foundUserIds[key]}>
+            <Link className="link" key={key} to={foundUserIds[key]}>
               {val}
             </Link>
           )

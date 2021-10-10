@@ -65,7 +65,7 @@ function Friends() {
             {(!(friendList.length === 0)) ? friendList.map((val, key) => {
                 return(
                     <div className="greyBox">
-                        <Link key={key} to={`/${friendListRoutes[key]}`}>
+                        <Link className="link" key={key} to={`/${friendListRoutes[key]}`}>
                             {val}
                         </Link>
                     </div>
