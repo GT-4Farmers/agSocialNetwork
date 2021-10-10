@@ -72,19 +72,20 @@ exports.friendRequestController = (req, res) => { //Is the currently logged in u
                     msg: "No pending friend request from target"
                 })
             } else {
-                db.query('UPDATE haystackdb.Friends SET Relationship = ? WHERE RequesterID = ? AND RequesteeID = ?', ['Rejected', target_id, user_id], (err, data, fields) => {
-                    if (err) {
-                        res.json({
-                            success: false,
-                            msg: err
-                        })
-                    } else {
-                        res.json({
-                            success: true
-                        })
-                    }
-                })
-            }
-        })
-    } 
+                db.query('DELETE FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ?', [target_id, user_id], (err, data, fields) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: err
+                    })
+                } else {
+                    res.json({
+                        success: true
+                    })
+                }
+            })
+        }
+    })
+} 
+// db.query('UPDATE haystackdb.Friends SET Relationship = ? WHERE RequesterID = ? AND RequesteeID = ?', ['Blocked', target_id, user_id], (err, data, fields) => {
 }

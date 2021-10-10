@@ -13,18 +13,31 @@ exports.uuidIsUserOrFriendController = (req, res) => { //Is the currently logged
     const isUser = user_id === test_id
 
     if (!isUser) {
-        db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ? AND Relationship = ? UNION SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND RequesterID = ? AND Relationship = ?', [user_id, test_id, 'Accepted', user_id, test_id, 'Accepted'], (err, data, fields) => {
+        db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ? UNION SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND RequesterID = ?', [user_id, test_id, user_id, test_id], (err, data, fields) => {
             if (data[0]) {
-                res.json({
-                    success: true,
-                    isUser: false,
-                    isFriend: true
+                db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ? AND Relationship = ? UNION SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND RequesterID = ? AND Relationship = ?', [user_id, test_id, 'Accepted', user_id, test_id, 'Accepted'], (err, data, fields) => {
+                    if (data[0]) {
+                        res.json({
+                            success: true,
+                            isUser: false,
+                            isFriend: true,
+                            isPending: false
+                        })
+                    } else {
+                        res.json({
+                            success: true,
+                            isUser: false,
+                            isFriend: false,
+                            isPending: true
+                        })
+                    }
                 })
             } else {
                 res.json({
                     success: true,
                     isUser: false,
-                    isFriend: false
+                    isFriend: false,
+                    isPending: false
                 })
             }
         })
@@ -32,7 +45,8 @@ exports.uuidIsUserOrFriendController = (req, res) => { //Is the currently logged
         res.json({
             success: true,
             isUser: true,
-            isFriend: false
+            isFriend: false,
+            isPending: false
         })
     }
 
