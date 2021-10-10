@@ -26,29 +26,29 @@ exports.uuidIsUserOrFriendController = (req, res) => { //Is the currently logged
                             reversePending: false
                         })
                     } else {
-                        // db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ? AND Relationship = ?', [user_id, test_id, 'Pending'], (err, data, fields) => {
-                        //     if (data[0]) {
-                        //         // console.log("pending is true", data[0]);
-                        //         res.json({
-                        //             success: true,
-                        //             isUser: false,
-                        //             isFriend: false,
-                        //             isPending: true,
-                        //             reversePending: false
-                        //         })
-                        //     } else {
-                        //         db.query('SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND RequesterID = ? AND Relationship = ?', [user_id, test_id, 'Pending'], (err, data, fields) => {
-                        //             if (data[0]) {
-                        //                 console.log("reverse pending is true", data[0]);
-                        //                 res.json({
-                        //                     success: true,
-                        //                     isUser: false,
-                        //                     isFriend: false,
-                        //                     isPending: false,
-                        //                     reversePending: true
-                        //                 })
-                        //             } else {
-                                        // console.log("pending is false", data[0]);
+                        db.query('SELECT * FROM haystackdb.Friends WHERE RequesterID = ? AND RequesteeID = ? AND Relationship = ?', [user_id, test_id, 'Pending'], (err, data, fields) => {
+                            if (data[0]) {
+                                // console.log("pending is true", data[0]);
+                                res.json({
+                                    success: true,
+                                    isUser: false,
+                                    isFriend: false,
+                                    isPending: true,
+                                    reversePending: false
+                                })
+                            } else {
+                                db.query('SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND RequesterID = ? AND Relationship = ?', [user_id, test_id, 'Pending'], (err, data, fields) => {
+                                    if (data[0]) {
+                                        console.log("reverse pending is true", data[0]);
+                                        res.json({
+                                            success: true,
+                                            isUser: false,
+                                            isFriend: false,
+                                            isPending: false,
+                                            reversePending: true
+                                        })
+                                    } else {
+                                        console.log("pending is false", data[0]);
                                         res.json({
                                             success: true,
                                             isUser: false,
@@ -57,10 +57,10 @@ exports.uuidIsUserOrFriendController = (req, res) => { //Is the currently logged
                                             reversePending: false
                                         })
                                     }
-                    //             })
-                    //         }
-                    //     })
-                    // }
+                                })
+                            }
+                        })
+                    }
                 })
             } else {
                 res.json({
