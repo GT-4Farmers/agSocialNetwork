@@ -35,27 +35,6 @@
   }
 }
 
-
-.column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 1%;
-}
-
-
-.block {
-  display: block;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  align-items: left;
-  padding-top: 1%;
-  margin: 0 auto;
-}
-
 body {
   background-color: #F2F2F2;
   width: 100%;
@@ -69,13 +48,27 @@ header {
   text-align: left;
 }
 
-.content {
-  margin-left: 17em;
-}
-
 image {
   max-width: 20%;
   height: auto;
+}
+
+p {
+  margin: 1% 0 0 0;
+  color: #000000;
+  font-size: 1.4rem;
+}
+
+a {
+  text-decoration: none;
+  color: #000000;
+  font-size: 1.4rem;
+  padding: 0 0 4% 0;
+  margin: 1% 0 0 0;
+}
+
+a:hover {
+  color: #166C3B;
 }
 
 h1 {
@@ -97,13 +90,6 @@ ul {
   list-style-type: none;
 }
 
-.greyBox {
-  padding: .5% 0 .5% 2%;
-  margin: 2% 2em 0 0em;
-  background-color: #C4C4C4;
-  border-radius: 1em;
-}
-
 input {
   outline: none;
   border-radius: 10em;
@@ -118,24 +104,17 @@ input {
   box-shadow: 0em 0em .12em black;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 button {
-  margin: 1% auto;
+  margin: 1% 1%;
   color: #FFF;
   background: #166C3B;
   border-radius: 2em;
-  padding: .5em 1.5em;
-  font-size: 1.7rem;
+  padding: .5em 1em;
+  font-size: 1.2rem;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease-out;
 }
-
 
 button:hover {
   background: #6FCF97;
@@ -143,3 +122,50 @@ button:hover {
   transition: all 0.3s ease-out;
 }
 
+/* GENERAL STYLE CLASSES */
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rightAlign {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.greyBox {
+  padding: 1% 0 1% 2%;
+  margin: 2% 2em 0 0em;
+  background-color: #C4C4C4;
+  border-radius: 1em;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1%;
+}
+
+.block {
+  display: block;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  padding-top: 1%;
+  margin: 0 auto;
+}
+
+.inline {
+  display: inline;
+}
+
+.content {
+  margin-left: 17em;
+}

@@ -74,9 +74,9 @@ function Login(props) {
                     <button onClick={toggleShow} id="showhide">Show/Hide</button>
                 </div>
 
-                <button onClick={login}>Login</button>
+                <button className="loginButton" onClick={login}>Login</button>
 
-                <button onClick={handleHistory}>Create New Account</button>
+                <button className="loginButton" onClick={handleHistory}>Create New Account</button>
             </div>
         </div>
     )

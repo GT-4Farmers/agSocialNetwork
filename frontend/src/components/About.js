@@ -136,7 +136,7 @@ function About() {
     return ( //Bio is visible to all, other fields visible to profile owner/friends only, editing is only for the profile owner
     <div className="content">
         <h2>About</h2>
-        <ul>
+        <ul className="greyBox">
             <li>Bio: {showElement ? null : bio}
                 {showElement && isProfileOwner ? <input
                     type="text"

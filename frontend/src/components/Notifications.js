@@ -56,17 +56,23 @@ function Notifications() {
     return (
         <div className="content">
             <div>
-                <h2> Notifications </h2>
+                <h2>Notifications</h2>
             </div>
             <div className="registration">
             {(!(incomingRequests.length === 0)) ? incomingRequests.map((val, key) => {
                 let requester = <Link key={key} to={`/${incomingRequestsRoutes[key]}`}>{val}</Link>
-                let acceptBtn = <button onClick = {() => {handleAccept(incomingRequestsRoutes[key])}}>Accept</button>
+
+                let acceptBtn = <button className onClick = {() => {handleAccept(incomingRequestsRoutes[key])}}>Accept</button>
                 let rejectBtn = <button onClick = {() => {handleReject(incomingRequestsRoutes[key])}}>Reject</button>
                 return(
-                    <div>{requester} has sent you a friend request {acceptBtn} {rejectBtn}</div>
+                    <div className="greyBox">
+                        {requester} 
+                        <p className="inline"> has sent you a friend request.</p>
+                        {acceptBtn} 
+                        {rejectBtn}
+                    </div>
                 )
-            }) : <div>No notifications</div> }
+            }) : <p>No notifications</p> }
             </div>
         </div>
     )

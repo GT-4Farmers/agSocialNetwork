@@ -57,13 +57,14 @@ function Profile() {
         <div className="greyBox">  
              <h2>{firstName} {lastName}</h2>
         </div>
-        <h3>This is a user's bio.</h3>
+        <h3>bio here</h3>
         
         <div className="">
             <button onClick={handleAbout}>About</button>
             {/* <button onClick={handlePhotos}>Photos</button> */}
             <button>Photos</button>
             <button onClick={handleFriends}>Friends</button>
+            <br></br>
             <button onClick={handleFriendRequest}>Send Friend Request</button>
         </div>
 

@@ -113,7 +113,7 @@ function Register() {
                     />
                     <button onClick={toggleShow} id="showhide">Show/Hide</button>
                 </div>
-                <button onClick={handleRegister}>Sign Up</button>
+                <button className="loginButton" onClick={handleRegister}>Sign Up</button>
 
                 <div>
                     <span>Already have an account? </span>
