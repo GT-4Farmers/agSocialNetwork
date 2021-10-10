@@ -16,6 +16,7 @@ function Profile() {
     const [isFriend, setIsFriend] = useState(false);
     const [isProfileOwner, setIsProfileOwner] = useState(false);
     const [isPending, setIsPending] = useState('');
+    // const [reversePending, setReversePending] = useState('');
 
     useEffect(() => {
 
@@ -46,6 +47,7 @@ function Profile() {
                     setIsFriend(res.data.isFriend);
                     setIsProfileOwner(res.data.isUser);
                     setIsPending(res.data.isPending);
+                    // setReversePending(res.data.reversePending);
                 }
             })
 
@@ -78,6 +80,20 @@ function Profile() {
         setIsPending(true);
     }
 
+    // const handleReversePending = () => {
+    //     let acceptBtn = <button onClick = {() => {handleAccept(uid)}}>Accept</button>
+    //     let rejectBtn = <button onClick = {() => {handleReject(uid)}}>Reject</button>
+    // }
+
+    // const notif = () =>
+    // {handleReversePending}
+    // <div>
+    //     {firstName} {lastName}
+    //     <p className="inline"> has sent you a friend request.</p>
+    //     {acceptBtn} 
+    //     {rejectBtn}
+    // </div>
+
     return (
         <div className="content">
             <div className="greyBox">
@@ -92,6 +108,8 @@ function Profile() {
                 <button onClick={handleFriends}>Friends</button>
                 <br></br>
                 {(isProfileOwner || isFriend) ? null : <button onClick={handleFriendRequest}> {isPending ? "Friend Request Sent" : "Send Friend Request"} </button>}
+                
+                {/* {reversePending ? notif : null } */}
             </div>
 
             <p>User posts displayed here</p>
