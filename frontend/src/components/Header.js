@@ -9,25 +9,10 @@ import '../css/header.css';
 function Header(props) {
 
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
-  const [uuid, setUuid] = useState("");
-  let {uid} = useParams();
-  useEffect(() => {
-    let unmounted = false;
-
-    Axios.get("http://localhost:3001/profile")
-    .then(res => {
-        if (!unmounted) {
-            setUuid(res.data.uuid);
-        }
-    })
-
-    return () => { unmounted = true };
-  });
-  uid = uuid;
+  const { user, setUser } = useContext(AuthContext);
 
   function renderNav() {
     if ( (!(props.location.pathname === '/' || (props.location.pathname === '/register')) && isLoggedIn) ) {
-      uid = uuid;
       return (
         <>
           <nav>
@@ -47,7 +32,7 @@ function Header(props) {
               </li>
               <li>
                 <div className="navButton">
-                  <Link to={`/${uid}`}><svg alt="" width="28" height="27" viewBox="0 0 28 27" fill="inherit">
+                  <Link to={`/${user}`}><svg alt="" width="28" height="27" viewBox="0 0 28 27" fill="inherit">
                     <path d="M13.7588 0C6.30113 0 0.258789 6.04234 0.258789 13.5C0.258789 20.9577 6.30113 27 13.7588 27C21.2165 27 27.2588 20.9577 27.2588 13.5C27.2588 6.04234 21.2165 0 13.7588 0ZM13.7588 5.22581C16.4044 5.22581 18.5491 7.37056 18.5491 10.0161C18.5491 12.6617 16.4044 14.8065 13.7588 14.8065C11.1132 14.8065 8.96847 12.6617 8.96847 10.0161C8.96847 7.37056 11.1132 5.22581 13.7588 5.22581ZM13.7588 23.9516C10.5634 23.9516 7.70012 22.5036 5.78399 20.2391C6.80738 18.3121 8.8106 16.9839 11.1459 16.9839C11.2765 16.9839 11.4072 17.0056 11.5324 17.0438C12.24 17.2724 12.9804 17.4194 13.7588 17.4194C14.5372 17.4194 15.283 17.2724 15.9852 17.0438C16.1104 17.0056 16.241 16.9839 16.3717 16.9839C18.707 16.9839 20.7102 18.3121 21.7336 20.2391C19.8175 22.5036 16.9542 23.9516 13.7588 23.9516Z"/>
                   </svg> Profile</Link>
                 </div>

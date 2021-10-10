@@ -28,6 +28,7 @@ function App() {
     .then((res) => {
         if (!unmounted) {
           setIsLoggedIn(res.data.success);
+          setUser(res.data.uuid);
         }
     })
 

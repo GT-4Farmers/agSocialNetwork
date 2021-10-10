@@ -1,5 +1,5 @@
 exports.isLoggedInController = (req, res) => {
-    const db = require("../server");
+    const db = require("../server"); 
 
     if (req.session.userID) {
         let cols = [req.session.userID];
@@ -9,7 +9,8 @@ exports.isLoggedInController = (req, res) => {
                     success: true,
                     email: data[0].email,
                     firstName: data[0].firstName,
-                    lastName: data[0].lastName
+                    lastName: data[0].lastName,
+                    uuid: data[0].uuid
                 })
                 return;
             } else {

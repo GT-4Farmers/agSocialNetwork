@@ -68,6 +68,7 @@ a {
 }
 
 a:hover {
+  cursor: pointer;
   color: #166C3B;
 }
 
