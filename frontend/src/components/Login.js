@@ -11,6 +11,7 @@ function Login(props) {
     let history = useHistory();
 
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    const {user, setUser} = useContext(AuthContext);
 
     const [state, setState] = useState({
         email: "",
@@ -40,6 +41,7 @@ function Login(props) {
                 alert(response.data.msg);
             } else {
                 setIsLoggedIn(true);
+                setUser(response.data.uuid);
                 console.log("successful login");
                 history.push("/home");
             }

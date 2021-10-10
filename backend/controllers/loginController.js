@@ -37,7 +37,8 @@ exports.loginController = (req, res) => {
                         success:true,
                         email: data[0].email,
                         firstName: data[0].firstName,
-                        lastName: data[0].lastName
+                        lastName: data[0].lastName,
+                        uuid: data[0].uuid
                     })
                     return;
                 } else {

@@ -10,7 +10,7 @@ function Header(props) {
 
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const { user, setUser } = useContext(AuthContext);
-
+  
   function renderNav() {
     if ( (!(props.location.pathname === '/' || (props.location.pathname === '/register')) && isLoggedIn) ) {
       return (
