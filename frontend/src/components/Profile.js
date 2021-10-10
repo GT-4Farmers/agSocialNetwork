@@ -13,23 +13,49 @@ function Profile() {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [isFriend, setIsFriend] = useState(false);
+    const [isProfileOwner, setIsProfileOwner] = useState(false);
 
-    useEffect(() => {
-        let unmounted = false;
-        Axios.post("http://localhost:3001/profile", {
-            profileRoute: uuid
-        })
-        .then(res => {
-            if (!unmounted) {
-                setUuid(res.data.uuid);
-                setEmail(res.data.email);
-                setFirstName(res.data.firstName);
-                setLastName(res.data.lastName);
+    // useEffect(() => {
+    //     let unmounted = false;
+    //     Axios.post("http://localhost:3001/profile", {
+    //         profileRoute: uuid
+    //     })
+    //     .then(res => {
+    //         if (!unmounted) {
+    //             setUuid(res.data.uuid);
+    //             setEmail(res.data.email);
+    //             setFirstName(res.data.firstName);
+    //             setLastName(res.data.lastName);
+    //         }
+    //     })
+
+    //     return () => { unmounted = true };
+    // }, []);
+
+    const profileRoute = {
+        profileRoute: uuid
+    };
+
+    const updateProfile = async () => {
+        try {
+            const firstRes = await Axios.post("http://localhost:3001/profile", profileRoute);
+            const secondRes = await Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", profileRoute);
+            if (firstRes) {
+                setUuid(firstRes.data.uuid);
+                setEmail(firstRes.data.email);
+                setFirstName(firstRes.data.firstName);
+                setLastName(firstRes.data.lastName);
             }
-        })
-
-        return () => { unmounted = true };
-    }, []);
+            if (secondRes) {
+                setIsFriend(secondRes.data.isFriend);
+                setIsProfileOwner(secondRes.data.isUser);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    updateProfile();
 
     const handleAbout = () => {
         history.push(`/${uuid}/about`);
@@ -52,6 +78,7 @@ function Profile() {
         })
     }
 
+
     return (
     <div className="content">
         <div className="greyBox">  
@@ -64,7 +91,7 @@ function Profile() {
             {/* <button onClick={handlePhotos}>Photos</button> */}
             <button>Photos</button>
             <button onClick={handleFriends}>Friends</button>
-            <button onClick={handleFriendRequest}>Send Friend Request</button>
+            {(isProfileOwner || isFriend) ? null: <button onClick={handleFriendRequest}>Send Friend Request</button>}
         </div>
 
         <p>User posts displayed here</p>
