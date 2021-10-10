@@ -16,46 +16,37 @@ function Profile() {
     const [isFriend, setIsFriend] = useState(false);
     const [isProfileOwner, setIsProfileOwner] = useState(false);
 
-    // useEffect(() => {
-    //     let unmounted = false;
-    //     Axios.post("http://localhost:3001/profile", {
-    //         profileRoute: uuid
-    //     })
-    //     .then(res => {
-    //         if (!unmounted) {
-    //             setUuid(res.data.uuid);
-    //             setEmail(res.data.email);
-    //             setFirstName(res.data.firstName);
-    //             setLastName(res.data.lastName);
-    //         }
-    //     })
-
-    //     return () => { unmounted = true };
-    // }, []);
-
-    const profileRoute = {
-        profileRoute: uuid
-    };
-
-    const updateProfile = async () => {
-        try {
-            const firstRes = await Axios.post("http://localhost:3001/profile", profileRoute);
-            const secondRes = await Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", profileRoute);
-            if (firstRes) {
-                setUuid(firstRes.data.uuid);
-                setEmail(firstRes.data.email);
-                setFirstName(firstRes.data.firstName);
-                setLastName(firstRes.data.lastName);
+    useEffect(() => {
+        let unmounted = false;
+        Axios.post("http://localhost:3001/profile", {
+            profileRoute: uuid
+        })
+        .then(res => {
+            if (!unmounted) {
+                setUuid(res.data.uuid);
+                setEmail(res.data.email);
+                setFirstName(res.data.firstName);
+                setLastName(res.data.lastName);
             }
-            if (secondRes) {
-                setIsFriend(secondRes.data.isFriend);
-                setIsProfileOwner(secondRes.data.isUser);
+        })
+
+        return () => { unmounted = true };
+    }, []);
+
+    useEffect(() => {
+        let unmounted = false;
+        Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
+            profileRoute: uuid
+        })
+        .then(res => {
+            if (!unmounted) {
+                setIsFriend(res.data.isFriend);
+                setIsProfileOwner(res.data.isUser);
             }
-        } catch (err) {
-            console.error(err);
-        }
-    };
-    updateProfile();
+        })
+
+        return () => { unmounted = true };
+    }, []);
 
     const handleAbout = () => {
         history.push(`/${uuid}/about`);
@@ -77,7 +68,6 @@ function Profile() {
             mode: 'request'
         })
     }
-
 
     return (
     <div className="content">
