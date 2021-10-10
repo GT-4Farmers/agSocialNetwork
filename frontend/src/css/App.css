@@ -1,5 +1,4 @@
 /* CSS FOR ENTIRE APP */
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -36,7 +35,8 @@
 }
 
 body {
-  background-color: #F2F2F2;
+  margin-top: 0px;
+  background-color: #eeeeee;
   width: 100%;
 }
 
@@ -83,7 +83,7 @@ h2 {
   text-align: left;
   padding: 0em;
   font-size: 2.5em;
-  margin: 2% 0;
+  margin: 0% 0;
 }
 
 ul {

@@ -13,6 +13,7 @@ uuidIsUserOrFriendRoute = require("../controllers/uuidIsUserOrFriendController")
 friendRequestRoute = require("../controllers/friendRequestController");
 incomingRequestsRoute = require("../controllers/getFriendRequestController");
 
+
 router.put("/about/phone", editPhoneRoute.editPhoneController)
 router.put("/about/location", editLocationRoute.editLocationController)
 router.put("/about/birthdate", editBirthdateRoute.editBirthdateController)

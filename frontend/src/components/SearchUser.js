@@ -60,7 +60,7 @@ function SearchUser() {
           onChange={handleChange}
         />
       </div>
-      <div className="block">
+      <div className="searchResults">
         {(!(foundUser.length === 0)) ? foundUser.map((val, key) => {
           return(
             <Link className="block" key={key} to={foundUserIds[key]}>

@@ -1,50 +1,51 @@
 /* CSS SPECIFIC TO HEADER / NAV BAR */
 .navBox {
-    position: fixed;
-    margin: 0;
-    padding: 2em 0 1em 2em;
-    width: 14em;
-    background-color: #27AE60;
-    border-radius: 0 1em 1em 0;
-  }
+  position: fixed;
+  margin-top: 0;
+  padding: 2em 0 1em 2em;
+  width: 14em;
+  height: 95%;
+  background-color: #27AE60;
+  border-radius: 0 1em 1em 0;
+}
   
-  .navButton {
-    display: block;
-    padding: 1.5em 1.5em;
-    margin: 1em 0;
-    background-color: #27AE60;
-    border-radius:  2em 0 0 2em;
-    color: #F2F2F2;;
-    fill: #F2F2F2;;
-  }
+.navButton {
+  display: block;
+  padding: 1.5em 1.5em;
+  margin: 1em 0;
+  background-color: #27AE60;
+  border-radius:  2em 0 0 2em;
+  color: #F2F2F2;;
+  fill: #F2F2F2;;
+}
+
+.navButton a {
+  color: inherit;
+  font-size: 1.5em;
+  text-decoration: none;
+  padding: 0em;
+}
+
+#navLogOut {
+  font-size: 1.5em;
+  text-decoration: none;
+  color: inherit;
+  background-color: inherit;
+  padding: 0;
+  transition: 0s;
+  font-size: 1.5em;
+  width: 100%;
+  text-align: left;
+}
   
-  .navButton a {
-    color: inherit;
-    font-size: 1.5em;
-    text-decoration: none;
-    padding: 0em;
-  }
-  
-  #navLogOut {
-    font-size: 1.5em;
-    text-decoration: none;
-    color: inherit;
-    background-color: inherit;
-    padding: 0;
-    transition: 0s;
-    font-size: 1.5em;
-    width: 100%;
-    text-align: left;
-  }
-   
-  .navButton:hover {
-    background-color: #F2F2F2;
-    fill: #000000;
-    color: #000000;
-    transition: all 0.3s ease-out;
-  }
-  
-  #headerLogo {
-    margin-left: 2em;
-    width: 50%;
-  }
+.navButton:hover {
+  background-color: #eeeeee;
+  fill: #000000;
+  color: #000000;
+  transition: all 0.3s ease-out;
+}
+
+#headerLogo {
+  margin-left: 2em;
+  width: 50%;
+}

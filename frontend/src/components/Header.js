@@ -4,7 +4,6 @@ import Axios from 'axios';
 import { useHistory, useParams } from 'react-router';
 import AuthContext from '../states/AuthContext';
 import logo from './logo.png';
-import '../css/App.css';
 import '../css/header.css';
 
 function Header(props) {
