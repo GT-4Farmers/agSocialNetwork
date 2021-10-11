@@ -30,6 +30,9 @@ function Profile() {
     const [posts, setPosts] = useState([]);
     const [ts, setTs] = useState([]);
 
+    // network state
+    const [network, setNetwork] = useState(0);
+
     useEffect(() => {
 
         setUuid(uid);
@@ -63,12 +66,11 @@ function Profile() {
                     setReversePending(res.data.reversePending);
                 }
             })
-            loadPosts();
         return () => { unmounted = true };
         
-    }, [postContent]);
+    }, []);
 
-    const loadPosts = () => {
+    useEffect(() => {
         let unmounted = false;
         Axios.post("http://localhost:3001/profile/getTextPosts", {
             profileRoute: uuid
@@ -80,7 +82,7 @@ function Profile() {
             }
         })
         return () => { unmounted = true };
-    }
+    }, [network]);
 
     const handleAbout = () => {
         history.push(`/${uuid}/about`);
@@ -157,6 +159,7 @@ function Profile() {
             }
         })
         setPostContent("");
+        setNetwork(network + 1);
         }
     }
 
