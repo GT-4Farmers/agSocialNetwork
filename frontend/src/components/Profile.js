@@ -4,20 +4,31 @@ import { useHistory, useParams } from 'react-router';
 import '../css/App.css';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
+import { Link } from "react-router-dom";
 
 function Profile() {
+    // login, routing, user states
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
     let { uid } = useParams();
     const [uuid, setUuid] = useState(uid);
+
+    // info states
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+
+    // friend request states
     const [isFriend, setIsFriend] = useState(false);
     const [isProfileOwner, setIsProfileOwner] = useState(false);
     const [interactFR, setInteractFR] = useState(false);
     const [isPending, setIsPending] = useState('');
     const [reversePending, setReversePending] = useState('');
+
+    // post states
+    const [postContent, setPostContent] = useState('');
+    const [posts, setPosts] = useState([]);
+    const [ts, setTs] = useState([]);
 
     useEffect(() => {
 
@@ -27,14 +38,15 @@ function Profile() {
         Axios.post("http://localhost:3001/profile", {
             profileRoute: uuid
         })
-            .then(res => {
-                if (!unmounted) {
-                    setUuid(res.data.uuid);
-                    setEmail(res.data.email);
-                    setFirstName(res.data.firstName);
-                    setLastName(res.data.lastName);
-                }
-            })
+        .then(res => {
+            if (!unmounted) {
+                setUuid(res.data.uuid);
+                setEmail(res.data.email);
+                setFirstName(res.data.firstName);
+                setLastName(res.data.lastName);
+            }
+        })
+        
         return () => { unmounted = true };
     });
 
@@ -51,9 +63,24 @@ function Profile() {
                     setReversePending(res.data.reversePending);
                 }
             })
-
+            loadPosts();
         return () => { unmounted = true };
+        
     }, []);
+
+    const loadPosts = () => {
+        let unmounted = false;
+        Axios.post("http://localhost:3001/profile/getTextPosts", {
+            profileRoute: uuid
+        })
+        .then(res => {
+            if (!unmounted) {
+                setPosts(res.data.posts);
+                setTs(res.data.timestamps);
+            }
+        })
+        return () => { unmounted = true };
+    }
 
     const handleAbout = () => {
         history.push(`/${uuid}/about`);
@@ -109,6 +136,25 @@ function Profile() {
     const FRSent = () => <button onClick={handleFriendRequest}>Friend Request Sent</button>;
     const SendFR = () => <button onClick={handleFriendRequest}>Send Friend Request</button>;
 
+    const handlePostChange = (e) => {
+        setPostContent(e.target.value);
+    }
+
+    const handlepostContent = () => {
+        Axios.post('http://localhost:3001/profile/createTextPost', {
+            content: postContent
+        }).then((response) => {
+            if (!response.data.success) {
+                alert(response.data.msg);
+            } else {
+                console.log(response.data.msg);
+            }
+        })
+        setPostContent("");
+    }
+
+    // TODO: FIX PROFILE REFRESH WHEN COMING FROM DIFFERENT PROFILE
+
     return (
         <div className="content">
             <div className="greyBox">
@@ -123,11 +169,36 @@ function Profile() {
                 <button onClick={handleFriends}>Friends</button>
                 <br></br>
                 {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
-                
-                
             </div>
 
-            <p>User posts displayed here</p>
+            <div className="greyBox">
+                <input className="postInput"
+                    type="text"
+                    id="post"
+                    placeholder="How are you feeling today?"
+                    value={postContent ? postContent : ""}
+                    onChange={handlePostChange}
+                />
+                <button onClick={handlepostContent}>Post</button>
+            </div>
+
+            <div className="posts">
+                {(!(posts === undefined)) ? (!(posts.length === 0)) ? posts.map((val, key) => {
+                // const { createdAt, content } = val;
+                return(
+                    <div className="greyBox" key={key}>
+                        <Link className="link" to={`/${uuid}`}>
+                            {firstName} {lastName}
+                        </Link>
+                        <div className="postTs">{ts[key]}</div>
+                        <div className="postContent">{val}</div>
+                    </div>
+                )}) :
+                    <div className="greyBox">
+                        No posts yet
+                    </div> : null }
+            </div>
+
         </div>
     )
 }
