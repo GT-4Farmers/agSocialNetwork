@@ -185,6 +185,7 @@ function Profile() {
             <div className="greyBox">
                 <input className="postInput"
                     type="text"
+                    autoComplete="off"
                     id="post"
                     placeholder="How are you feeling today?"
                     value={postContent ? postContent : ""}
