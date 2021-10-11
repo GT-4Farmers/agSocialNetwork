@@ -45,7 +45,7 @@
   background-color: #eeeeee;
   fill: #000000;
   color: #000000;
-  transition: all 0.3s ease-out;
+  /* transition: all 0.3s ease-out; */
 }
 
 #headerLogo {
