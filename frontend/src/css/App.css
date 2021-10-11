@@ -231,3 +231,26 @@ button:hover {
   font-size: calc(2px + 2vmin);
   color: grey;
 }
+
+/* can totally change this if need be, just adding for testing purposes */
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #5ec478 #eeeeee;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 17px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #eeeeee;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #5ec478;
+    border-radius: 10px;
+    border: 3px solid #eeeeee;
+  }
