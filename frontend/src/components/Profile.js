@@ -141,7 +141,13 @@ function Profile() {
     }
 
     const handlePostContent = () => {
-        Axios.post('http://localhost:3001/profile/createTextPost', {
+        // if empty post
+        if (postContent === "") {
+            alert("I said HOW ARE YOU FEELING TODAY?");
+
+        // otherwise
+        } else {
+            Axios.post('http://localhost:3001/profile/createTextPost', {
             content: postContent
         }).then((response) => {
             if (!response.data.success) {
@@ -151,6 +157,7 @@ function Profile() {
             }
         })
         setPostContent("");
+        }
     }
 
     // TODO: FIX PROFILE REFRESH WHEN COMING FROM DIFFERENT PROFILE
