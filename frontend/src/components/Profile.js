@@ -66,7 +66,7 @@ function Profile() {
             loadPosts();
         return () => { unmounted = true };
         
-    }, []);
+    }, [postContent]);
 
     const loadPosts = () => {
         let unmounted = false;
@@ -140,7 +140,7 @@ function Profile() {
         setPostContent(e.target.value);
     }
 
-    const handlepostContent = () => {
+    const handlePostContent = () => {
         Axios.post('http://localhost:3001/profile/createTextPost', {
             content: postContent
         }).then((response) => {
@@ -160,7 +160,7 @@ function Profile() {
             <div className="greyBox">
                 <h2>{firstName} {lastName}</h2>
             </div>
-            
+
             {/* <h3>This is a user's bio.</h3> */}
 
             <div className="">
@@ -180,7 +180,7 @@ function Profile() {
                     value={postContent ? postContent : ""}
                     onChange={handlePostChange}
                 />
-                <button onClick={handlepostContent}>Post</button>
+                <button onClick={handlePostContent}>Post</button>
             </div>
 
             <div className="posts">
