@@ -9,9 +9,13 @@ import { Link } from "react-router-dom";
 function Profile() {
     // login, routing, user states
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    const { profileDummy, setProfileDummy } = useContext(AuthContext);
     const history = useHistory();
     let { uid } = useParams();
-    const [uuid, setUuid] = useState(uid);
+    let profileRoute = (window.location.pathname).substring(1)
+    var pathArray = profileRoute.split('/');
+    profileRoute = (pathArray[0]);
+    const [uuid, setUuid] = useState(profileRoute);
 
     // info states
     const [email, setEmail] = useState("");
@@ -34,12 +38,14 @@ function Profile() {
     const [network, setNetwork] = useState(0);
 
     useEffect(() => {
+        let profileRoute = (window.location.pathname).substring(1)
+        var pathArray = profileRoute.split('/');
+        profileRoute = (pathArray[0]);
 
-        setUuid(uid);
-
+        setUuid(profileRoute);
         let unmounted = false;
         Axios.post("http://localhost:3001/profile", {
-            profileRoute: uuid
+            profileRoute: profileRoute
         })
         .then(res => {
             if (!unmounted) {
@@ -49,14 +55,14 @@ function Profile() {
                 setLastName(res.data.lastName);
             }
         })
-        
+        checkButton();
         return () => { unmounted = true };
-    });
+    }, [profileDummy]);
 
-    useEffect(() => {
+    const checkButton = () => {
         let unmounted = false;
         Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
-            profileRoute: uuid
+            profileRoute: profileRoute
         })
             .then(res => {
                 if (!unmounted) {
@@ -68,12 +74,12 @@ function Profile() {
             })
         return () => { unmounted = true };
         
-    }, []);
+    }
 
     useEffect(() => {
         let unmounted = false;
         Axios.post("http://localhost:3001/profile/getTextPosts", {
-            profileRoute: uuid
+            profileRoute: profileRoute
         })
         .then(res => {
             if (!unmounted) {
@@ -82,7 +88,7 @@ function Profile() {
             }
         })
         return () => { unmounted = true };
-    }, [network]);
+    }, [profileDummy, network]);
 
     const handleAbout = () => {
         history.push(`/${uuid}/about`);
@@ -164,6 +170,7 @@ function Profile() {
     }
 
     // TODO: FIX PROFILE REFRESH WHEN COMING FROM DIFFERENT PROFILE
+    // TODO: SHOULDNT BE ABLE TO MAKE POST ON OTHER USERS PROFILE
 
     return (
         <div className="content">
