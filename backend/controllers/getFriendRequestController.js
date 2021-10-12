@@ -4,9 +4,8 @@ exports.getFriendRequestController = (req, res) => {
     let uid = req.session.userID;
 
     db.query(`select firstName, lastName, RequesterID, RequesteeID, Relationship from Friends inner join Users on Friends.RequesterID = Users.uuid where RequesteeID = ? and Relationship = 'Pending'`, uid, (err, data, fields) => {
-
         // if at least 1 user exists
-        if (data[0]) {
+        if (data) {
             let incomingRequests = [];
             let incomingRequestsRoutes = [];
             for (const key in data) {

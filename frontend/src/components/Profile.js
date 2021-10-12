@@ -137,11 +137,11 @@ function Profile() {
     }
 
     const ReversePendingNotif = () =>
-    <div className="greyBox">
-        <p className="inline">{firstName} {lastName} has sent you a friend request.</p>
-        <button onClick = {() => {handleAccept(uid)}}>Accept</button>
-        <button onClick = {() => {handleReject(uid)}}>Reject</button>
-    </div>
+        <div className="greyBox">
+            <p className="inline">{firstName} {lastName} has sent you a friend request.</p>
+            <button onClick = {() => {handleAccept(uid)}}>Accept</button>
+            <button onClick = {() => {handleReject(uid)}}>Reject</button>
+        </div>
 
     const FRSent = () => <button onClick={handleFriendRequest}>Friend Request Sent</button>;
     const SendFR = () => <button onClick={handleFriendRequest}>Send Friend Request</button>;
@@ -184,8 +184,6 @@ function Profile() {
         setNetwork(network + 1);
     }
 
-    // TODO: SHOULDNT BE ABLE TO MAKE POST ON OTHER USERS PROFILE
-
     return (
         <div className="content">
             <div className="greyBox">
@@ -203,7 +201,7 @@ function Profile() {
                 {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
             </div>
 
-            <div className="greyBox">
+            {isProfileOwner ? <div className="greyBox">
                 <input className="postInput"
                     type="text"
                     autoComplete="off"
@@ -213,7 +211,7 @@ function Profile() {
                     onChange={handlePostChange}
                 />
                 <button onClick={handlePostContent}>Post</button>
-            </div>
+                </div> : null}
 
             <div className="posts">
                 {(!(posts === undefined)) ? (!(posts.length === 0)) ? posts.map((val, key) => {
@@ -223,7 +221,7 @@ function Profile() {
                         <Link className="link" to={`/${uuid}`}>
                             {firstName} {lastName}
                         </Link>
-                        <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>
+                        {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">{val}</div>
                     </div>

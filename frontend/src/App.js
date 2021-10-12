@@ -19,6 +19,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState("");
   const [profileDummy, setProfileDummy] = useState(0);
+  const [areNotifications, setAreNotifications] = useState(false);
 
   Axios.defaults.withCredentials = true;
   
@@ -38,7 +39,7 @@ function App() {
 
   return (
     <Router>
-      <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser, profileDummy, setProfileDummy}}>
+      <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser, profileDummy, setProfileDummy, areNotifications, setAreNotifications}}>
         <Header />
         <Switch>
           <Route exact path="/" component={Login} />
