@@ -171,9 +171,9 @@ function Profile() {
         }
     }
 
-    const handleDeletePost = (deletedPostID) => {
+    const handleDeletePost = (deletedPost) => {
         Axios.post('http://localhost:3001/profile/deleteTextPost', {
-            deletedPostID: deletedPostID
+            deletedPostID: deletedPost
         }).then((response) => {
             if (!response.data.success) {
                 alert(response.data.msg);

@@ -9,10 +9,12 @@ exports.deleteTextPostController = (req, res) => {
     db.query(sql, input, (err, data, fields) => {
         if (err) {
             req.json({
+                success: false,
                 msg: 'An error occurred while deleting post.'
             })
         } else {
             res.json({
+                success: true,
                 msg:'Successfully deleted post.'
             })
         }

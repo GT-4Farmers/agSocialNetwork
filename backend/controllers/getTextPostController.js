@@ -3,7 +3,7 @@ exports.getTextPostController = (req, res) => {
     
     let user = req.body.profileRoute;
 
-    var sql = 'SELECT createdAt, content FROM `Posts` WHERE createdBy = ? ORDER BY createdAt DESC';
+    var sql = 'SELECT createdAt, content, postID FROM `Posts` WHERE createdBy = ? ORDER BY createdAt DESC';
     var input = [user];
 
     db.query(sql, input, (err, data, fields) => {
@@ -15,7 +15,7 @@ exports.getTextPostController = (req, res) => {
             for (const key in data) {
                 posts.push(`${data[key].content}`);
                 timestamps.push(`${data[key].createdAt}`);
-                postIDs.push(`${data[key].postID}`)
+                postIDs.push(`${data[key].postID}`);
             }
 
             res.json({
