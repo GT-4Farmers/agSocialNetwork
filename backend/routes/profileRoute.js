@@ -16,10 +16,12 @@ friendRequestRoute = require("../controllers/friendRequestController");
 incomingRequestsRoute = require("../controllers/getFriendRequestController");
 createTextPostRoute = require("../controllers/createTextPostController");
 getTextPostRoute = require("../controllers/getTextPostController");
+deleteTextPostRoute = require("../controllers/deleteTextPostController");
 
 // post requests
 router.post("/createTextPost/", createTextPostRoute.createTextPostController)
 router.post("/getTextPosts/", getTextPostRoute.getTextPostController)
+router.post("/deleteTextPost/", deleteTextPostRoute.deleteTextPostController)
 // info requests
 router.put("/about/phone", editPhoneRoute.editPhoneController)
 router.put("/about/location", editLocationRoute.editLocationController)

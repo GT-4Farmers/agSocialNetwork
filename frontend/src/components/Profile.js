@@ -33,6 +33,7 @@ function Profile() {
     const [postContent, setPostContent] = useState('');
     const [posts, setPosts] = useState([]);
     const [ts, setTs] = useState([]);
+    const [postIDs, setPostIDs] = useState([]);
 
     // network state
     const [network, setNetwork] = useState(0);
@@ -85,6 +86,7 @@ function Profile() {
             if (!unmounted) {
                 setPosts(res.data.posts);
                 setTs(res.data.timestamps);
+                setPostIDs(res.data.postIDs);
             }
         })
         return () => { unmounted = true };
@@ -169,7 +171,19 @@ function Profile() {
         }
     }
 
-    // TODO: FIX PROFILE REFRESH WHEN COMING FROM DIFFERENT PROFILE
+    const handleDeletePost = (deletedPostID) => {
+        Axios.post('http://localhost:3001/profile/deleteTextPost', {
+            deletedPostID: deletedPostID
+        }).then((response) => {
+            if (!response.data.success) {
+                alert(response.data.msg);
+            } else {
+                console.log(response.data.msg);
+            }
+        })
+        setNetwork(network + 1);
+    }
+
     // TODO: SHOULDNT BE ABLE TO MAKE POST ON OTHER USERS PROFILE
 
     return (
@@ -209,6 +223,7 @@ function Profile() {
                         <Link className="link" to={`/${uuid}`}>
                             {firstName} {lastName}
                         </Link>
+                        <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">{val}</div>
                     </div>
