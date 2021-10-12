@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 function Notifications() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    const { areNotifications, setAreNotifications } = useContext(AuthContext);
     const history = useHistory();
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [incomingRequestsRoutes, setIncomingRequestsRoutes] = useState([]);
@@ -23,6 +24,9 @@ function Notifications() {
                     setIncomingRequests(res.data.incomingRequests[0]);
                     setIncomingRequestsRoutes(res.data.incomingRequestsRoutes[0]);
                     setCounter(incomingRequests.length);
+                    if (incomingRequests.length === 0 && areNotifications) {
+                        setAreNotifications(false);
+                    }
                 } 
             }
         })

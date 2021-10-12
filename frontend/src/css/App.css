@@ -92,10 +92,15 @@ ul {
 }
 
 input {
+  /* child of content-box */
+  box-sizing: border-box;
+
   outline: none;
   border-radius: 10em;
   color: #219653;
-  width: 60%;
+
+  width: 98%;
+
   height: 1.8em;
   margin: 1% auto;
   padding: .7em;
@@ -139,6 +144,13 @@ button:hover {
 }
 
 .greyBox {
+  /* parent of border-box */
+  box-sizing: content-box;
+  width: 95%;
+
+  /* spans for all content inside greybox container */
+  overflow: hidden;
+
   padding: 1% 0 1% 2%;
   margin: 0 2em 1% 0em;
   background-color: #C4C4C4;
@@ -191,3 +203,54 @@ button:hover {
   padding-top: 1%;
   margin-left: 3em;
 }
+
+
+/* can totally change this if need be, just adding for testing purposes */
+.greyBox .postInput {
+  position: relative;
+  float: left;
+  /* margin-right: 2%; */
+  width: 98%;
+}
+
+/* can totally change this if need be, just adding for testing purposes */
+.greyBox button {
+  position: relative;
+  float: right;
+  margin-right: 2%;
+}
+
+/* can totally change this if need be, just adding for testing purposes */
+.postContent {
+  font-size: calc(2px + 2vmin);
+  color: black;
+}
+
+/* can totally change this if need be, just adding for testing purposes */
+.postTs {
+  font-size: calc(2px + 2vmin);
+  color: grey;
+}
+
+/* can totally change this if need be, just adding for testing purposes */
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #5ec478 #eeeeee;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 17px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #eeeeee;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #5ec478;
+    border-radius: 10px;
+    border: 3px solid #eeeeee;
+  }
