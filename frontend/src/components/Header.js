@@ -6,6 +6,7 @@ import AuthContext from '../states/AuthContext';
 import logo from './logo.png';
 import '../css/header.css';
 import {MdNotificationAdd} from 'react-icons/md';
+import requests from './requests';
 
 function Header(props) {
 
@@ -45,6 +46,14 @@ function Header(props) {
                 <div id="headerLogo">
                   <img alt='Haystack Logo' src={logo}/>
                   <h1>HAYSTACK</h1>
+                </div>
+              </li>
+
+              <li>
+                <div className="navButton">
+                  <Link
+                    to='/test'
+                    state={{ fetchUrl: 'hello' }}>Test</Link>
                 </div>
               </li>
               <li>

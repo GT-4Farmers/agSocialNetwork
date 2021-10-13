@@ -12,7 +12,9 @@ import About from './components/About';
 import Friends from './components/Friends';
 import SearchUser from './components/SearchUser';
 import Notifications from './components/Notifications';
+import Test from './components/Test';
 import './css/App.css';
+import requests from './components/requests';
 
 function App() {
   
@@ -43,10 +45,11 @@ function App() {
         <Header />
         <Switch>
           <Route exact path="/" component={Login} />
-          <Route path="/home" component={Home} />
+          <Route path="/home" component={() => <Home fetchUrl={requests.fetchB} />} />
           <Route path="/searchUser" component={SearchUser} />
           <Route path="/register" component={Register} />
           <Route path="/notifications" component={Notifications} />
+          <Route path="/test" component={() => <Test fetchUrl={requests.fetchA} />} />
           <Route path="/:uid/friends" component={Friends} />
           <Route path="/:uid/about" component={About} />
           <Route path="/:uid" component={Profile} />

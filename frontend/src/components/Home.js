@@ -6,7 +6,7 @@ import '../css/App.css';
 import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
 
-function Home() {
+function Home({fetchUrl}) {
   let history = useHistory();
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const { profileDummy, setProfileDummy } = useContext(AuthContext);
@@ -26,30 +26,27 @@ function Home() {
   const [network, setNetwork] = useState(0);
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((res) => {
-      if (res) {
-        setName(`${res.data.firstName} ${res.data.lastName}`);
-      }
-    });
-
-    Axios.get("http://localhost:3001/home/friends").then((res) => {
-      if (res) {
-        setFriendUuid(res.data.friendUuid);
-        setFriendName(res.data.friendName);
-      }
-    })
-  }, []);
+    async function fetchData() {
+      const req = await Axios.get("/login");
+      setName(`${req.data.firstName} ${req.data.lastName}`);
+      return req;
+    }
+    fetchData();
+  }, [fetchUrl]);
 
   useEffect(() => {
-    Axios.post("http://localhost:3001/home/", {
-      friendUuid: friendUuid
-    }).then((res) => {
-      setAuthors(res.data.authors); // imagine moving this line down 3 times and dashboard crashing
-      setPosts(res.data.posts);
-      setTs(res.data.timestamps);
-      setPostIDs(res.data.postIDs);
-    })
-  }, [friendUuid, profileDummy, network]);
+    async function fetchData() {
+      const req = await Axios.post("/home/", {
+        friendUuid: friendUuid
+      });
+      setAuthors(req.data.authors);
+      setPosts(req.data.posts);
+      setTs(req.data.timestamps);
+      setPostIDs(req.data.postIDs);
+      return req;
+    }
+    fetchData();
+  }, [fetchUrl]);
 
   const handleDeletePost = (deletedPost) => {
     Axios.post('http://localhost:3001/profile/deleteTextPost', {
@@ -77,12 +74,8 @@ function Home() {
         <p>Hey {name}! :-D</p>
         <p>Dashboard displayed here.</p>
         <div className="posts">
-        {(!(posts === undefined)) ? (!(posts.length === 0) && (!(friendName.length === 0))) ? 
-        
-        posts.map((val, key) => {
-        
+        { posts.map((val, key) => {
         return(
-            
             <div className="greyBox" key={key}>
                 <Link className="link" to={`/${authors[key]}`}>
                   {friendName[friendUuid.indexOf(authors[key])] ? friendName[friendUuid.indexOf(authors[key])] : name}
@@ -92,11 +85,7 @@ function Home() {
                 <div className="postTs">{ts[key]}</div>
                 <div className="postContent">{val}</div>
                 
-            </div>
-        )}) :
-            <div className="greyBox">
-                No posts yet
-            </div> : null }
+            </div> )})}
         </div>
       </div>
     </>
