@@ -71,8 +71,8 @@ function Notifications() {
                     <div className="greyBox">
                         {requester} 
                         <p className="inline"> has sent you a friend request.</p>
-                        {acceptBtn} 
                         {rejectBtn}
+                        {acceptBtn} 
                     </div>
                 )
             }) : <p>No notifications</p> }

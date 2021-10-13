@@ -139,8 +139,8 @@ function Profile() {
     const ReversePendingNotif = () =>
         <div className="greyBox">
             <p className="inline">{firstName} {lastName} has sent you a friend request.</p>
-            <button onClick = {() => {handleAccept(uid)}}>Accept</button>
             <button onClick = {() => {handleReject(uid)}}>Reject</button>
+            <button onClick = {() => {handleAccept(uid)}}>Accept</button>
         </div>
 
     const FRSent = () => <button onClick={handleFriendRequest}>Friend Request Sent</button>;
