@@ -221,7 +221,7 @@ function Profile() {
                         <Link className="link" to={`/${uuid}`}>
                             {firstName} {lastName}
                         </Link>
-                        {/* {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>} */}
+                        {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">{val}</div>
                     </div>
