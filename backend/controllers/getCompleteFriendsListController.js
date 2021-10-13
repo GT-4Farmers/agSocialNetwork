@@ -8,7 +8,7 @@ exports.getCompleteFriendsListController = (req, res) => {
 
     db.query('SELECT * FROM Friends WHERE RequesterID = ? AND Relationship = ? UNION SELECT * FROM haystackdb.Friends WHERE RequesteeID = ? AND Relationship = ?', [user, 'Accepted', user, 'Accepted'], (err, data, fields) => {
         // if at least 1 user exists
-        if (data) {
+        if (data[0]) {
             for (const key in data) {
                 if (data[key].RequesterID == user) {
                     listOfUuid.push(`${data[key].RequesteeID}`);
@@ -36,6 +36,14 @@ exports.getCompleteFriendsListController = (req, res) => {
                         msg: "An error occurred retrieving friends' names"
                     })
                 }
+            })
+
+        // no friends
+        } else if (!data.length) {
+            res.json({
+                success: true,
+                friendUuid: friendUuid,
+                friendName: friendName
             })
         } else {
             res.json({

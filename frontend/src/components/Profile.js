@@ -43,61 +43,37 @@ function Profile() {
         var pathArray = profileRoute.split('/');
         profileRoute = (pathArray[0]);
 
-        setUuid(profileRoute);
-        let unmounted = false;
-        Axios.post("http://localhost:3001/profile", {
-            profileRoute: profileRoute
-        })
-        .then(res => {
-            if (!unmounted) {
-                setUuid(res.data.uuid);
-                setEmail(res.data.email);
-                setFirstName(res.data.firstName);
-                setLastName(res.data.lastName);
-            }
-        })
-        checkButton();
-        return () => { unmounted = true };
-    }, [profileDummy]);
-
-    const checkButton = () => {
-        let unmounted = false;
-        Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
-            profileRoute: profileRoute
-        })
-            .then(res => {
-                if (!unmounted) {
-                    setIsFriend(res.data.isFriend);
-                    setIsProfileOwner(res.data.isUser);
-                    setIsPending(res.data.isPending);
-                    setReversePending(res.data.reversePending);
-                }
+        async function fetchData() {
+            const res = await Axios.post("/profile", {
+                profileRoute: profileRoute
             })
-        return () => { unmounted = true };
+            setUuid(res.data.uuid);
+            setEmail(res.data.email);
+            setFirstName(res.data.firstName);
+            setLastName(res.data.lastName);
         
-    }
-
-    useEffect(() => {
-        let unmounted = false;
-        Axios.post("http://localhost:3001/profile/getTextPosts", {
-            profileRoute: profileRoute
-        })
-        .then(res => {
-            if (!unmounted) {
-                setPosts(res.data.posts);
-                setTs(res.data.timestamps);
-                setPostIDs(res.data.postIDs);
-            }
-        })
-        return () => { unmounted = true };
+            const resTwo = await Axios.post("/profile/getTextPosts", {
+                profileRoute: profileRoute
+            })
+            setPosts(resTwo.data.posts);
+            setTs(resTwo.data.timestamps);
+            setPostIDs(resTwo.data.postIDs);
+        }
+        checkButton();
+        fetchData();
     }, [profileDummy, network]);
 
-    const handleAbout = () => {
-        history.push(`/${uuid}/about`);
-    }
-
-    const handleFriends = () => {
-        history.push(`/${uuid}/friends`);
+    const checkButton = () => {
+        async function fetchData() {
+            const res = await Axios.post("/profile/uuidIsUserOrFriend", {
+                profileRoute: profileRoute
+            })
+            setIsFriend(res.data.isFriend);
+            setIsProfileOwner(res.data.isUser);
+            setIsPending(res.data.isPending);
+            setReversePending(res.data.reversePending);
+        }
+        fetchData();
     }
 
     if (!isLoggedIn) {
@@ -107,33 +83,37 @@ function Profile() {
     }
 
     const handleFriendRequest = () => {
-        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
-            profileRoute: uid,
-            mode: 'request'
-        })
-        handlePending();
+        async function fetchData() {
+            const res = await Axios.post("/profile/friends/friendRequest", {
+                profileRoute: uid,
+                mode: 'request'
+            })
+            setIsPending(true);
+        }
+        fetchData();
     }
 
-    const handlePending = () => {
-        setIsPending(true);
-    }
 
     const handleAccept = (route) => {
-        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
-            profileRoute: route,
-            mode: 'accept'
-        }).then(
-            setInteractFR(true)
-        )
+        async function fetchData() {
+            const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+                profileRoute: route,
+                mode: 'accept'
+            })
+            setInteractFR(true);
+        }
+        fetchData();
     }
 
     const handleReject = (route) => {
-        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
-            profileRoute: route,
-            mode: 'reject'
-        }).then(
-            setInteractFR(true)
-        )
+        async function fetchData() {
+            const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+                profileRoute: route,
+                mode: 'reject'
+            })
+            setInteractFR(true);
+        }
+        fetchData();
     }
 
     const ReversePendingNotif = () =>
@@ -146,42 +126,35 @@ function Profile() {
     const FRSent = () => <button onClick={handleFriendRequest}>Friend Request Sent</button>;
     const SendFR = () => <button onClick={handleFriendRequest}>Send Friend Request</button>;
 
-    const handlePostChange = (e) => {
-        setPostContent(e.target.value);
-    }
-
     const handlePostContent = () => {
-        // if empty post
         if (postContent === "") {
             alert("I said HOW ARE YOU FEELING TODAY?");
-
-        // otherwise
         } else {
-            Axios.post('http://localhost:3001/profile/createTextPost', {
-            content: postContent
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
-            } else {
-                console.log(response.data.msg);
+            async function fetchData() {
+                const res = await Axios.post('/profile/createTextPost', {
+                    content: postContent
+                })
+                if (!res.data.success) {
+                    alert(res.data.msg);
+                }
             }
-        })
+            fetchData();
+        }
         setPostContent("");
         setNetwork(network + 1);
-        }
     }
 
     const handleDeletePost = (deletedPost) => {
-        Axios.post('http://localhost:3001/profile/deleteTextPost', {
-            deletedPostID: deletedPost
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
-            } else {
-                console.log(response.data.msg);
+        async function fetchData() {
+            const res = await Axios.post('http://localhost:3001/profile/deleteTextPost', {
+                deletedPostID: deletedPost
+            })
+            if (!res.data.success) {
+                alert(res.data.msg);
             }
-        })
-        setNetwork(network + 1);
+            setNetwork(network + 1);
+        }
+        fetchData();
     }
 
     return (
@@ -193,10 +166,10 @@ function Profile() {
             {/* <h3>This is a user's bio.</h3> */}
 
             <div className="">
-                <button onClick={handleAbout}>About</button>
+                <button onClick={() => history.push(`/${uuid}/about`)}>About</button>
                 {/* <button onClick={handlePhotos}>Photos</button> */}
                 <button>Photos</button>
-                <button onClick={handleFriends}>Friends</button>
+                <button onClick={() => history.push(`/${uuid}/friends`)}>Friends</button>
                 <br></br>
                 {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
             </div>
@@ -208,7 +181,7 @@ function Profile() {
                     id="post"
                     placeholder="How are you feeling today?"
                     value={postContent ? postContent : ""}
-                    onChange={handlePostChange}
+                    onChange={(e) => {setPostContent(e.target.value)}}
                 />
                 <button onClick={handlePostContent}>Post</button>
                 </div> : null}

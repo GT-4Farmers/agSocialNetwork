@@ -44,7 +44,6 @@ function Login(props) {
                 setIsLoggedIn(true);
                 setUser(response.data.uuid);
                 setAreNotifications(false);
-                console.log("successful login");
                 history.push("/home");
             }
         })

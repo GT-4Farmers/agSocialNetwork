@@ -57,9 +57,6 @@ function About() {
         }).then((response) => {
             if (!response.data.success) {
                 alert(response.data.msg);
-            } else {
-                // alert('Bio updated successfully')
-                console.log(response.data.success);
             }
         })
     };
@@ -70,9 +67,6 @@ function About() {
         }).then((response) => {
             if (!response.data.success) {
                 alert(response.data.msg);
-            } else {
-                // alert('Birthday updated successfully')
-                console.log(response.data.success);
             }
         })
     };
@@ -83,9 +77,6 @@ function About() {
         }).then((response) => {
             if (!response.data.success) {
                 alert(response.data.msg);
-            } else {
-                // alert('Location updated successfully')
-                console.log(response.data.success);
             }
         })
     };
@@ -96,9 +87,6 @@ function About() {
         }).then((response) => {
             if (!response.data.success) {
                 alert(response.data.msg);
-            } else {
-                // alert('Phone updated successfully')
-                console.log(response.data.success);
             }
         })
     };

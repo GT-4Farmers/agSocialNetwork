@@ -26,41 +26,38 @@ function Home() {
   const [network, setNetwork] = useState(0);
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((res) => {
-      if (res) {
-        setName(`${res.data.firstName} ${res.data.lastName}`);
-      }
-    });
+    async function fetchData() {
+      const res = await Axios.get("/login");
+      setName(`${res.data.firstName} ${res.data.lastName}`);
 
-    Axios.get("http://localhost:3001/home/friends").then((res) => {
-      if (res) {
-        setFriendUuid(res.data.friendUuid);
-        setFriendName(res.data.friendName);
-      }
-    })
-  }, []);
+      const resTwo = await Axios.get("/home/friends");
+      setFriendUuid(resTwo.data.friendUuid);
+      setFriendName(resTwo.data.friendName);
 
-  useEffect(() => {
-    Axios.post("http://localhost:3001/home/", {
-      friendUuid: friendUuid
-    }).then((res) => {
-      setAuthors(res.data.authors); // imagine moving this line down 3 times and dashboard crashing
-      setPosts(res.data.posts);
-      setTs(res.data.timestamps);
-      setPostIDs(res.data.postIDs);
-    })
-  }, [friendUuid, profileDummy, network]);
+      const resThree = await Axios.post("/home/", {
+        // set to resTwo.data.friendUuid instead of friendUuid
+        // since this is encapsulated within the same fetchData function
+        // and friendUuid isn't updated by the team it reaches this request
+        friendUuid: resTwo.data.friendUuid
+      });
+      setAuthors(resThree.data.authors);
+      setPosts(resThree.data.posts);
+      setTs(resThree.data.timestamps);
+      setPostIDs(resThree.data.postIDs);
+    }
+    fetchData();
+  }, [network]);
 
   const handleDeletePost = (deletedPost) => {
-    Axios.post('http://localhost:3001/profile/deleteTextPost', {
+    async function fetchData() {
+      const res = await Axios.post('/profile/deleteTextPost', {
         deletedPostID: deletedPost
-    }).then((response) => {
-        if (!response.data.success) {
-            alert(response.data.msg);
-        } else {
-            console.log(response.data.msg);
-        }
-    })
+      });
+      if (!res.data.success) {
+        alert(res.data.msg);
+      }
+    }
+    fetchData();
     setNetwork(network + 1);
   }
 
@@ -77,25 +74,19 @@ function Home() {
         <p>Hey {name}! :-D</p>
         <p>Dashboard displayed here.</p>
         <div className="posts">
-        {(!(posts === undefined)) ? (!(posts.length === 0) && (!(friendName.length === 0))) ? 
-        
-        posts.map((val, key) => {
-        
-        return(
-            
+        {(!(posts === undefined)) ? ((!(friendName === undefined))) ? posts.map((val, key) => {
+          return(
             <div className="greyBox" key={key}>
-                <Link className="link" to={`/${authors[key]}`}>
-                  {friendName[friendUuid.indexOf(authors[key])] ? friendName[friendUuid.indexOf(authors[key])] : name}
-                </Link>
-                
-                {(!(authors[key] === user)) ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
-                <div className="postTs">{ts[key]}</div>
-                <div className="postContent">{val}</div>
-                
+              <Link className="link" to={`/${authors[key]}`}>
+                {friendName[friendUuid.indexOf(authors[key])] ? friendName[friendUuid.indexOf(authors[key])] : name}
+              </Link>
+              {(!(authors[key] === user)) ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
+              <div className="postTs">{ts[key]}</div>
+              <div className="postContent">{val}</div>
             </div>
-        )}) :
+          )}) :
             <div className="greyBox">
-                No posts yet
+              No posts yet
             </div> : null }
         </div>
       </div>
