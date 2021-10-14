@@ -64,6 +64,8 @@ function Home() {
       // setCounts(countArray);
     }
     fetchData();
+
+    return () => {}
   }, [network]);
 
   const handleDeletePost = (deletedPost) => {

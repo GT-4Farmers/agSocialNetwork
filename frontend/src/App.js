@@ -29,6 +29,7 @@ function App() {
       setIsLoggedIn(res.data.success);
       setUser(res.data.uuid);
     }
+    fetchData();
 
     // return () => {};
   });

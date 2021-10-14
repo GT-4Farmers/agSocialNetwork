@@ -9,13 +9,10 @@ function AuthService() {
 
     useEffect(() => {
         async function fetchData() {
-            const res = await Axios.get("/login");
+            const res = await Axios.get("http://localhost:3001/login");
             setIsLoggedIn(res.data.success);
         }
         fetchData()
-        // return () => {
-        //     setIsLoggedIn(false);
-        // };
     });
 
     if (!isLoggedIn) {
