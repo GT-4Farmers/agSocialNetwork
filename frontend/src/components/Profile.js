@@ -44,7 +44,7 @@ function Profile() {
         profileRoute = (pathArray[0]);
 
         async function fetchData() {
-            const res = await Axios.post("/profile", {
+            const res = await Axios.post("http://localhost:3001/profile", {
                 profileRoute: profileRoute
             })
             setUuid(res.data.uuid);
@@ -52,7 +52,7 @@ function Profile() {
             setFirstName(res.data.firstName);
             setLastName(res.data.lastName);
         
-            const resTwo = await Axios.post("/profile/getTextPosts", {
+            const resTwo = await Axios.post("http://localhost:3001/profile/getTextPosts", {
                 profileRoute: profileRoute
             })
             setPosts(resTwo.data.posts);
@@ -80,7 +80,7 @@ function Profile() {
 
     const checkButton = () => {
         async function fetchData() {
-            const res = await Axios.post("/profile/uuidIsUserOrFriend", {
+            const res = await Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
                 profileRoute: profileRoute
             })
             setIsFriend(res.data.isFriend);
@@ -93,7 +93,7 @@ function Profile() {
 
     const handleFriendRequest = () => {
         async function fetchData() {
-            const res = await Axios.post("/profile/friends/friendRequest", {
+            const res = await Axios.post("http://localhost:3001/profile/friends/friendRequest", {
                 profileRoute: uid,
                 mode: 'request'
             })
@@ -105,7 +105,7 @@ function Profile() {
 
     const handleAccept = (route) => {
         async function fetchData() {
-            const res = Axios.post("/profile/friends/friendRequest", {
+            const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
                 profileRoute: route,
                 mode: 'accept'
             })
@@ -116,7 +116,7 @@ function Profile() {
 
     const handleReject = (route) => {
         async function fetchData() {
-            const res = Axios.post("/profile/friends/friendRequest", {
+            const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
                 profileRoute: route,
                 mode: 'reject'
             })
@@ -140,7 +140,7 @@ function Profile() {
             alert("I said HOW ARE YOU FEELING TODAY?");
         } else {
             async function fetchData() {
-                const res = await Axios.post('/profile/createTextPost', {
+                const res = await Axios.post('http://localhost:3001/profile/createTextPost', {
                     content: postContent
                 })
                 if (!res.data.success) {
@@ -155,7 +155,7 @@ function Profile() {
 
     const handleDeletePost = (deletedPost) => {
         async function fetchData() {
-            const res = await Axios.post('/profile/deleteTextPost', {
+            const res = await Axios.post('http://localhost:3001/profile/deleteTextPost', {
                 deletedPostID: deletedPost
             })
             if (!res.data.success) {

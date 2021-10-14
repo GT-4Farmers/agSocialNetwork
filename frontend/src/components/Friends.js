@@ -17,13 +17,13 @@ function Friends() {
 
     useEffect(() => {
         async function fetchData() {
-            const res = await Axios.post("/profile/friends", {
+            const res = await Axios.post("http://localhost:3001/profile/friends", {
                 profileRoute: profileRoute
             })
             if (res.data.success) {
                 setFriendListRoutes(res.data.friendsList[0]);
 
-                const resTwo = await Axios.post("/profile/friends/friendslist", {
+                const resTwo = await Axios.post("http://localhost:3001/profile/friends/friendslist", {
                     friendsUuids: res.data.friendsList[0]
                 })
                 if (resTwo.data.success) {

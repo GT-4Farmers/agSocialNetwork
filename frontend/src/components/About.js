@@ -21,7 +21,7 @@ function About() {
 
     useEffect(() => {
         async function fetchData() {
-            const res = await Axios.post("/profile/about", {
+            const res = await Axios.post("http://localhost:3001/profile/about", {
                 profileRoute: uid
             })
             setPhone(res.data.phone);
@@ -33,7 +33,7 @@ function About() {
         fetchData();
 
         async function fetchMoreData() {
-            const resTwo = await Axios.post("/profile/uuidIsUserOrFriend", {
+            const resTwo = await Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
                 profileRoute: uid
             })
             if (resTwo.data.success) {
@@ -58,7 +58,7 @@ function About() {
 
     const editBio = () => {
         async function fetchData() {
-            const res = await Axios.put('/profile/about/bio', {
+            const res = await Axios.put('http://localhost:3001/profile/about/bio', {
                 bio: bio
             })
         }
@@ -67,7 +67,7 @@ function About() {
 
     const editBirthdate = () => {
         async function fetchData() {
-            const res = await Axios.put('/profile/about/birthdate', {
+            const res = await Axios.put('http://localhost:3001/profile/about/birthdate', {
                 birthdate: birthdate
             })
         }
@@ -76,7 +76,7 @@ function About() {
 
     const editLocation = () => {
         async function fetchData() {
-            const res = await Axios.put('/profile/about/location', {
+            const res = await Axios.put('http://localhost:3001/profile/about/location', {
                 location: location
             })
         }
@@ -85,7 +85,7 @@ function About() {
 
     const editPhone = () => {
         async function fetchData() {
-            const res = Axios.put('/profile/about/phone', {
+            const res = Axios.put('http://localhost:3001/profile/about/phone', {
                 phone: phone
             })
         }

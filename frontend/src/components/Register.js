@@ -20,7 +20,7 @@ function Register() {
     
     const register = () => {
         async function fetchData() {
-            const res = await Axios.post('/register', {
+            const res = await Axios.post('http://localhost:3001/register', {
                 uuid: uniqueID,
                 firstName: firstNameReg,
                 lastName: lastNameReg,

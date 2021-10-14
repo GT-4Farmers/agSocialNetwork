@@ -30,14 +30,14 @@ function Home() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await Axios.get("/login");
+      const res = await Axios.get("http://localhost:3001/login");
       setName(`${res.data.firstName} ${res.data.lastName}`);
 
-      const resTwo = await Axios.get("/home/friends");
+      const resTwo = await Axios.get("http://localhost:3001/home/friends");
       setFriendUuid(resTwo.data.friendUuid);
       setFriendName(resTwo.data.friendName);
 
-      const resThree = await Axios.post("/home", {
+      const resThree = await Axios.post("http://localhost:3001/home", {
         // set to resTwo.data.friendUuid instead of friendUuid
         // since this is encapsulated within the same fetchData function
         // and friendUuid isn't updated by the team it reaches this request
@@ -52,7 +52,7 @@ function Home() {
       let lArray = [];
       let countArray = [];
       for (const p in pIDS) {
-        let resFour = await Axios.post("/home/likes/getLikes", {
+        let resFour = await Axios.post("http://localhost:3001/home/likes/getLikes", {
           postID: pIDS[p]
         });
         lArray.push(resFour.data.likers);
@@ -77,7 +77,7 @@ function Home() {
 
   const handleDeletePost = (deletedPost) => {
     async function fetchData() {
-      const res = await Axios.post('/profile/deleteTextPost', {
+      const res = await Axios.post('http://localhost:3001/profile/deleteTextPost', {
         deletedPostID: deletedPost
       });
       if (!res.data.success) {
@@ -90,7 +90,7 @@ function Home() {
 
   const handleLike = (likePID) => {
     async function fetchData() {
-      const res = await Axios.post('/home/likes', {
+      const res = await Axios.post('http://localhost:3001/home/likes', {
         postID: likePID,
         uuid: user,
         mode: "like"
@@ -102,7 +102,7 @@ function Home() {
 
   const handleDislike = (dislikePID) => {
     async function fetchData() {
-      const res = await Axios.post('/home/likes', {
+      const res = await Axios.post('http://localhost:3001/home/likes', {
         postID: dislikePID,
         uuid: user,
         mode: "dislike"
