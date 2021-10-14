@@ -1,13 +1,17 @@
 exports.getDashboardTextPostsController = (req, res) => {
     const db = require("../server");
 
-    let friendUuid = [req.session.userID];
-    friendUuid.push(req.body.friendUuid);
+    let friendUuid = [];
+    friendUuid.push(req.session.userID);
+    req.body.friendUuid.forEach(friend => friendUuid.push(friend));
+
+    console.log(friendUuid);
 
     var sql = 'SELECT * FROM `Posts` WHERE createdBy IN (?) ORDER BY createdAt DESC';
-    var input = friendUuid;
+    var input = [friendUuid];
 
     db.query(sql, input, (err, data, fields) => {
+        console.log(data);
         if (data) {
             let posts = [];
             let timestamps = [];
