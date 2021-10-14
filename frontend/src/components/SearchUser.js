@@ -16,21 +16,23 @@ function SearchUser() {
   const [foundUserIds, setFoundUserIds] = useState([]);
 
   useEffect(() => {
-    let unmounted = false;
-
-    Axios.post("http://localhost:3001/searchUser", {
-      userToSearch: userToSearch
-    })
-    .then(res => {
-        if (!unmounted) {
-          if (res.data.success) {
-            setFoundUser(res.data.users[0]);
-            setFoundUserIds(res.data.uniqueIds[0])
-          }
-        }
+    async function fetchData() {
+      const res = await Axios.post("http://localhost:3001/searchUser", {
+        userToSearch: userToSearch
       })
-      
-    return () => { unmounted = true };
+      if (res.data.success) {
+        setFoundUser(res.data.users[0]);
+        setFoundUserIds(res.data.uniqueIds[0])
+      }
+    }
+    fetchData();
+
+    // unmount cleanup
+    return () => {
+      setFoundUser([]);
+      setFoundUserIds([]);
+    }
+
   }, [userToSearch]);
 
   const handleChange = (e) => {
@@ -63,7 +65,7 @@ function SearchUser() {
       <div className="searchResults">
         {(!(foundUser.length === 0)) ? foundUser.map((val, key) => {
           return(
-            <Link className="link" key={key} to={foundUserIds[key]}>
+            <Link className="link" key={key} to={foundUserIds[key] ? foundUserIds[key] : `/`}>
               {val}
             </Link>
           )

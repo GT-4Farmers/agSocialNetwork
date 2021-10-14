@@ -34,7 +34,7 @@ function Home() {
       setFriendUuid(resTwo.data.friendUuid);
       setFriendName(resTwo.data.friendName);
 
-      const resThree = await Axios.post("/home/", {
+      const resThree = await Axios.post("/home", {
         // set to resTwo.data.friendUuid instead of friendUuid
         // since this is encapsulated within the same fetchData function
         // and friendUuid isn't updated by the team it reaches this request
@@ -46,6 +46,17 @@ function Home() {
       setPostIDs(resThree.data.postIDs);
     }
     fetchData();
+
+    // unmount cleanup
+    return () => {
+      setName("");
+      setFriendUuid([]);
+      setFriendName([]);
+      setAuthors([]);
+      setPosts([]);
+      setTs([]);
+      setPostIDs([]);
+    }
   }, [network]);
 
   const handleDeletePost = (deletedPost) => {

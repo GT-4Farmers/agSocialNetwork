@@ -8,63 +8,42 @@ import logo from './logo.png';
 
 function Register() {
     let uniqueID = uuid();
-
     const history = useHistory();
-    const handleHistory = () => {
-        history.push("/");
-    }
 
-    const [state, setState] = useState({
-        firstNameReg: null,
-        lastNameReg: null,
-        emailReg: null,
-        passwordReg: "",
-        confirmPasswordReg: ""
-    })
+    const [firstNameReg, setFirstNameReg] = useState(null);
+    const [lastNameReg, setLastNameReg] = useState(null);
+    const [emailReg, setEmailReg] = useState(null);
+    const [passwordReg, setPasswordReg] = useState("");
+    const [confirmPasswordReg, setConfirmPasswordReg] = useState("");
     
     const [hidden, setHidden] = useState(true);
     
     const register = () => {
-        
-        Axios.post('http://localhost:3001/register', {
-            uuid: uniqueID,
-            firstName: state.firstNameReg,
-            lastName: state.lastNameReg,
-            email: state.emailReg,
-            password: state.passwordReg,
-            confirmPassword: state.confirmPasswordReg
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
+        async function fetchData() {
+            const res = await Axios.post('http://localhost:3001/register', {
+                uuid: uniqueID,
+                firstName: firstNameReg,
+                lastName: lastNameReg,
+                email: emailReg,
+                password: passwordReg,
+                confirmPassword: confirmPasswordReg
+            })
+            if (!res.data.success) {
+                alert(res.data.msg);
             } else {
-                redirectToHome();
+                history.push('/');
             }
-        })
+        }
+        fetchData();
     };
-
-    const redirectToHome = () => {
-        history.push('/');
-    }
-
-    const toggleShow = () => {
-        setHidden(!hidden)
-    }
 
     const handleRegister = (e) => {
         e.preventDefault();
-        if (state.passwordReg === state.confirmPasswordReg) {
+        if (passwordReg === confirmPasswordReg) {
             register();
         } else {
             alert("Passwords do not match");
         }
-    }
-    
-    const handleChange = (e) => {
-        const { id, value } = e.target
-        setState(prevState => ({
-            ...prevState,
-            [id] : value
-        }))
     }
 
     return (
@@ -79,45 +58,40 @@ function Register() {
                     <input
                         type="text"
                         placeholder="First Name"
-                        id="firstNameReg"
-                        value={state.firstNameReg ? state.firstNameReg : ""}
-                        onChange={handleChange}
+                        value={firstNameReg ? firstNameReg : ""}
+                        onChange={(e) => {setFirstNameReg(e.target.value)}}
                     />
                     <input
                         type="text"
                         placeholder="Last Name"
-                        id="lastNameReg"
-                        value={state.lastNameReg ? state.lastNameReg : ""}
-                        onChange={handleChange}
+                        value={lastNameReg ? lastNameReg : ""}
+                        onChange={(e) => {setLastNameReg(e.target.value)}}
                     />
                     <input
                         type="email"
                         placeholder="Email"
-                        id="emailReg"
-                        value={state.emailReg ? state.emailReg : ""}
-                        onChange={handleChange}
+                        value={emailReg ? emailReg : ""}
+                        onChange={(e) => {setEmailReg(e.target.value)}}
                     />
                     <input
                         type={hidden ? "password" : "text"}
                         placeholder="Password"
-                        id="passwordReg"
-                        value={state.passwordReg ? state.passwordReg : ""}
-                        onChange={handleChange}
+                        value={passwordReg ? passwordReg : ""}
+                        onChange={(e) => {setPasswordReg(e.target.value)}}
                     />
                     <input
                         type={hidden ? "password" : "text"}
                         placeholder="Confirm Password"
-                        id="confirmPasswordReg"
-                        value={state.confirmPasswordReg ? state.confirmPasswordReg : ""}
-                        onChange={handleChange}
+                        value={confirmPasswordReg ? confirmPasswordReg : ""}
+                        onChange={(e) => {setConfirmPasswordReg(e.target.value)}}
                     />
-                    <button onClick={toggleShow} id="showhide">Show/Hide</button>
+                    <button onClick={() => {setHidden(!hidden)}} id="showhide">Show/Hide</button>
                 </div>
                 <button className="loginButton" onClick={handleRegister}>Sign Up</button>
 
                 <div>
                     <span>Already have an account? </span>
-                    <a id="logIn" onClick={handleHistory}>Login here</a>
+                    <a id="logIn" onClick={() => {history.push("/")}}>Login here</a>
                 </div>
             </div>
         </div>

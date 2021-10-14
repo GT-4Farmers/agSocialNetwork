@@ -61,6 +61,21 @@ function Profile() {
         }
         checkButton();
         fetchData();
+
+        // unmount cleanup
+        return () => {
+            setUuid("");
+            setEmail("");
+            setFirstName("");
+            setLastName("");
+            setPosts([]);
+            setTs([]);
+            setPostIDs([]);
+            setIsFriend(false);
+            setIsProfileOwner(false);
+            setIsPending('');
+            setReversePending('');
+        }
     }, [profileDummy, network]);
 
     const checkButton = () => {
@@ -74,12 +89,6 @@ function Profile() {
             setReversePending(res.data.reversePending);
         }
         fetchData();
-    }
-
-    if (!isLoggedIn) {
-        return (
-            <AuthService />
-        )
     }
 
     const handleFriendRequest = () => {
@@ -155,6 +164,12 @@ function Profile() {
             setNetwork(network + 1);
         }
         fetchData();
+    }
+
+    if (!isLoggedIn) {
+        return (
+            <AuthService />
+        )
     }
 
     return (

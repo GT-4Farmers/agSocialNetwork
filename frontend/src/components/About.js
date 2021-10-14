@@ -5,11 +5,10 @@ import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
 
 function About() {
-    const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    const { isLoggedIn } = useContext(AuthContext);
 
     const history = useHistory();
     let {uid} = useParams()
-    const [uuid, setUuid] = useState(uid)
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState("");
     const [birthdate, setBirthdate] = useState("");
@@ -19,97 +18,79 @@ function About() {
     const [isProfileOwner, setIsProfileOwner] = useState(false)
     const [isFriend, setIsFriend] = useState(false)
     const [saveChanges, setSaveChanges] = useState(false);
-    const onClick = () => {
-        setShowText(!showElement);
-        setSaveChanges(false);
-    }
 
     useEffect(() => {
-        Axios.post("http://localhost:3001/profile/about", {
-            profileRoute: uuid
-        })
-        .then(res => {
+        async function fetchData() {
+            const res = await Axios.post("/profile/about", {
+                profileRoute: uid
+            })
+            setPhone(res.data.phone);
             setEmail(res.data.email)
             setBio(res.data.bio);
             setBirthdate(res.data.birthdate);
             setLocation(res.data.location);
-            setPhone(res.data.phone);
-        })
+        }
+        fetchData();
+
+        async function fetchMoreData() {
+            const resTwo = await Axios.post("/profile/uuidIsUserOrFriend", {
+                profileRoute: uid
+            })
+            if (resTwo.data.success) {
+                setIsProfileOwner(resTwo.data.isUser)
+                setIsFriend(resTwo.data.isFriend)
+            } else {
+                alert(resTwo.data.msg)
+            }
+        }
+        fetchMoreData();
+
+        return () => {
+            setEmail("")
+            setBio("");
+            setBirthdate("");
+            setLocation("");
+            setPhone("");
+            setIsProfileOwner(false);
+            setIsFriend(false);
+        }
     }, []);
 
-    useEffect(() => {
-        Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
-            profileRoute: uuid
-        })
-        .then(res => {
-            if (res.data.success) {
-                setIsProfileOwner(res.data.isUser)
-                setIsFriend(res.data.isFriend)
-            } else {
-                alert(res.data.msg)
-            }
-        })
-    }, [])
-
     const editBio = () => {
-        Axios.put('http://localhost:3001/profile/about/bio', {
-            bio: bio
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
-            }
-        })
+        async function fetchData() {
+            const res = await Axios.put('/profile/about/bio', {
+                bio: bio
+            })
+        }
+        fetchData();
     };
 
     const editBirthdate = () => {
-        Axios.put('http://localhost:3001/profile/about/birthdate', {
-            birthdate: birthdate
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
-            }
-        })
+        async function fetchData() {
+            const res = await Axios.put('/profile/about/birthdate', {
+                birthdate: birthdate
+            })
+        }
+        fetchData();
     };
 
     const editLocation = () => {
-        Axios.put('http://localhost:3001/profile/about/location', {
-            location: location
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
-            }
-        })
+        async function fetchData() {
+            const res = await Axios.put('/profile/about/location', {
+                location: location
+            })
+        }
+        fetchData();
     };
 
     const editPhone = () => {
-        Axios.put('http://localhost:3001/profile/about/phone', {
-            phone: phone
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
-            }
-        })
+        async function fetchData() {
+            const res = Axios.put('/profile/about/phone', {
+                phone: phone
+            })
+        }
+        fetchData();
     };
-
-    const handleBioChange = (e) => {
-        setBio(e.target.value)
-    }
-
-    const handleBirthdateChange = (e) => {
-        setBirthdate(e.target.value)
-    }
-
-    const handleLocationChange = (e) => {
-        setLocation(e.target.value)
-    }
-
-    const handlePhoneChange = (e) => {
-        setPhone(e.target.value)
-    }
-
-    const handleBack = () => {
-        history.goBack();
-    }
 
     const handleButton = () => {
         editBio();
@@ -119,21 +100,24 @@ function About() {
         setSaveChanges(true);
     }
 
-    const SaveButton = () => <button onClick={handleButton}>{saveChanges ? "Changes saved" : "Save Changes"}</button>;
-
-    // const BioButton = () => <button id="bioBtn" onClick={editBio}>Save</button>;
-    // const BirthdayButton = () => <button id="birthdayBtn" onClick={editBirthdate}>Save</button>;
-    // const LocationButton = () => <button id="locationBtn" onClick={editLocation}>Save</button>;
-    // const PhoneButton = () => <button id="phoneBtn" onClick={editPhone}>Save</button>;
+    const SaveButton = () =>
+        <button onClick={handleButton}>
+            {saveChanges ? "Changes saved" : "Save Changes"}
+        </button>;
 
     let value = !showElement ? "Edit About" : "Done";
+
+    // referred to on line 170
+    const onClick = () => {
+        setShowText(!showElement);
+        setSaveChanges(false);
+    }
 
     if (!isLoggedIn) {
         return (
             <AuthService />
         )
     }
-
 
     return ( //Bio is visible to all, other fields visible to profile owner/friends only, editing is only for the profile owner
     <div className="content">
@@ -144,7 +128,7 @@ function About() {
                     type="text"
                     id="bio"
                     value={bio ? bio : ""}
-                    onChange={handleBioChange}
+                    onChange={(e) => { setBio(e.target.value)}}
                 /> : null}
                 {/* {showElement && isProfileOwner ? <BioButton /> : null} */}
             </li>
@@ -154,7 +138,7 @@ function About() {
                     type="text"
                     id="birthdate"
                     value={birthdate ? birthdate : ""}
-                    onChange={handleBirthdateChange}
+                    onChange={(e) => {setBirthdate(e.target.value)}}
                 /> : null}
                 {/* {showElement && isProfileOwner ? <BirthdayButton /> : null} */}
             </li> : null}
@@ -164,7 +148,7 @@ function About() {
                     type="text"
                     id="location"
                     value={location ? location : ""}
-                    onChange={handleLocationChange}
+                    onChange={(e) => {setLocation(e.target.value)}}
                 /> : null}
                 {/* {showElement ? <LocationButton /> : null} */}
             </li> : null}
@@ -174,7 +158,7 @@ function About() {
                     type="text"
                     id="phone"
                     value={phone ? phone : ""}
-                    onChange={handlePhoneChange}
+                    onChange={(e) => {setPhone(e.target.value)}}
                 /> : null}
                 {/* {showElement && isProfileOwner ? <PhoneButton /> : null} */}
             </li> : null}
@@ -186,7 +170,7 @@ function About() {
             {isProfileOwner ? <button onClick={onClick}>{value}</button> : null}
         </div>
         <div>
-            <button onClick={handleBack}>Back</button>
+            <button onClick={() => {history.goBack()}}>Back</button>
         </div>
     </div>);
 }
