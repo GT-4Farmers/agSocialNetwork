@@ -16,7 +16,7 @@ function Header(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await Axios.get("http://localhost:3001/profile/friends/incomingRequests");
+      const res = await Axios.get("/profile/friends/incomingRequests");
       if (res && res.data.incomingRequests[0].length !== 0) {
         setAreNotifications(true);
       }
@@ -88,7 +88,7 @@ function Header(props) {
 
   const logout = () => {
     async function fetchData() {
-      const res = await Axios.post('http://localhost:3001/logout');
+      const res = await Axios.post('/logout');
       if (res && res.data.success) {
           history.push("/");
       }

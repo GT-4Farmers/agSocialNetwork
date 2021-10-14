@@ -17,7 +17,7 @@ function SearchUser() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await Axios.post("http://localhost:3001/searchUser", {
+      const res = await Axios.post("/searchUser", {
         userToSearch: userToSearch
       })
       if (res.data.success) {

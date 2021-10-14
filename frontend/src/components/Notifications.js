@@ -16,7 +16,7 @@ function Notifications() {
 
     useEffect(() => {
         async function fetchData() {
-            const res = await Axios.get("http://localhost:3001/profile/friends/incomingRequests");
+            const res = await Axios.get("/profile/friends/incomingRequests");
             if (res) {
                 setIncomingRequests(res.data.incomingRequests[0]);
                 setIncomingRequestsRoutes(res.data.incomingRequestsRoutes[0]);
@@ -44,7 +44,7 @@ function Notifications() {
 
     const handleAccept = (route) => {
         async function fetchData() {
-            const res = await Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            const res = await Axios.post("/profile/friends/friendRequest", {
                 profileRoute: route,
                 mode: 'accept'
             });
@@ -55,7 +55,7 @@ function Notifications() {
 
     const handleReject = (route) => {
         async function fetchData() {
-            const res = await Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            const res = await Axios.post("/profile/friends/friendRequest", {
                 profileRoute: route,
                 mode: 'reject'
             })

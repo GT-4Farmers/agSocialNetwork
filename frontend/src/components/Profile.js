@@ -105,7 +105,7 @@ function Profile() {
 
     const handleAccept = (route) => {
         async function fetchData() {
-            const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            const res = Axios.post("/profile/friends/friendRequest", {
                 profileRoute: route,
                 mode: 'accept'
             })
@@ -116,7 +116,7 @@ function Profile() {
 
     const handleReject = (route) => {
         async function fetchData() {
-            const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+            const res = Axios.post("/profile/friends/friendRequest", {
                 profileRoute: route,
                 mode: 'reject'
             })
@@ -155,7 +155,7 @@ function Profile() {
 
     const handleDeletePost = (deletedPost) => {
         async function fetchData() {
-            const res = await Axios.post('http://localhost:3001/profile/deleteTextPost', {
+            const res = await Axios.post('/profile/deleteTextPost', {
                 deletedPostID: deletedPost
             })
             if (!res.data.success) {

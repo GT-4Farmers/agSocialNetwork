@@ -19,7 +19,7 @@ function Login() {
     
     const login = () => {
         async function fetchData() {
-            const res = await Axios.post('http://localhost:3001/login', {
+            const res = await Axios.post('/login', {
                 email: email,
                 password: password
             });
