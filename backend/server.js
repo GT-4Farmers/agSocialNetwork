@@ -6,6 +6,7 @@ const cors = require("cors");
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const cookieParser = require('cookie-parser');
+const aws = require('aws-sdk');
 
 const db = mysql.createConnection({
     host: 'haystackdb.cwuhnsyt464r.us-east-1.rds.amazonaws.com',
@@ -36,6 +37,12 @@ const sessionStore = new MySQLStore({
     expiration: (60 * 60 * 24 * 60),
     endConnectionOnClose: false
 }, db);
+
+const s3 = new aws.S3({
+    accessKeyId: urAccessKey, //For when we have json files for aws creds
+    secretAccessKey: urSecretAccessKey,
+    Bucket: 'haystackimages'
+})
 
 app.use(session({
     key: 'userCookietv254gt2grwg43w',

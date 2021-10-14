@@ -14,13 +14,13 @@ editPhoneRoute = require("../controllers/editPhoneController");
 uuidIsUserOrFriendRoute = require("../controllers/uuidIsUserOrFriendController");
 friendRequestRoute = require("../controllers/friendRequestController");
 incomingRequestsRoute = require("../controllers/getFriendRequestController");
-createTextPostRoute = require("../controllers/createTextPostController");
-getTextPostRoute = require("../controllers/getTextPostController");
+createPostRoute = require("../controllers/createPostController");
+getPostRoute = require("../controllers/getPostController");
 deleteTextPostRoute = require("../controllers/deleteTextPostController");
 
 // post requests
-router.post("/createTextPost/", createTextPostRoute.createTextPostController)
-router.post("/getTextPosts/", getTextPostRoute.getTextPostController)
+router.post("/createPost/", createPostRoute.createPostController)
+router.post("/getPosts/", getPostRoute.getPostController)
 router.post("/deleteTextPost/", deleteTextPostRoute.deleteTextPostController)
 // info requests
 router.put("/about/phone", editPhoneRoute.editPhoneController)

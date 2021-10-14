@@ -1,4 +1,4 @@
-exports.getTextPostController = (req, res) => {
+exports.getPostController = (req, res) => {
     const db = require("../server");
     
     let user = req.body.profileRoute;
@@ -11,11 +11,24 @@ exports.getTextPostController = (req, res) => {
             let posts = [];
             let timestamps = [];
             let postIDs = [];
+            let images_data = [];
 
             for (const key in data) {
                 posts.push(`${data[key].content}`);
                 timestamps.push(`${data[key].createdAt}`);
                 postIDs.push(`${data[key].postID}`);
+                db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data, fields) => {
+                    if (err) {
+                        res.json({
+                            success: false,
+                            msg: "Database error"
+                        })
+                    }
+
+                    if (img_data[0]) {images_data.push(img_data[0]);}
+                    else {images_data.push(null)}
+                    
+                })
             }
 
             res.json({
