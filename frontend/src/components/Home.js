@@ -48,12 +48,11 @@ function Home() {
       setTs(resThree.data.timestamps);
       setPostIDs(resThree.data.postIDs);
 
-      let pIDS = resThree.data.postIDs;
       let lArray = [];
       let countArray = [];
-      for (const p in pIDS) {
+      for (const p in resThree.data.postIDs) {
         let resFour = await Axios.post("http://localhost:3001/home/likes/getLikes", {
-          postID: pIDS[p]
+          postID: resThree.data.postIDs[p]
         });
         lArray.push(resFour.data.likers);
         countArray.push(resFour.data.count);

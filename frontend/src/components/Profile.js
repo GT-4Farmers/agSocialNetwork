@@ -39,6 +39,14 @@ function Profile() {
     const [network, setNetwork] = useState(0);
 
     useEffect(() => {
+        if (uuid !== uid) {
+            setFirstName("");
+            setLastName("");
+            setPosts([]);
+            setTs([]);
+            setPostIDs([]);
+        }
+
         let profileRoute = (window.location.pathname).substring(1)
         var pathArray = profileRoute.split('/');
         profileRoute = (pathArray[0]);

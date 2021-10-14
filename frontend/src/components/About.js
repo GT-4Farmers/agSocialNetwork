@@ -38,7 +38,7 @@ function About() {
         //     setLocation("");
         //     setPhone("");
         // }
-    },[]);
+    }, [uid]);
 
     useEffect(() => {
         async function fetchMoreData() {
@@ -58,13 +58,13 @@ function About() {
         //     setIsProfileOwner(false);
         //     setIsFriend(false);
         // }
-    }, []);
+    }, [uid]);
 
     const editBio = () => {
         async function fetchData() {
             const res = await Axios.put('http://localhost:3001/profile/about/bio', {
                 bio: bio
-            })
+            });
         }
         fetchData();
     };
@@ -73,7 +73,7 @@ function About() {
         async function fetchData() {
             const res = await Axios.put('http://localhost:3001/profile/about/birthdate', {
                 birthdate: birthdate
-            })
+            });
         }
         fetchData();
     };
@@ -82,7 +82,7 @@ function About() {
         async function fetchData() {
             const res = await Axios.put('http://localhost:3001/profile/about/location', {
                 location: location
-            })
+            });
         }
         fetchData();
     };
@@ -91,7 +91,7 @@ function About() {
         async function fetchData() {
             const res = Axios.put('http://localhost:3001/profile/about/phone', {
                 phone: phone
-            })
+            });
         }
         fetchData();
     };
