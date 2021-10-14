@@ -13,6 +13,7 @@ function Notifications() {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [incomingRequestsRoutes, setIncomingRequestsRoutes] = useState([]);
     const [counter, setCounter] = useState(0);
+    const [network, setNetwork] = useState(0);
 
     useEffect(() => {
         async function fetchData() {
@@ -34,7 +35,7 @@ function Notifications() {
         //     setIncomingRequestsRoutes([]);
         //     setCounter(0);
         // };
-    }, []);
+    }, [network]);
 
     if (!isLoggedIn) {
         return (
@@ -51,6 +52,7 @@ function Notifications() {
             setCounter(counter-1);
         }
         fetchData();
+        setNetwork(network + 1);
     }
 
     const handleReject = (route) => {
@@ -62,6 +64,7 @@ function Notifications() {
             setCounter(counter-1);
         }
         fetchData();
+        setNetwork(network - 1);
     }
 
     return (

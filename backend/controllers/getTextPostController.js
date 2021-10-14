@@ -21,9 +21,6 @@ exports.getTextPostController = (req, res) => {
                 postIDs.push(`${data[key].postID}`);
                 likeCounts.push(`${data[key].likeCount}`);
 
-                console.log("data[key].uuid:",data[key].uuid);
-                console.log("user:",user);
-
                 if (data[key].uuid === user || data[key].uuid !== null) {
                     liked.push("green");
                 } else {
