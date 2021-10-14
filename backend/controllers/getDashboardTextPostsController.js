@@ -6,8 +6,8 @@ exports.getDashboardTextPostsController = (req, res) => {
     friendUuid.push(user);
     req.body.friendUuid.forEach(friend => friendUuid.push(friend));
 
-    var sql = 'SELECT Posts.postID, Posts.createdBy, createdAt, content, likeCount, Likes.uuid FROM Posts left join Likes ON Posts.postID = Likes.postID WHERE createdBy IN (?) ORDER BY createdAt DESC';
-    var input = [friendUuid];
+    var sql = 'SELECT Posts.postID, Posts.createdBy, createdAt, content, likeCount, Likes.uuid FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy IN (?) ORDER BY createdAt DESC';
+    var input = [user, friendUuid];
     db.query(sql, input, (err, data, fields) => {
         if (data) {
             let posts = [];
