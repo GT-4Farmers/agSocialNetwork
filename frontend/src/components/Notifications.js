@@ -13,25 +13,29 @@ function Notifications() {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [incomingRequestsRoutes, setIncomingRequestsRoutes] = useState([]);
     const [counter, setCounter] = useState(0);
+    const [network, setNetwork] = useState(0);
 
     useEffect(() => {
-        let unmounted = false;
-
-        Axios.get("http://localhost:3001/profile/friends/incomingRequests")
-        .then(res => {
-            if (!unmounted) {
-                if (res) {
-                    setIncomingRequests(res.data.incomingRequests[0]);
-                    setIncomingRequestsRoutes(res.data.incomingRequestsRoutes[0]);
-                    setCounter(incomingRequests.length);
-                    if (incomingRequests.length === 0 && areNotifications) {
-                        setAreNotifications(false);
-                    }
-                } 
+        async function fetchData() {
+            const res = await Axios.get("http://localhost:3001/profile/friends/incomingRequests");
+            if (res) {
+                setIncomingRequests(res.data.incomingRequests[0]);
+                setIncomingRequestsRoutes(res.data.incomingRequestsRoutes[0]);
+                setCounter(incomingRequests.length);
+                if (incomingRequests.length === 0 && areNotifications) {
+                    setAreNotifications(false);
+                }
             }
-        })
-        return () => { unmounted = true };
-    }, [counter]);
+        }
+        fetchData();
+
+        // unmount cleanup
+        // return () => {
+        //     setIncomingRequests([]);
+        //     setIncomingRequestsRoutes([]);
+        //     setCounter(0);
+        // };
+    }, [network]);
 
     if (!isLoggedIn) {
         return (
@@ -40,21 +44,27 @@ function Notifications() {
     }
 
     const handleAccept = (route) => {
-        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
-            profileRoute: route,
-            mode: 'accept'
-        }).then(res => {
+        async function fetchData() {
+            const res = await Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+                profileRoute: route,
+                mode: 'accept'
+            });
             setCounter(counter-1);
-        })
+        }
+        fetchData();
+        setNetwork(network + 1);
     }
 
     const handleReject = (route) => {
-        Axios.post("http://localhost:3001/profile/friends/friendRequest", {
-            profileRoute: route,
-            mode: 'reject'
-        }).then(res => {
+        async function fetchData() {
+            const res = await Axios.post("http://localhost:3001/profile/friends/friendRequest", {
+                profileRoute: route,
+                mode: 'reject'
+            })
             setCounter(counter-1);
-        })
+        }
+        fetchData();
+        setNetwork(network - 1);
     }
 
     return (

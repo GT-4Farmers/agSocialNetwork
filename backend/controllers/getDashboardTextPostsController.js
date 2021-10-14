@@ -1,27 +1,30 @@
-exports.getTextPostController = (req, res) => {
+exports.getDashboardTextPostsController = (req, res) => {
     const db = require("../server");
-    
-    let user = req.body.profileRoute;
-    let loggedIn = req.session.userID;
 
-    var sql = 'SELECT Likes.uuid, createdAt, content, Posts.postID, likeCount FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy = ? ORDER BY createdAt DESC';
-    var input = [loggedIn, user];
+    let user = req.session.userID;
+    let friendUuid = [];
+    friendUuid.push(user);
+    req.body.friendUuid.forEach(friend => friendUuid.push(friend));
 
+    var sql = 'SELECT Posts.postID, Posts.createdBy, createdAt, content, likeCount, Likes.uuid FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy IN (?) ORDER BY createdAt DESC';
+    var input = [user, friendUuid];
     db.query(sql, input, (err, data, fields) => {
-        if (data[0]) {
+        if (data) {
             let posts = [];
             let timestamps = [];
             let postIDs = [];
+            let authors = [];
             let likeCounts = [];
             let liked = [];
 
             for (const key in data) {
-                posts.push(`${data[key].content}`);
-                timestamps.push(`${data[key].createdAt}`);
                 postIDs.push(`${data[key].postID}`);
+                authors.push(`${data[key].createdBy}`);
+                timestamps.push(`${data[key].createdAt}`);
+                posts.push(`${data[key].content}`);
                 likeCounts.push(`${data[key].likeCount}`);
 
-                if (data[key].uuid === user || data[key].uuid !== null) {
+                if (data[key].uuid === user) {
                     liked.push("green");
                 } else {
                     liked.push("black");
@@ -34,6 +37,7 @@ exports.getTextPostController = (req, res) => {
                 posts: posts,
                 timestamps: timestamps,
                 postIDs: postIDs,
+                authors: authors,
                 likeCounts: likeCounts,
                 liked: liked
             })
@@ -44,6 +48,7 @@ exports.getTextPostController = (req, res) => {
                 posts: [],
                 timestamps: [],
                 postIDs: [],
+                author: [],
                 likeCounts: [],
                 liked: []
             })

@@ -3,23 +3,17 @@ import { useHistory } from 'react-router';
 import Axios from 'axios';
 
 function AuthService() {
+    let history = useHistory();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
     Axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        let unmounted = false;
-
-        Axios.get("http://localhost:3001/login")
-        .then((res) => {
-            if (!unmounted) {
-                setIsLoggedIn(res.data.success);
-            }
-        })
-        return () => { unmounted = true };
+        async function fetchData() {
+            const res = await Axios.get("http://localhost:3001/login");
+            setIsLoggedIn(res.data.success);
+        }
+        fetchData()
     });
-
-    let history = useHistory();
 
     if (!isLoggedIn) {
         return (

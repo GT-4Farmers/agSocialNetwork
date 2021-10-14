@@ -16,33 +16,28 @@ function Friends() {
     profileRoute = (pathArray[0]);
 
     useEffect(() => {
-        let unmounted = false;
-        let friendsListVar = []
-        let friendsListNames = []
+        async function fetchData() {
+            const res = await Axios.post("http://localhost:3001/profile/friends", {
+                profileRoute: profileRoute
+            })
+            if (res.data.success) {
+                setFriendListRoutes(res.data.friendsList[0]);
 
-        Axios.post("http://localhost:3001/profile/friends", {
-            profileRoute: profileRoute
-        })
-        .then(res => {
-            if (!unmounted) {
-                if (res.data.success) {
-                    friendsListVar = res.data.friendsList[0];
-                    setFriendListRoutes(friendsListVar);
-                    Axios.post("http://localhost:3001/profile/friends/friendslist", {
-                        friendsUuids: friendsListVar
-                    })
-                    .then(res => {
-                        if (!unmounted) {
-                            if (res.data.success) {
-                                friendsListNames = res.data.friendsList[0];
-                                setFriendList(friendsListNames);
-                            }
-                        }
-                    })
+                const resTwo = await Axios.post("http://localhost:3001/profile/friends/friendslist", {
+                    friendsUuids: res.data.friendsList[0]
+                })
+                if (resTwo.data.success) {
+                    setFriendList(resTwo.data.friendsList[0]);
                 }
             }
-        })
-        return () => { unmounted = true };
+        }
+        fetchData();
+
+        // unmount cleanup
+        // return () => { 
+        //     setFriendListRoutes([]);
+        //     setFriendList([]);
+        // };
     }, []);
 
     if (!isLoggedIn) {
@@ -51,18 +46,13 @@ function Friends() {
         )
     }
 
-    const handleBack = () => {
-        history.goBack();
-    }
-
     return (
-
         <div className="content">
             <div>
                 <h2> Friends </h2>
             </div>
             <div>
-                <button onClick={handleBack}>Back</button>
+                <button onClick={() => {history.goBack()}}>Back</button>
             </div>
             <div className="block">
             {(!(friendList.length === 0)) ? friendList.map((val, key) => {
