@@ -12,7 +12,7 @@ function Login() {
 
     const { setIsLoggedIn } = useContext(AuthContext);
     const { setUser} = useContext(AuthContext);
-    const { setAreNotifications } = useContext(AuthContext);
+    const { areNotifications, setAreNotifications } = useContext(AuthContext);
     const [hidden, setHidden] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
