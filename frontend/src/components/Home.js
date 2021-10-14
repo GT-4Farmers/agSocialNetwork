@@ -5,6 +5,7 @@ import { useHistory } from 'react-router';
 import '../css/App.css';
 import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
+import { FaTractor } from 'react-icons/fa';
 
 function Home() {
   let history = useHistory();
@@ -21,6 +22,8 @@ function Home() {
   const [ts, setTs] = useState([]);
   const [postIDs, setPostIDs] = useState([]);
   const [authors, setAuthors] = useState([]);
+  const [likers, setLikers] = useState([]);
+  const [counts, setCounts] = useState([]);
 
   // network state
   const [network, setNetwork] = useState(0);
@@ -44,6 +47,19 @@ function Home() {
       setPosts(resThree.data.posts);
       setTs(resThree.data.timestamps);
       setPostIDs(resThree.data.postIDs);
+
+      let pIDS = resThree.data.postIDs;
+      let lArray = [];
+      let countArray = [];
+      for (const p in pIDS) {
+        let resFour = await Axios.post("/home/likes/getLikes", {
+          postID: pIDS[p]
+        });
+        lArray.push(resFour.data.likers);
+        countArray.push(resFour.data.count);
+      }
+      setLikers(lArray);
+      setCounts(countArray);
     }
     fetchData();
 
@@ -72,6 +88,30 @@ function Home() {
     setNetwork(network + 1);
   }
 
+  const handleLike = (likePID) => {
+    async function fetchData() {
+      const res = await Axios.post('/home/likes', {
+        postID: likePID,
+        uuid: user,
+        mode: "like"
+      });
+    }
+    fetchData();
+    setNetwork(network + 1);
+  }
+
+  const handleDislike = (dislikePID) => {
+    async function fetchData() {
+      const res = await Axios.post('/home/likes', {
+        postID: dislikePID,
+        uuid: user,
+        mode: "dislike"
+      });
+    }
+    fetchData();
+    setNetwork(network + 1);
+  }
+
   if (!isLoggedIn) {
     return (
       <AuthService />
@@ -94,6 +134,9 @@ function Home() {
               {(!(authors[key] === user)) ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
               <div className="postTs">{ts[key]}</div>
               <div className="postContent">{val}</div>
+              <div className="likes">
+                {likers[0] === undefined ? null : <button className="tractor" onClick={() => {!likers[key].includes(user) ? handleLike(postIDs[key]) : handleDislike(postIDs[key])}}>{ likers[key].includes(user) ? <FaTractor color="green"/> : <FaTractor />}</button>} {counts[key]}
+              </div>
             </div>
           )}) :
             <div className="greyBox">
