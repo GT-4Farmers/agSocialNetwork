@@ -24,18 +24,14 @@ function App() {
   Axios.defaults.withCredentials = true;
   
   useEffect(() => {
-    let unmounted = false;
-
-    Axios.get("http://localhost:3001/login")
+    Axios.get("/login")
     .then((res) => {
-        if (!unmounted) {
-          setIsLoggedIn(res.data.success);
-          setUser(res.data.uuid);
-        }
+        setIsLoggedIn(res.data.success);
+        setUser(res.data.uuid);
     })
 
-    return () => { unmounted = true };
-  });
+    return () => {};
+  }, []);
 
   return (
     <Router>

@@ -18,11 +18,10 @@ function Login() {
     const [password, setPassword] = useState("");
     
     const login = () => {
-        async function fetchData() {
-            const res = await Axios.post('/login', {
-                email: email,
-                password: password
-            });
+        Axios.post('/login', {
+            email: email,
+            password: password
+        }).then(res => {
             if (!res.data.success) {
                 alert(res.data.msg);
             } else {
@@ -30,9 +29,8 @@ function Login() {
                 setUser(res.data.uuid);
                 setAreNotifications(false);
                 history.push("/home");
-            }   
-        }
-        fetchData();
+            }
+        })
     };
 
     return (

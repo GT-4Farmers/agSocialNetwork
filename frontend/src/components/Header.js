@@ -15,13 +15,12 @@ function Header(props) {
   const { areNotifications, setAreNotifications } = useContext(AuthContext);
 
   useEffect(() => {
-    async function fetchData() {
-      const res = await Axios.get("/profile/friends/incomingRequests");
+    Axios.get("/profile/friends/incomingRequests")
+    .then(res => {
       if (res && res.data.incomingRequests[0].length !== 0) {
         setAreNotifications(true);
       }
-    }
-    fetchData();
+    })
 
     // unmount cleanup
     return () => {};
@@ -87,13 +86,12 @@ function Header(props) {
   const history = useHistory();
 
   const logout = () => {
-    async function fetchData() {
-      const res = await Axios.post('/logout');
+    Axios.post('/logout')
+    .then(res => {
       if (res && res.data.success) {
           history.push("/");
       }
-    }
-    fetchData();
+    })
   };
 
   return (

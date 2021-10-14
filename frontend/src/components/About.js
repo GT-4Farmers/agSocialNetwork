@@ -8,42 +8,30 @@ function About() {
     const { isLoggedIn } = useContext(AuthContext);
 
     const history = useHistory();
-    let {uid} = useParams()
+    let {uid} = useParams();
+    const [uuid, setUuid] = useState(uid);
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState("");
     const [birthdate, setBirthdate] = useState("");
     const [location, setLocation] = useState("");
     const [phone, setPhone] = useState("");
     const [showElement, setShowText] = useState(false);
-    const [isProfileOwner, setIsProfileOwner] = useState(false)
-    const [isFriend, setIsFriend] = useState(false)
+    const [isProfileOwner, setIsProfileOwner] = useState(false);
+    const [isFriend, setIsFriend] = useState(false);
     const [saveChanges, setSaveChanges] = useState(false);
 
     useEffect(() => {
-        async function fetchData() {
-            const res = await Axios.post("/profile/about", {
-                profileRoute: uid
-            })
+        setUuid(uid);
+
+        Axios.post("/profile/about", {
+            profileRoute: uuid
+        }).then(res => {
             setPhone(res.data.phone);
             setEmail(res.data.email)
             setBio(res.data.bio);
             setBirthdate(res.data.birthdate);
             setLocation(res.data.location);
-        }
-        fetchData();
-
-        async function fetchMoreData() {
-            const resTwo = await Axios.post("/profile/uuidIsUserOrFriend", {
-                profileRoute: uid
-            })
-            if (resTwo.data.success) {
-                setIsProfileOwner(resTwo.data.isUser)
-                setIsFriend(resTwo.data.isFriend)
-            } else {
-                alert(resTwo.data.msg)
-            }
-        }
-        fetchMoreData();
+        })
 
         return () => {
             setEmail("")
@@ -51,45 +39,49 @@ function About() {
             setBirthdate("");
             setLocation("");
             setPhone("");
+        }
+    }, []);
+
+    useEffect(() => {
+        Axios.post("/profile/uuidIsUserOrFriend", {
+            profileRoute: uuid
+        }).then(resTwo => {
+            if (resTwo.data.success) {
+                setIsProfileOwner(resTwo.data.isUser)
+                setIsFriend(resTwo.data.isFriend)
+            } else {
+                alert(resTwo.data.msg)
+            }
+        })
+
+        return () => {
             setIsProfileOwner(false);
             setIsFriend(false);
         }
     }, []);
 
     const editBio = () => {
-        async function fetchData() {
-            const res = await Axios.put('/profile/about/bio', {
-                bio: bio
-            })
-        }
-        fetchData();
+        Axios.put('/profile/about/bio', {
+            bio: bio
+        })
     };
 
     const editBirthdate = () => {
-        async function fetchData() {
-            const res = await Axios.put('/profile/about/birthdate', {
-                birthdate: birthdate
-            })
-        }
-        fetchData();
+        Axios.put('/profile/about/birthdate', {
+            birthdate: birthdate
+        })
     };
 
     const editLocation = () => {
-        async function fetchData() {
-            const res = await Axios.put('/profile/about/location', {
-                location: location
-            })
-        }
-        fetchData();
+        Axios.put('/profile/about/location', {
+            location: location
+        })
     };
 
     const editPhone = () => {
-        async function fetchData() {
-            const res = Axios.put('/profile/about/phone', {
-                phone: phone
-            })
-        }
-        fetchData();
+        const res = Axios.put('/profile/about/phone', {
+            phone: phone
+        })
     };
 
     const handleButton = () => {

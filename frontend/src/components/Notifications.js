@@ -15,8 +15,8 @@ function Notifications() {
     const [counter, setCounter] = useState(0);
 
     useEffect(() => {
-        async function fetchData() {
-            const res = await Axios.get("/profile/friends/incomingRequests");
+        Axios.get("/profile/friends/incomingRequests")
+        .then(res => {
             if (res) {
                 setIncomingRequests(res.data.incomingRequests[0]);
                 setIncomingRequestsRoutes(res.data.incomingRequestsRoutes[0]);
@@ -25,14 +25,13 @@ function Notifications() {
                     setAreNotifications(false);
                 }
             }
-        }
-        fetchData();
+        })
 
         // unmount cleanup
         return () => {
             setIncomingRequests([]);
             setIncomingRequestsRoutes([]);
-            setCounter(0);
+            // setCounter(0);
         };
     }, []);
 
@@ -43,25 +42,19 @@ function Notifications() {
     }
 
     const handleAccept = (route) => {
-        async function fetchData() {
-            const res = await Axios.post("/profile/friends/friendRequest", {
-                profileRoute: route,
-                mode: 'accept'
-            });
-            setCounter(counter-1);
-        }
-        fetchData();
+        Axios.post("/profile/friends/friendRequest", {
+            profileRoute: route,
+            mode: 'accept'
+        })
+        setCounter(counter-1);
     }
 
     const handleReject = (route) => {
-        async function fetchData() {
-            const res = await Axios.post("/profile/friends/friendRequest", {
-                profileRoute: route,
-                mode: 'reject'
-            })
-            setCounter(counter-1);
-        }
-        fetchData();
+        Axios.post("/profile/friends/friendRequest", {
+            profileRoute: route,
+            mode: 'reject'
+        })
+        setCounter(counter-1);
     }
 
     return (

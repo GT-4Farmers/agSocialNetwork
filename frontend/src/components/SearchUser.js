@@ -16,16 +16,14 @@ function SearchUser() {
   const [foundUserIds, setFoundUserIds] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const res = await Axios.post("/searchUser", {
-        userToSearch: userToSearch
-      })
+    Axios.post("/searchUser", {
+      userToSearch: userToSearch
+    }).then(res => {
       if (res.data.success) {
         setFoundUser(res.data.users[0]);
         setFoundUserIds(res.data.uniqueIds[0])
       }
-    }
-    fetchData();
+    })
 
     // unmount cleanup
     return () => {

@@ -16,22 +16,21 @@ function Friends() {
     profileRoute = (pathArray[0]);
 
     useEffect(() => {
-        async function fetchData() {
-            const res = await Axios.post("/profile/friends", {
-                profileRoute: profileRoute
-            })
+        Axios.post("/profile/friends", {
+            profileRoute: profileRoute
+        }).then(res => {
             if (res.data.success) {
                 setFriendListRoutes(res.data.friendsList[0]);
 
-                const resTwo = await Axios.post("/profile/friends/friendslist", {
+                Axios.post("/profile/friends/friendslist", {
                     friendsUuids: res.data.friendsList[0]
+                }).then(resTwo => {
+                    if (resTwo.data.success) {
+                        setFriendList(resTwo.data.friendsList[0]);
+                    }
                 })
-                if (resTwo.data.success) {
-                    setFriendList(resTwo.data.friendsList[0]);
-                }
             }
-        }
-        fetchData();
+        });
 
         // unmount cleanup
         return () => { 

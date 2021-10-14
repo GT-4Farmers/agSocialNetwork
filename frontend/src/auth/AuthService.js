@@ -8,11 +8,11 @@ function AuthService() {
     Axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        async function fetchData() {
-            const res = await Axios.get("/login");
+        Axios.get("/login")
+        .then(res => {
             setIsLoggedIn(res.data.success);
-        }
-        fetchData()
+        })
+        
         return () => {
             setIsLoggedIn(false);
         };

@@ -29,86 +29,88 @@ function Home() {
   const [network, setNetwork] = useState(0);
 
   useEffect(() => {
-    async function fetchData() {
-      const res = await Axios.get("/login");
+    Axios.get("/login")
+    .then(res => {
       setName(`${res.data.firstName} ${res.data.lastName}`);
+    });
 
-      const resTwo = await Axios.get("/home/friends");
+    Axios.get("/home/friends")
+    .then(resTwo => {
       setFriendUuid(resTwo.data.friendUuid);
       setFriendName(resTwo.data.friendName);
+    });
 
-      const resThree = await Axios.post("/home", {
-        // set to resTwo.data.friendUuid instead of friendUuid
-        // since this is encapsulated within the same fetchData function
-        // and friendUuid isn't updated by the team it reaches this request
-        friendUuid: resTwo.data.friendUuid
-      });
-      setAuthors(resThree.data.authors);
-      setPosts(resThree.data.posts);
-      setTs(resThree.data.timestamps);
-      setPostIDs(resThree.data.postIDs);
-
-      let pIDS = resThree.data.postIDs;
-      let lArray = [];
-      let countArray = [];
-      for (const p in pIDS) {
-        let resFour = await Axios.post("/home/likes/getLikes", {
-          postID: pIDS[p]
-        });
-        lArray.push(resFour.data.likers);
-        countArray.push(resFour.data.count);
-      }
-      setLikers(lArray);
-      setCounts(countArray);
-    }
-    fetchData();
-
-    // unmount cleanup
     return () => {
       setName("");
       setFriendUuid([]);
       setFriendName([]);
+    }
+  }, [network]);
+
+  useEffect(() => {
+    Axios.post("/home", {
+      friendUuid: friendUuid
+    }).then(resThree => {
+      setAuthors(resThree.data.authors);
+      setPosts(resThree.data.posts);
+      setTs(resThree.data.timestamps);
+      setPostIDs(resThree.data.postIDs);
+    });
+    // unmount cleanup
+    return () => {
       setAuthors([]);
       setPosts([]);
       setTs([]);
       setPostIDs([]);
     }
+  },[network]);
+
+  useEffect(() => {
+    let lArray = [];
+    let countArray = [];
+    for (const p in postIDs) {
+      Axios.post("/home/likes/getLikes", {
+        postID: postIDs[p]
+      }).then(resFour => {
+        lArray.push(resFour.data.likers);
+        countArray.push(resFour.data.count);
+      });
+    }
+    setLikers(lArray);
+    setCounts(countArray);
+
+    return () => {
+      setLikers([]);
+      setCounts([]);
+    }
   }, [network]);
 
   const handleDeletePost = (deletedPost) => {
-    async function fetchData() {
-      const res = await Axios.post('/profile/deleteTextPost', {
-        deletedPostID: deletedPost
-      });
+    Axios.post('/profile/deleteTextPost', {
+      deletedPostID: deletedPost
+    }).then(res => {
       if (!res.data.success) {
         alert(res.data.msg);
       }
-    }
-    fetchData();
+    });
     setNetwork(network + 1);
   }
 
   const handleLike = (likePID) => {
-    async function fetchData() {
-      const res = await Axios.post('/home/likes', {
-        postID: likePID,
-        uuid: user,
-        mode: "like"
-      });
-    }
-    fetchData();
+    Axios.post('/home/likes', {
+      postID: likePID,
+      uuid: user,
+      mode: "like"
+    });
     setNetwork(network + 1);
   }
 
   const handleDislike = (dislikePID) => {
-    async function fetchData() {
-      const res = await Axios.post('/home/likes', {
-        postID: dislikePID,
-        uuid: user,
-        mode: "dislike"
-      });
-    }
-    fetchData();
+    Axios.post('/home/likes', {
+      postID: dislikePID,
+      uuid: user,
+      mode: "dislike"
+    });
     setNetwork(network + 1);
   }
 

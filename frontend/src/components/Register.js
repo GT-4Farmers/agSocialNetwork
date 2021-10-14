@@ -19,22 +19,20 @@ function Register() {
     const [hidden, setHidden] = useState(true);
     
     const register = () => {
-        async function fetchData() {
-            const res = await Axios.post('/register', {
-                uuid: uniqueID,
-                firstName: firstNameReg,
-                lastName: lastNameReg,
-                email: emailReg,
-                password: passwordReg,
-                confirmPassword: confirmPasswordReg
-            })
+        Axios.post('/register', {
+            uuid: uniqueID,
+            firstName: firstNameReg,
+            lastName: lastNameReg,
+            email: emailReg,
+            password: passwordReg,
+            confirmPassword: confirmPasswordReg
+        }).then(res => {
             if (!res.data.success) {
                 alert(res.data.msg);
             } else {
                 history.push('/');
             }
-        }
-        fetchData();
+        });
     };
 
     const handleRegister = (e) => {
