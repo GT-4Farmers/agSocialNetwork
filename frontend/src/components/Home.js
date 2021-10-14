@@ -22,8 +22,9 @@ function Home() {
   const [ts, setTs] = useState([]);
   const [postIDs, setPostIDs] = useState([]);
   const [authors, setAuthors] = useState([]);
-  const [likers, setLikers] = useState([]);
-  const [counts, setCounts] = useState([]);
+  // const [likers, setLikers] = useState([]);
+  const [likeCounts, setLikeCounts] = useState([]);
+  const [liked, setLiked] = useState([]);
 
   // network state
   const [network, setNetwork] = useState(0);
@@ -47,18 +48,20 @@ function Home() {
       setPosts(resThree.data.posts);
       setTs(resThree.data.timestamps);
       setPostIDs(resThree.data.postIDs);
+      setLikeCounts(resThree.data.likeCounts);
+      setLiked(resThree.data.liked);
 
-      let lArray = [];
-      let countArray = [];
-      for (const p in resThree.data.postIDs) {
-        let resFour = await Axios.post("http://localhost:3001/home/likes/getLikes", {
-          postID: resThree.data.postIDs[p]
-        });
-        lArray.push(resFour.data.likers);
-        countArray.push(resFour.data.count);
-      }
-      setLikers(lArray);
-      setCounts(countArray);
+      // let lArray = [];
+      // let countArray = [];
+      // for (const p in resThree.data.postIDs) {
+      //   let resFour = await Axios.post("http://localhost:3001/home/likes/getLikes", {
+      //     postID: resThree.data.postIDs[p]
+      //   });
+      //   lArray.push(resFour.data.likers);
+      //   countArray.push(resFour.data.count);
+      // }
+      // setLikers(lArray);
+      // setCounts(countArray);
     }
     fetchData();
   }, [network]);
@@ -76,24 +79,35 @@ function Home() {
     setNetwork(network + 1);
   }
 
-  const handleLike = (likePID) => {
-    async function fetchData() {
-      const res = await Axios.post('http://localhost:3001/home/likes', {
-        postID: likePID,
-        uuid: user,
-        mode: "like"
-      });
-    }
-    fetchData();
-    setNetwork(network + 1);
-  }
+  // const handleLike = (likePID, author) => {
+  //   async function fetchData() {
+  //     const res = await Axios.post('http://localhost:3001/home/likes', {
+  //       postID: likePID,
+  //       postOwner: author,
+  //       mode: "like"
+  //     });
+  //   }
+  //   fetchData();
+  //   setNetwork(network + 1);
+  // }
 
-  const handleDislike = (dislikePID) => {
+  // const handleDislike = (dislikePID) => {
+  //   async function fetchData() {
+  //     const res = await Axios.post('http://localhost:3001/home/likes', {
+  //       postID: dislikePID,
+  //       uuid: user,
+  //       mode: "dislike"
+  //     });
+  //   }
+  //   fetchData();
+  //   setNetwork(network + 1);
+  // }
+
+  const updateLikeCount = (postID, postOwner) => {
     async function fetchData() {
-      const res = await Axios.post('http://localhost:3001/home/likes', {
-        postID: dislikePID,
-        uuid: user,
-        mode: "dislike"
+      const res = await Axios.post('http://localhost:3001/home/updateLikeCount', {
+        postID: postID,
+        postOwner: postOwner
       });
     }
     fetchData();
@@ -122,9 +136,14 @@ function Home() {
               {(!(authors[key] === user)) ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
               <div className="postTs">{ts[key]}</div>
               <div className="postContent">{val}</div>
+              {/* <div className="likeCounts">{likeCounts[key]}</div> */}
+              {/* <div className="likes">
+                {likeCounts === undefined ? null : <button className="tractor" onClick={() => {!likeCounts[key].includes(user) ? handleLike(postIDs[key]) : handleDislike(postIDs[key])}}>{ likers[key].includes(user) ? <FaTractor color="green"/> : <FaTractor />}</button>} {counts[key]}
+              </div> */}
               <div className="likes">
-                {likers[0] === undefined ? null : <button className="tractor" onClick={() => {!likers[key].includes(user) ? handleLike(postIDs[key]) : handleDislike(postIDs[key])}}>{ likers[key].includes(user) ? <FaTractor color="green"/> : <FaTractor />}</button>} {counts[key]}
+                {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], authors[key])}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
               </div>
+
             </div>
           )}) :
             <div className="greyBox">

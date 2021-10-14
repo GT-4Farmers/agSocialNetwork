@@ -245,9 +245,9 @@ function Profile() {
                         {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">{val}</div>
-                        <div className="likes">
+                        {/* <div className="likes">
                             {likers[0] === undefined ? null : <button className="tractor" onClick={() => {!likers[key].includes(user) ? handleLike(postIDs[key]) : handleDislike(postIDs[key])}}>{ likers[key].includes(user) ? <FaTractor color="green"/> : <FaTractor />}</button>} {counts[key]}
-                        </div>
+                        </div> */}
                     </div>
                 )}) :
                     <div className="greyBox">
