@@ -81,4 +81,4 @@ function Notifications() {
     )
 }
 
-export default Notifications; 
+export default Notifications;
