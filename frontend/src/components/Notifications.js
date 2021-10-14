@@ -29,11 +29,11 @@ function Notifications() {
         fetchData();
 
         // unmount cleanup
-        return () => {
-            setIncomingRequests([]);
-            setIncomingRequestsRoutes([]);
-            setCounter(0);
-        };
+        // return () => {
+        //     setIncomingRequests([]);
+        //     setIncomingRequestsRoutes([]);
+        //     setCounter(0);
+        // };
     }, []);
 
     if (!isLoggedIn) {

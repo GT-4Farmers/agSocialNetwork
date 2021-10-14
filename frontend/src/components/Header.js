@@ -16,7 +16,7 @@ function Header(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await Axios.get("/profile/friends/incomingRequests");
+      const res = await Axios.get("http://localhost:3001/profile/friends/incomingRequests");
       if (res && res.data.incomingRequests[0].length !== 0) {
         setAreNotifications(true);
       }
@@ -24,7 +24,7 @@ function Header(props) {
     fetchData();
 
     // unmount cleanup
-    return () => {};
+    // return () => {};
   }, []);
   
   function renderNav() {

@@ -13,9 +13,9 @@ function AuthService() {
             setIsLoggedIn(res.data.success);
         }
         fetchData()
-        return () => {
-            setIsLoggedIn(false);
-        };
+        // return () => {
+        //     setIsLoggedIn(false);
+        // };
     });
 
     if (!isLoggedIn) {

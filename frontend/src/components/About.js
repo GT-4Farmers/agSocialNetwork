@@ -31,7 +31,16 @@ function About() {
             setLocation(res.data.location);
         }
         fetchData();
+        // return () => {
+        //     setEmail("")
+        //     setBio("");
+        //     setBirthdate("");
+        //     setLocation("");
+        //     setPhone("");
+        // }
+    },[]);
 
+    useEffect(() => {
         async function fetchMoreData() {
             const resTwo = await Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
                 profileRoute: uid
@@ -45,15 +54,10 @@ function About() {
         }
         fetchMoreData();
 
-        return () => {
-            setEmail("")
-            setBio("");
-            setBirthdate("");
-            setLocation("");
-            setPhone("");
-            setIsProfileOwner(false);
-            setIsFriend(false);
-        }
+        // return () => {
+        //     setIsProfileOwner(false);
+        //     setIsFriend(false);
+        // }
     }, []);
 
     const editBio = () => {

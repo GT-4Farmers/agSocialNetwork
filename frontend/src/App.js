@@ -24,17 +24,13 @@ function App() {
   Axios.defaults.withCredentials = true;
   
   useEffect(() => {
-    let unmounted = false;
+    async function fetchData() {
+      const res = await Axios.get("http://localhost:3001/login");
+      setIsLoggedIn(res.data.success);
+      setUser(res.data.uuid);
+    }
 
-    Axios.get("http://localhost:3001/login")
-    .then((res) => {
-        if (!unmounted) {
-          setIsLoggedIn(res.data.success);
-          setUser(res.data.uuid);
-        }
-    })
-
-    return () => { unmounted = true };
+    // return () => {};
   });
 
   return (

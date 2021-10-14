@@ -34,10 +34,10 @@ function Friends() {
         fetchData();
 
         // unmount cleanup
-        return () => { 
-            setFriendListRoutes([]);
-            setFriendList([]);
-        };
+        // return () => { 
+        //     setFriendListRoutes([]);
+        //     setFriendList([]);
+        // };
     }, []);
 
     if (!isLoggedIn) {

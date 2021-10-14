@@ -28,10 +28,10 @@ function SearchUser() {
     fetchData();
 
     // unmount cleanup
-    return () => {
-      setFoundUser([]);
-      setFoundUserIds([]);
-    }
+    // return () => {
+    //   setFoundUser([]);
+    //   setFoundUserIds([]);
+    // }
 
   }, [userToSearch]);
 

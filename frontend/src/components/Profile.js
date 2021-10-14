@@ -61,21 +61,6 @@ function Profile() {
         }
         checkButton();
         fetchData();
-
-        // unmount cleanup
-        return () => {
-            setUuid("");
-            setEmail("");
-            setFirstName("");
-            setLastName("");
-            setPosts([]);
-            setTs([]);
-            setPostIDs([]);
-            setIsFriend(false);
-            setIsProfileOwner(false);
-            setIsPending('');
-            setReversePending('');
-        }
     }, [profileDummy, network]);
 
     const checkButton = () => {

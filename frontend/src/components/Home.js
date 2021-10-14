@@ -62,17 +62,6 @@ function Home() {
       setCounts(countArray);
     }
     fetchData();
-
-    // unmount cleanup
-    return () => {
-      setName("");
-      setFriendUuid([]);
-      setFriendName([]);
-      setAuthors([]);
-      setPosts([]);
-      setTs([]);
-      setPostIDs([]);
-    }
   }, [network]);
 
   const handleDeletePost = (deletedPost) => {
