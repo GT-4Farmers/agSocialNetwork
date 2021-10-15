@@ -119,6 +119,7 @@ button {
   font-size: 1.2rem;
   border: none;
   cursor: pointer;
+  box-shadow: 0 1px 4px rgb(24, 63, 24);
   transition: all 0.3s ease-out;
 }
 
@@ -152,9 +153,10 @@ button:hover {
   overflow: hidden;
 
   padding: 1% 0 1% 2%;
-  margin: 0 2em 1% 0em;
+  margin: 0 0 1.5% 0;
   background-color: #C4C4C4;
   border-radius: 1em;
+  box-shadow: 0 3px 7px rgb(83, 83, 83);
 }
 
 .column {
@@ -265,9 +267,59 @@ button:hover {
   font-size: 1.7rem;
   border: none;
   cursor: pointer;
+  box-shadow: 0 0 0px;
   transition: all 0.3s ease-out;
 }
 
 .greyBox .likes {
   font-size: 1.7rem;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown {
+  padding: 0;
+  margin: 1% 2% 2% 2%;
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 50%;
+  background-color: #166C3B;
+  color: #fff;
+  cursor: pointer;
+  outline: 0;
+  font-size: 1.5em;
+  transition: all 0.3s ease-out;
+}
+
+.dropdown:hover {
+  color: #fff;
+  background-color: #5ec478;
+}
+
+.dropdownOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 300px;
+  z-index: 2;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
+}
+
+.dropdownOptions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.dropdownOptions li {
+  padding: 8px 12px;
+}
+
+.dropdownOptions li:hover {
+  background-color: rgba(0, 0, 0, 0.14);
+  cursor: pointer;
 }

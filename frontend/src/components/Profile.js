@@ -36,9 +36,10 @@ function Profile() {
     const [posts, setPosts] = useState([]);
     const [ts, setTs] = useState([]);
     const [postIDs, setPostIDs] = useState([]);
-
     const [likeCounts, setLikeCounts] = useState([]);
     const [liked, setLiked] = useState([]);
+    const [openDD, setOpenDD] = useState([]);
+    const [dropdown, setDropdown] = useState([]);
 
     // network state
     const [network, setNetwork] = useState(0);
@@ -74,7 +75,9 @@ function Profile() {
             setLikeCounts(resTwo.data.likeCounts);
             setLiked(resTwo.data.liked);
 
-            console.log(resTwo.data.liked);
+            
+
+            // setDropdown(dropdown.from({length: resTwo.data.posts.length}, (v, i) => i));
 
             // let lArray = [];
             // let countArray = [];
@@ -192,6 +195,11 @@ function Profile() {
         setNetwork(network + 1);
     }
 
+    const handleDropdown = (key) => {
+        openDD[key] = !openDD[key];
+        setNetwork(network + 1);
+    }
+
     if (!isLoggedIn) {
         return (
             <AuthService />
@@ -228,14 +236,27 @@ function Profile() {
                 </div> : null}
 
             <div className="posts">
-                {(!(posts === undefined)) ? (!(posts.length === 0)) ? posts.map((val, key) => {
+                {(!(posts === undefined)) && (!(posts.length === 0)) ? posts.map((val, key) => {
                 // const { createdAt, content } = val;
                 return(
                     <div className="greyBox" key={key}>
                         <Link className="link" to={`/${uuid}`}>
                             {firstName} {lastName}
                         </Link>
-                        {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
+
+                        {/* {isProfileOwner && <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>} */}
+                        
+                        {isProfileOwner &&
+                        <div className="dropdownContainer">
+                            <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>
+                            {openDD[key] && <div className="dropdownOptions">
+                                <ul>
+                                    <li>Edit</li>
+                                    <li>Delete</li>
+                                </ul>
+                            </div>}
+                        </div>}
+                        
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">{val}</div>
                         <div className="likes">
@@ -245,7 +266,7 @@ function Profile() {
                 )}) :
                     <div className="greyBox">
                         No posts yet
-                    </div> : null }
+                    </div>}
             </div>
 
         </div>
