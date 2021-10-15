@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import Axios from 'axios';
 import { useHistory, useParams } from 'react-router';
 import '../css/App.css';
@@ -18,6 +18,7 @@ function Profile() {
     var pathArray = profileRoute.split('/');
     profileRoute = (pathArray[0]);
     const [uuid, setUuid] = useState(profileRoute);
+    const ref = useRef(null);
 
     // info states
     const [email, setEmail] = useState("");
@@ -39,7 +40,6 @@ function Profile() {
     const [likeCounts, setLikeCounts] = useState([]);
     const [liked, setLiked] = useState([]);
     const [openDD, setOpenDD] = useState([]);
-    const [dropdown, setDropdown] = useState([]);
 
     // network state
     const [network, setNetwork] = useState(0);
@@ -92,8 +92,14 @@ function Profile() {
             // setCounts(countArray);
 
         }
+        document.addEventListener('click', handleClickOutside, true);
+
         checkButton();
         fetchData();
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true);
+        };
     }, [profileDummy, network]);
 
     const checkButton = () => {
@@ -184,6 +190,13 @@ function Profile() {
         fetchData();
     }
 
+    const handleClickOutside = (e) => {
+        console.log(ref.current && !ref.current.contains(e.target));
+        if (ref.current && !ref.current.contains(e.target)) {
+            setOpenDD([]);
+        }
+    };
+
     const updateLikeCount = (postID, postOwner) => {
         async function fetchData() {
             const res = await Axios.post('http://localhost:3001/home/updateLikeCount', {
@@ -247,7 +260,7 @@ function Profile() {
                         {/* {isProfileOwner && <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>} */}
                         
                         {isProfileOwner &&
-                        <div className="dropdownContainer">
+                        <div className="dropdownContainer" ref={ref}>
                             <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>
                             {openDD[key] && <div className="dropdownOptions">
                                 <ul>
