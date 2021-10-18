@@ -6,53 +6,34 @@ import '../css/Login.css';
 import AuthContext from '../states/AuthContext';
 import logo from './logo.png';
 
-function Login(props) {
+function Login() {
 
     let history = useHistory();
 
-    const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
-    const {user, setUser} = useContext(AuthContext);
+    const { setIsLoggedIn } = useContext(AuthContext);
+    const { setUser} = useContext(AuthContext);
     const { areNotifications, setAreNotifications } = useContext(AuthContext);
-
-    const [state, setState] = useState({
-        email: "",
-        password: ""
-    })
-    
     const [hidden, setHidden] = useState(true);
-    
-    const handleChange = (e) => {
-        const { id, value } = e.target
-        setState(prevState => ({
-            ...prevState,
-            [id] : value
-        }))
-    }
-    
-    const toggleShow = () => {
-        setHidden(!hidden)
-    }
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     
     const login = () => {
-        Axios.post('http://localhost:3001/login', {
-            email: state.email,
-            password: state.password
-        }).then((response) => {
-            if (!response.data.success) {
-                alert(response.data.msg);
+        async function fetchData() {
+            const res = await Axios.post('http://localhost:3001/login', {
+                email: email,
+                password: password
+            });
+            if (!res.data.success) {
+                alert(res.data.msg);
             } else {
                 setIsLoggedIn(true);
-                setUser(response.data.uuid);
+                setUser(res.data.uuid);
                 setAreNotifications(false);
-                console.log("successful login");
                 history.push("/home");
-            }
-        })
+            }   
+        }
+        fetchData();
     };
-    
-    const handleHistory = () => {
-        history.push("/register");
-    }
 
     return (
         <div>
@@ -66,21 +47,19 @@ function Login(props) {
                     <input
                         type="email"
                         placeholder="Email"
-                        id="email"
-                        value={state.email ? state.email : ""}
-                        onChange={handleChange} />
+                        value={email ? email : ""}
+                        onChange={(e) => {setEmail(e.target.value)}} />
                     <input
                         type={hidden ? "password" : "text"}
                         placeholder="Password"
-                        id="password"
-                        value={state.password ? state.password : ""}
-                        onChange={handleChange} />
-                    <button onClick={toggleShow} id="showhide">Show/Hide</button>
+                        value={password ? password : ""}
+                        onChange={(e) => {setPassword(e.target.value)}} />
+                    <button onClick={() => {setHidden(!hidden)}} id="showhide">Show/Hide</button>
                 </div>
 
                 <button className="loginButton" onClick={login}>Login</button>
 
-                <button className="loginButton" onClick={handleHistory}>Create New Account</button>
+                <button className="loginButton" onClick={() => {history.push("/register")}}>Create New Account</button>
             </div>
         </div>
     )

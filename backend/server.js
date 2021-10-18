@@ -56,6 +56,7 @@ app.use(session({
     }
 }));
 
+app.use("/home/", require("./routes/homeRoute"));
 app.use("/profile/", require("./routes/profileRoute"));
 app.use("/register/", require("./routes/registerRoute"));
 app.use("/login/", require("./routes/loginRoute"));
