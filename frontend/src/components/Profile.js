@@ -183,6 +183,7 @@ function Profile() {
             fetchData();
         }
         setPostContent("");
+
         setNetwork(network + 1);
     }
 
@@ -194,9 +195,13 @@ function Profile() {
             if (!res.data.success) {
                 alert(res.data.msg);
             }
-            setNetwork(network + 1);
         }
         fetchData();
+
+        setShowEdit([]);
+        setOpenDD([]);
+
+        setNetwork(network + 1);
     }
 
     const updateLikeCount = (postID, postOwner) => {
@@ -207,10 +212,14 @@ function Profile() {
             });
         }
         fetchData();
+
         setNetwork(network + 1);
     }
 
     const handleDropdown = (key) => {
+        console.log(key);
+        console.log(openDD);
+        console.log(openDD[key]);
         openDD[key] = !openDD[key];
         setNetwork(network + 1);
     }
@@ -224,13 +233,15 @@ function Profile() {
             if (!res.data.success) {
                 alert(res.data.msg);
             }
-            setNetwork(network + 1);
         }
         fetchData();
         showEdit[key] = (!showEdit[key]);
+
+        setNetwork(network + 1);
     }
 
     const showEditOptions = (key) => {
+        console.log("after edit click:",showEdit[key]);
         showEdit[key] = (!showEdit[key]);
     }
 
@@ -295,8 +306,6 @@ function Profile() {
                             {firstName} {lastName}
                         </Link>
 
-                        {/* {isProfileOwner && <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>} */}
-                        
                         {isProfileOwner &&
                         <div className="dropdownContainer" ref={ref}>
                             {(!(showEdit[key])) && <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>}
