@@ -77,15 +77,18 @@ function Home() {
       }
     }
     fetchData();
-    // rerender
-    setNetwork(network + 1);
     
     setShowEdit([]);
+    setOpenDD([]);
+
+    // rerender
+    setNetwork(network + 1);
   }
 
   const handleDropdown = (key) => {
-    openDD[key] = !openDD[key];
-    setNetwork(network + 1);
+    let newOpenDD = [...openDD];
+    newOpenDD[key] = (!newOpenDD[key]);
+    setOpenDD(newOpenDD);
   }
 
   const handleEditPost = (editedPost, content, key) => {
@@ -100,11 +103,17 @@ function Home() {
       setNetwork(network + 1);
     }
     fetchData();
-    showEdit[key] = (!showEdit[key]);
+    
+    showEditOptions(key);
+    setOpenDD([]);
+    setNetwork(network + 1);
   }
 
   const showEditOptions = (key) => {
-    showEdit[key] = (!showEdit[key]);
+    let newShowEdit = [...showEdit];
+    newShowEdit[key] = (!newShowEdit[key]);
+    setShowEdit(newShowEdit);
+    handleDropdown(key);
   }
 
   const handleEdit = (e, key) => {
@@ -121,7 +130,9 @@ function Home() {
       setPosts(res.data.posts);
     }
     fetchData();
-    showEdit[key] = (!showEdit[key]);
+    
+    showEditOptions(key);
+    setOpenDD([]);
   }
 
   const updateLikeCount = (postID, postOwner) => {

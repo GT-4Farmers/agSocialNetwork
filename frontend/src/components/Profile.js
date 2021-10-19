@@ -184,6 +184,10 @@ function Profile() {
         }
         setPostContent("");
 
+        // prevents keys getting mixed if posting while editing
+        setShowEdit([]);
+        setOpenDD([]);
+
         setNetwork(network + 1);
     }
 
@@ -217,11 +221,9 @@ function Profile() {
     }
 
     const handleDropdown = (key) => {
-        console.log(key);
-        console.log(openDD);
-        console.log(openDD[key]);
-        openDD[key] = !openDD[key];
-        setNetwork(network + 1);
+        let newOpenDD = [...openDD];
+        newOpenDD[key] = (!newOpenDD[key]);
+        setOpenDD(newOpenDD);
     }
 
     const handleEditPost = (editedPost, content, key) => {
@@ -235,14 +237,18 @@ function Profile() {
             }
         }
         fetchData();
-        showEdit[key] = (!showEdit[key]);
-
+        
+        showEditOptions(key);
+        setOpenDD([]);
         setNetwork(network + 1);
     }
 
+    // after clicking on Edit
     const showEditOptions = (key) => {
-        console.log("after edit click:",showEdit[key]);
-        showEdit[key] = (!showEdit[key]);
+        let newShowEdit = [...showEdit];
+        newShowEdit[key] = (!newShowEdit[key]);
+        setShowEdit(newShowEdit);
+        handleDropdown(key);
     }
 
     const handleEdit = (e, key) => {
@@ -259,7 +265,9 @@ function Profile() {
             setPosts(res.data.posts);
         }
         fetchData();
-        showEdit[key] = (!showEdit[key]);
+
+        showEditOptions(key);
+        setOpenDD([]);
     }
 
     if (!isLoggedIn) {
