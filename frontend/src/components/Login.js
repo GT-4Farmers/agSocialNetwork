@@ -54,7 +54,7 @@ function Login() {
                         placeholder="Password"
                         value={password ? password : ""}
                         onChange={(e) => {setPassword(e.target.value)}} />
-                    <button onClick={() => {setHidden(!hidden)}} id="showhide">Show/Hide</button>
+                    <button className="showHide" onClick={() => {setHidden(!hidden)}} id="showhide">Show/Hide</button>
                 </div>
 
                 <button className="loginButton" onClick={login}>Login</button>

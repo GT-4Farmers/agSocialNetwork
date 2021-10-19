@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import Axios from 'axios';
 import { useHistory, useParams } from 'react-router';
 import '../css/App.css';
@@ -18,6 +18,7 @@ function Profile() {
     var pathArray = profileRoute.split('/');
     profileRoute = (pathArray[0]);
     const [uuid, setUuid] = useState(profileRoute);
+    const ref = useRef(null);
 
     // info states
     const [email, setEmail] = useState("");
@@ -36,9 +37,10 @@ function Profile() {
     const [posts, setPosts] = useState([]);
     const [ts, setTs] = useState([]);
     const [postIDs, setPostIDs] = useState([]);
-
     const [likeCounts, setLikeCounts] = useState([]);
     const [liked, setLiked] = useState([]);
+    const [openDD, setOpenDD] = useState([]);
+    const [showEdit, setShowEdit] = useState([]);
 
     // network state
     const [network, setNetwork] = useState(0);
@@ -74,7 +76,9 @@ function Profile() {
             setLikeCounts(resTwo.data.likeCounts);
             setLiked(resTwo.data.liked);
 
-            console.log(resTwo.data.liked);
+            
+
+            // setDropdown(dropdown.from({length: resTwo.data.posts.length}, (v, i) => i));
 
             // let lArray = [];
             // let countArray = [];
@@ -89,9 +93,23 @@ function Profile() {
             // setCounts(countArray);
 
         }
+        document.addEventListener('click', handleClickOutside);
+
         checkButton();
         fetchData();
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
     }, [profileDummy, network]);
+
+    const handleClickOutside = (e) => {
+        // console.log(e.target.classList);
+        if (ref.current && !e.target.classList.contains('dropdown')) {
+            // close dropdown
+            setOpenDD([]);
+        }
+    };
 
     const checkButton = () => {
         async function fetchData() {
@@ -165,6 +183,11 @@ function Profile() {
             fetchData();
         }
         setPostContent("");
+
+        // prevents keys getting mixed if posting while editing
+        setShowEdit([]);
+        setOpenDD([]);
+
         setNetwork(network + 1);
     }
 
@@ -176,9 +199,13 @@ function Profile() {
             if (!res.data.success) {
                 alert(res.data.msg);
             }
-            setNetwork(network + 1);
         }
         fetchData();
+
+        setShowEdit([]);
+        setOpenDD([]);
+
+        setNetwork(network + 1);
     }
 
     const updateLikeCount = (postID, postOwner) => {
@@ -189,7 +216,58 @@ function Profile() {
             });
         }
         fetchData();
+
         setNetwork(network + 1);
+    }
+
+    const handleDropdown = (key) => {
+        let newOpenDD = [...openDD];
+        newOpenDD[key] = (!newOpenDD[key]);
+        setOpenDD(newOpenDD);
+    }
+
+    const handleEditPost = (editedPost, content, key) => {
+        async function fetchData() {
+            const res = await Axios.put('http://localhost:3001/profile/editTextPost', {
+                editedPostID: editedPost,
+                content: content
+            })
+            if (!res.data.success) {
+                alert(res.data.msg);
+            }
+        }
+        fetchData();
+        
+        showEditOptions(key);
+        setOpenDD([]);
+        setNetwork(network + 1);
+    }
+
+    // after clicking on Edit
+    const showEditOptions = (key) => {
+        let newShowEdit = [...showEdit];
+        newShowEdit[key] = (!newShowEdit[key]);
+        setShowEdit(newShowEdit);
+        handleDropdown(key);
+    }
+
+    const handleEdit = (e, key) => {
+        let newPosts = [...posts];
+        newPosts[key] = e.target.value;
+        setPosts(newPosts);
+    }
+
+    const handleDiscardChanges = (key) => {
+        async function fetchData() {
+            const res = await Axios.post("http://localhost:3001/profile/getTextPosts", {
+                profileRoute: profileRoute
+            });
+            setPosts(res.data.posts);
+        }
+        fetchData();
+
+        showEditOptions(key);
+        setOpenDD([]);
     }
 
     if (!isLoggedIn) {
@@ -228,16 +306,40 @@ function Profile() {
                 </div> : null}
 
             <div className="posts">
-                {(!(posts === undefined)) ? (!(posts.length === 0)) ? posts.map((val, key) => {
+                {(!(posts === undefined)) && (!(posts.length === 0)) ? posts.map((val, key) => {
                 // const { createdAt, content } = val;
                 return(
                     <div className="greyBox" key={key}>
                         <Link className="link" to={`/${uuid}`}>
                             {firstName} {lastName}
                         </Link>
-                        {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
+
+                        {isProfileOwner &&
+                        <div className="dropdownContainer" ref={ref}>
+                            {(!(showEdit[key])) && <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>}
+                            {openDD[key] && <div className="dropdownOptions">
+                                <button id="edit" className="dropdownButton" onClick={() => showEditOptions(key)}>Edit</button>
+                                <button id="delete" className="dropdownButton" onClick={() => handleDeletePost(postIDs[key])}>Delete</button>
+                            </div>}
+                        </div>}
+                        
                         <div className="postTs">{ts[key]}</div>
-                        <div className="postContent">{val}</div>
+                        <div className="postContent">
+                            {(!(showEdit[key])) && val}
+                            {showEdit[key] && isProfileOwner && <input
+                                type="text"
+                                id="content"
+                                autoComplete="off"
+                                value={val ? val : ""}
+                                onChange={(e) => handleEdit(e, key)}
+                            />}
+                        </div>
+
+                        <div>
+                            {showEdit[key] && isProfileOwner && <button onClick={() => {handleEditPost(postIDs[key], posts[key], key)}}>Save Changes</button>}
+                            {showEdit[key] && isProfileOwner && <button onClick={() => {handleDiscardChanges(key)}}>Discard Changes</button>}
+                        </div>
+
                         <div className="likes">
                             {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], uuid)}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
                         </div>
@@ -245,7 +347,7 @@ function Profile() {
                 )}) :
                     <div className="greyBox">
                         No posts yet
-                    </div> : null }
+                    </div>}
             </div>
 
         </div>

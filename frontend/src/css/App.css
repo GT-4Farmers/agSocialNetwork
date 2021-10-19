@@ -119,6 +119,7 @@ button {
   font-size: 1.2rem;
   border: none;
   cursor: pointer;
+  box-shadow: 0 1px 4px rgb(24, 63, 24);
   transition: all 0.3s ease-out;
 }
 
@@ -152,9 +153,10 @@ button:hover {
   overflow: hidden;
 
   padding: 1% 0 1% 2%;
-  margin: 0 2em 1% 0em;
+  margin: 0 0 1.5% 0;
   background-color: #C4C4C4;
   border-radius: 1em;
+  box-shadow: 0 3px 7px rgb(83, 83, 83);
 }
 
 .column {
@@ -265,6 +267,7 @@ button:hover {
   font-size: 1.7rem;
   border: none;
   cursor: pointer;
+  box-shadow: 0 0 0px;
   transition: all 0.3s ease-out;
 }
 
