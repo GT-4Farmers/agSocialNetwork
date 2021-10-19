@@ -6,13 +6,18 @@ const aws = require('aws-sdk');
 const multers3 = require('multer-s3');
 const multer = require('multer');
 const path = require('path');
+const { config } = require('process');
 
 const router = express.Router();
 
+aws.config.loadFromPath('./aws.json'); //Set this up and make sure it's in gitignore
+
+console.log(config.accessKeyId)
+
 const s3 = new aws.S3({
     signatureVersion: 'v4',
-    accessKeyId: '', //For when we have json files for aws creds
-    secretAccessKey: '',
+    accessKeyId: config.accessKeyId,
+    secretAccessKey: config.secretAccessKeyId,
     Bucket: 'haystackimages'
 })
 

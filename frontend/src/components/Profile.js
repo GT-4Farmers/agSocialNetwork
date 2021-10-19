@@ -55,8 +55,6 @@ function Profile() {
             setImages([]);
         }
 
-        console.log(postImage)
-
         let profileRoute = (window.location.pathname).substring(1)
         var pathArray = profileRoute.split('/');
         profileRoute = (pathArray[0]);
@@ -81,6 +79,7 @@ function Profile() {
             setLiked(resTwo.data.liked);
 
             console.log(resTwo.data.liked);
+            console.log(resTwo.data.images)
 
             // let lArray = [];
             // let countArray = [];
@@ -281,9 +280,11 @@ function Profile() {
                         {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">{val}</div>
+                        {images[key] ? 
                         <div className="postImage">
                             <img src={images[key]} alt="Could not display image"/>
                         </div>
+                        : null}
                         <div className="likes">
                             {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], uuid)}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
                         </div>

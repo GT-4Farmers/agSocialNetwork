@@ -20,6 +20,7 @@ function Home() {
   // post states
   const [posts, setPosts] = useState([]);
   const [ts, setTs] = useState([]);
+  const [images, setImages] = useState([]);
   const [postIDs, setPostIDs] = useState([]);
   const [authors, setAuthors] = useState([]);
   // const [likers, setLikers] = useState([]);
@@ -47,6 +48,7 @@ function Home() {
       setAuthors(resThree.data.authors);
       setPosts(resThree.data.posts);
       setTs(resThree.data.timestamps);
+      setImages(resThree.data.images);
       setPostIDs(resThree.data.postIDs);
       setLikeCounts(resThree.data.likeCounts);
       setLiked(resThree.data.liked);
@@ -142,6 +144,11 @@ function Home() {
               {/* <div className="likes">
                 {likeCounts === undefined ? null : <button className="tractor" onClick={() => {!likeCounts[key].includes(user) ? handleLike(postIDs[key]) : handleDislike(postIDs[key])}}>{ likers[key].includes(user) ? <FaTractor color="green"/> : <FaTractor />}</button>} {counts[key]}
               </div> */}
+              {images[key] ? 
+                  <div className="postImage">
+                      <img src={images[key]} alt="Could not display image"/>
+                  </div>
+              : null}
               <div className="likes">
                 {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], authors[key])}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
               </div>

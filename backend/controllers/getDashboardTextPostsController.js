@@ -13,6 +13,7 @@ exports.getDashboardTextPostsController = (req, res) => {
             let posts = [];
             let timestamps = [];
             let postIDs = [];
+            let images = [];
             let authors = [];
             let likeCounts = [];
             let liked = [];
@@ -24,23 +25,44 @@ exports.getDashboardTextPostsController = (req, res) => {
                 posts.push(`${data[key].content}`);
                 likeCounts.push(`${data[key].likeCount}`);
 
+                db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
+                    console.log("did db query, starting callback")
+                    if (err) {
+                        res.json({
+                            success: false,
+                            msg: "Database error"
+                        })
+                    }
+                
+                    if (img_data[0]) {images.push(`${img_data[0].File_reference}`)}
+                    else {images.push(null)}
+
+                    if (images.length == data.length) {
+                        // console.log("starting json response")
+                        // console.log(posts)
+                        console.log(images)
+                        res.json({
+                            success: true,
+                            msg: 'Successfully retrieved posts',
+                            posts: posts,
+                            timestamps: timestamps,
+                            postIDs: postIDs,
+                            images: images,
+                            authors: authors,
+                            likeCounts: likeCounts,
+                            liked: liked
+                        })
+                    }
+                    // console.log(images)
+                    
+                });
+
                 if (data[key].uuid === user) {
                     liked.push("green");
                 } else {
                     liked.push("black");
                 }
             }
-
-            res.json({
-                success: true,
-                msg: 'Successfully retrieved posts',
-                posts: posts,
-                timestamps: timestamps,
-                postIDs: postIDs,
-                authors: authors,
-                likeCounts: likeCounts,
-                liked: liked
-            })
         } else {
             res.json({
                 success: false,
@@ -48,7 +70,8 @@ exports.getDashboardTextPostsController = (req, res) => {
                 posts: [],
                 timestamps: [],
                 postIDs: [],
-                author: [],
+                images: [],
+                authors: [],
                 likeCounts: [],
                 liked: []
             })

@@ -20,18 +20,33 @@ exports.getPostController = (req, res) => {
                 posts.push(`${data[key].content}`);
                 timestamps.push(`${data[key].createdAt}`);
                 postIDs.push(`${data[key].postID}`);
-                db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data, fields) => {
+                db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
                     if (err) {
                         res.json({
                             success: false,
                             msg: "Database error"
                         })
                     }
-
-                    if (img_data[0]) {images.push(img_data[0]);}
+                
+                    if (img_data[0]) {images.push(`${img_data[0].File_reference}`)}
                     else {images.push(null)}
+
+                    if (images.length == data.length) {
+
+                        res.json({
+                            success: true,
+                            msg: 'Successfully retrieved posts',
+                            posts: posts,
+                            timestamps: timestamps,
+                            postIDs: postIDs,
+                            images: images,
+                            likeCounts: likeCounts,
+                            liked: liked
+                        })
+                    }
+                    // console.log(images)
                     
-                })
+                });
 
                 likeCounts.push(`${data[key].likeCount}`);
 
@@ -41,17 +56,7 @@ exports.getPostController = (req, res) => {
                     liked.push("black");
                 }
             }
-
-            res.json({
-                success: true,
-                msg: 'Successfully retrieved posts',
-                posts: posts,
-                timestamps: timestamps,
-                postIDs: postIDs,
-                images: images,
-                likeCounts: likeCounts,
-                liked: liked
-            })
+            
         } else {
             res.json({
                 success: false,
