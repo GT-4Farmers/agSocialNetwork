@@ -240,6 +240,17 @@ function Profile() {
         setPosts(newPosts);
     }
 
+    const handleDiscardChanges = (key) => {
+        async function fetchData() {
+            const res = await Axios.post("http://localhost:3001/profile/getTextPosts", {
+                profileRoute: profileRoute
+            });
+            setPosts(res.data.posts);
+        }
+        fetchData();
+        showEdit[key] = (!showEdit[key]);
+    }
+
     if (!isLoggedIn) {
         return (
             <AuthService />
@@ -288,12 +299,8 @@ function Profile() {
                         
                         {isProfileOwner &&
                         <div className="dropdownContainer" ref={ref}>
-                            <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>
+                            {(!(showEdit[key])) && <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>}
                             {openDD[key] && <div className="dropdownOptions">
-                                {/* <ul>
-                                    <li>Edit</li>
-                                    <li>Delete</li>
-                                </ul> */}
                                 <button id="edit" className="dropdownButton" onClick={() => showEditOptions(key)}>Edit</button>
                                 <button id="delete" className="dropdownButton" onClick={() => handleDeletePost(postIDs[key])}>Delete</button>
                             </div>}
@@ -301,17 +308,19 @@ function Profile() {
                         
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">
-                            {showEdit[key] ? null : val}
-                            {showEdit[key] && isProfileOwner ? <input
+                            {(!(showEdit[key])) && val}
+                            {showEdit[key] && isProfileOwner && <input
                                 type="text"
                                 id="content"
+                                autoComplete="off"
                                 value={val ? val : ""}
                                 onChange={(e) => handleEdit(e, key)}
-                            /> : null}
+                            />}
                         </div>
 
                         <div>
-                            {showEdit[key] && isProfileOwner ? <button onClick={() => {handleEditPost(postIDs[key], posts[key], key)}}>Save Changes</button> : null}
+                            {showEdit[key] && isProfileOwner && <button onClick={() => {handleEditPost(postIDs[key], posts[key], key)}}>Save Changes</button>}
+                            {showEdit[key] && isProfileOwner && <button onClick={() => {handleDiscardChanges(key)}}>Discard Changes</button>}
                         </div>
 
                         <div className="likes">
