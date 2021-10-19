@@ -11,8 +11,8 @@ const router = express.Router();
 
 const s3 = new aws.S3({
     signatureVersion: 'v4',
-    accessKeyId: 'AKIAUXAK6QGX7NTJBX57', //For when we have json files for aws creds
-    secretAccessKey: 'gE7uSQVDg725DhqDkIAvUvfeWAxzVM4OWBT15y',
+    accessKeyId: '', //For when we have json files for aws creds
+    secretAccessKey: '',
     Bucket: 'haystackimages'
 })
 
