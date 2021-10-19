@@ -33,9 +33,11 @@ function Profile() {
 
     // post states
     const [postContent, setPostContent] = useState('');
+    const [postImage, setPostImage] = useState('')
     const [posts, setPosts] = useState([]);
     const [ts, setTs] = useState([]);
     const [postIDs, setPostIDs] = useState([]);
+    const [images, setImages] = useState([]);
 
     const [likeCounts, setLikeCounts] = useState([]);
     const [liked, setLiked] = useState([]);
@@ -50,7 +52,10 @@ function Profile() {
             setPosts([]);
             setTs([]);
             setPostIDs([]);
+            setImages([]);
         }
+
+        console.log(postImage)
 
         let profileRoute = (window.location.pathname).substring(1)
         var pathArray = profileRoute.split('/');
@@ -65,12 +70,13 @@ function Profile() {
             setFirstName(res.data.firstName);
             setLastName(res.data.lastName);
         
-            const resTwo = await Axios.post("http://localhost:3001/profile/getTextPosts", {
+            const resTwo = await Axios.post("http://localhost:3001/profile/getPosts", {
                 profileRoute: profileRoute
             });
             setPosts(resTwo.data.posts);
             setTs(resTwo.data.timestamps);
             setPostIDs(resTwo.data.postIDs);
+            setImages(resTwo.data.images);
             setLikeCounts(resTwo.data.likeCounts);
             setLiked(resTwo.data.liked);
 
@@ -155,16 +161,46 @@ function Profile() {
             alert("I said HOW ARE YOU FEELING TODAY?");
         } else {
             async function fetchData() {
-                const res = await Axios.post('http://localhost:3001/profile/createTextPost', {
-                    content: postContent
-                })
+                let image_name = ""
+                let image_loc = ""
+                console.log(postImage)
+                if (postImage) {
+                    let formData = new FormData();
+                    formData.append("image", postImage);
+                    let url = "http://localhost:3001/profile/imageUpload/"
+                    const res = await Axios.post(url, formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        }
+                    }).then((response) => {
+                        return response;
+                        });
+                    if (!res.data.success) {
+                        alert(res.data.msg);
+                    } else {
+                        image_name = res.data.image_name
+                        image_loc = res.data.image_loc
+                    }
+                    console.log(res)
+                }
+                let url = "http://localhost:3001/profile/createPost/"
+                const res = await Axios.post(url, {
+                    content: postContent,
+                    image_name: image_name,
+                    image_loc: image_loc
+                }).then((response) => {
+                    console.log(response)
+                    return response;
+                    });
                 if (!res.data.success) {
                     alert(res.data.msg);
                 }
             }
             fetchData();
+             
         }
         setPostContent("");
+        setPostImage("")
         setNetwork(network + 1);
     }
 
@@ -224,6 +260,13 @@ function Profile() {
                     value={postContent ? postContent : ""}
                     onChange={(e) => {setPostContent(e.target.value)}}
                 />
+                <input className="imageInput"
+                    type="file"
+                    accept="image/*"
+                    id="post_img"
+                    placeholder="Upload Image"
+                    onChange={(e) => {setPostImage(e.target.files[0])}}
+                />
                 <button onClick={handlePostContent}>Post</button>
                 </div> : null}
 
@@ -238,6 +281,9 @@ function Profile() {
                         {!isProfileOwner ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
                         <div className="postTs">{ts[key]}</div>
                         <div className="postContent">{val}</div>
+                        <div className="postImage">
+                            <img src={images[key]} alt="Could not display image"/>
+                        </div>
                         <div className="likes">
                             {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], uuid)}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
                         </div>

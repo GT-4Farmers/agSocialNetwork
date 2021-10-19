@@ -12,7 +12,7 @@ exports.getPostController = (req, res) => {
             let posts = [];
             let timestamps = [];
             let postIDs = [];
-            let images_data = [];
+            let images = [];
             let likeCounts = [];
             let liked = [];
 
@@ -28,11 +28,11 @@ exports.getPostController = (req, res) => {
                         })
                     }
 
-                    if (img_data[0]) {images_data.push(img_data[0]);}
-                    else {images_data.push(null)}
+                    if (img_data[0]) {images.push(img_data[0]);}
+                    else {images.push(null)}
                     
                 })
-                
+
                 likeCounts.push(`${data[key].likeCount}`);
 
                 if (data[key].uuid === user || data[key].uuid !== null) {
@@ -48,6 +48,7 @@ exports.getPostController = (req, res) => {
                 posts: posts,
                 timestamps: timestamps,
                 postIDs: postIDs,
+                images: images,
                 likeCounts: likeCounts,
                 liked: liked
             })
@@ -58,6 +59,7 @@ exports.getPostController = (req, res) => {
                 posts: [],
                 timestamps: [],
                 postIDs: [],
+                images: [],
                 likeCounts: [],
                 liked: []
             })

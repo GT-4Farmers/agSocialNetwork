@@ -2,16 +2,21 @@
 // i am personally not totally sure what needs to be here and what does not
 
 const express = require('express');
-const aws = require('asw-sdk');
+const aws = require('aws-sdk');
 const multers3 = require('multer-s3');
-const multer = reqiure('multer');
-const path = require('multer');
-const s3 = require("../server");
+const multer = require('multer');
+const path = require('path');
 
 const router = express.Router();
 
-//link to the s3 bucket on aws using our keys
+const s3 = new aws.S3({
+    signatureVersion: 'v4',
+    accessKeyId: 'AKIAUXAK6QGX7NTJBX57', //For when we have json files for aws creds
+    secretAccessKey: 'gE7uSQVDg725DhqDkIAvUvfeWAxzVM4OWBT15y',
+    Bucket: 'haystackimages'
+})
 
+//link to the s3 bucket on aws using our keys
 
    //from the example used by the video for single image upload
    //no idea what it might actually do
@@ -24,7 +29,7 @@ var post_media_upload = multer({
     // the time stamp it genius because we may not need versioning with this
     //talk to jeff about it and see how accurate the date.now() method is
     key: function (req, file, cb) {
-    cb(null, req.session.userID + " / " + path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname)) //not even remotely sure what this does.
+    cb(null, req.session.userID + "/" + path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname)) //not even remotely sure what this does.
     }
 }),
 limits: {filesize : 2000000}, //filesize in bytes, see if what we need to limit this to for post uploads
@@ -50,6 +55,6 @@ function checkFileType(file, cb) {
     }
 }
 
-module.exports = post_media_upload, checkFileType
+module.exports = post_media_upload
 
 

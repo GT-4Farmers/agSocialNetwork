@@ -17,11 +17,13 @@ incomingRequestsRoute = require("../controllers/getFriendRequestController");
 createPostRoute = require("../controllers/createPostController");
 getPostRoute = require("../controllers/getPostController");
 deleteTextPostRoute = require("../controllers/deleteTextPostController");
+imageUploadRoute = require("../controllers/imageUploadController")
 
 // post requests
 router.post("/createPost/", createPostRoute.createPostController)
 router.post("/getPosts/", getPostRoute.getPostController)
 router.post("/deleteTextPost/", deleteTextPostRoute.deleteTextPostController)
+router.post("/imageUpload", imageUploadRoute.imageUploadController)
 // info requests
 router.put("/about/phone", editPhoneRoute.editPhoneController)
 router.put("/about/location", editLocationRoute.editLocationController)

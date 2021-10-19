@@ -3,7 +3,9 @@ exports.createPostController = (req, res) => {
     const post_media_upload = require("../upload")
     const uuid = require("uuid")
     
-    let content = req.body.content; // How do we differentiate between content and file requests?
+    let content = req.body.content;
+    let image_name = req.body.image_name
+    let image_loc = req.body.image_loc
     let user = req.session.userID;
     let post_id = uuid.v4()
 
@@ -18,45 +20,35 @@ exports.createPostController = (req, res) => {
             })
             return;
         } else {
-            if (req.file == undefined) {
+            if (!image_name) {
                 res.json({
                 success: true,
-                msg:'Successfully created post.'
+                msg:'Successfully created post with no image.'
                 })
                 return;
             } else {
-                post_media_upload(req, res, (error) => {
-
-                    if(error){
-                        console.log('errors', error);
-                        res.json({error : error});
-                    // } else if (req.file == undefined) {
-                    //         console.log('error: no file selected');
-                    //         res.json('error: no file selected')
-                        
-                    } else {
-                        const imageName = req.file.key;
-                        //this location is what we need to store in our sql database.
-                        //it's the URL to the image
-                        const imageLocation = req.file.location;
-            
-                        //save the file into the database
-                        //he does this with a json but i'm not sure how we should do it
-
-                        db.query("INSERT INTO Images (File_reference, filename, postID) VALUES ?, ?, ?", [imageLocation, imageName, post_id], (err, data, fields) => {
+                db.query("INSERT INTO Images (File_reference, filename, postID) VALUES ?, ?, ?", [image_loc, image_name, post_id], (err, data, fields) => {
                             if (err) {
                                 res.json({
                                     success: false,
                                     msg: err
                                 })
+                                return;
+                            } else {
+                                res.json({
+                                    success: true,
+                                    msg:'Successfully created post with an image.'
+                                })
+                                return;
                             }
-                        })
-                    }
+                            
                 })
             }
-            
+                
         }
-    });
+            
+    })
+    
 
         
 }

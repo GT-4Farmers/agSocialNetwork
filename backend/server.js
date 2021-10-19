@@ -38,12 +38,6 @@ const sessionStore = new MySQLStore({
     endConnectionOnClose: false
 }, db);
 
-const s3 = new aws.S3({
-    accessKeyId: urAccessKey, //For when we have json files for aws creds
-    secretAccessKey: urSecretAccessKey,
-    Bucket: 'haystackimages'
-})
-
 app.use(session({
     key: 'userCookietv254gt2grwg43w',
     secret: '69g968ewr8h2397834h78vhs',
@@ -67,4 +61,4 @@ app.listen(3001, () => {
     console.log("Backend running on port 3001");
 })
 
-module.exports = db;
+module.exports = db
