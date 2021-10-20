@@ -17,7 +17,7 @@ function Home() {
   const [name, setName] = useState("");
   const [friendUuid, setFriendUuid] = useState([]);
   const [friendName, setFriendName] = useState([]);
-  
+
   // post states
   const [posts, setPosts] = useState([]);
   const [ts, setTs] = useState([]);
@@ -64,8 +64,8 @@ function Home() {
 
   const handleClickOutside = (e) => {
     if (ref.current && !e.target.classList.contains('dropdown')) {
-        // close dropdown
-        setOpenDD([]);
+      // close dropdown
+      setOpenDD([]);
     }
   };
 
@@ -79,7 +79,7 @@ function Home() {
       }
     }
     fetchData();
-    
+
     setShowEdit([]);
     setOpenDD([]);
 
@@ -96,16 +96,16 @@ function Home() {
   const handleEditPost = (editedPost, content, key) => {
     async function fetchData() {
       const res = await Axios.put('http://localhost:3001/profile/editTextPost', {
-          editedPostID: editedPost,
-          content: content
+        editedPostID: editedPost,
+        content: content
       })
       if (!res.data.success) {
-          alert(res.data.msg);
+        alert(res.data.msg);
       }
       setNetwork(network + 1);
     }
     fetchData();
-    
+
     showEditOptions(key);
     setOpenDD([]);
     setNetwork(network + 1);
@@ -132,7 +132,7 @@ function Home() {
       setPosts(res.data.posts);
     }
     fetchData();
-    
+
     showEditOptions(key);
     setOpenDD([]);
   }
@@ -160,53 +160,106 @@ function Home() {
         <h2>Home</h2>
         <p>Hey {name}! :-D</p>
         <p>Dashboard displayed here.</p>
+
         <div className="posts">
-        {(!(posts === undefined)) ? ((!(friendName === undefined))) ? posts.map((val, key) => {
-          return(
-            <div className="greyBox" key={key}>
-              <Link className="link" to={`/${authors[key]}`}>
-                {friendName[friendUuid.indexOf(authors[key])] ? friendName[friendUuid.indexOf(authors[key])] : name}
-              </Link>
-              {(!friendName[friendUuid.indexOf(authors[key])]) &&
-                <div className="dropdownContainer" ref={ref}>
-                    {(!(showEdit[key])) && <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>}
-                    {openDD[key] && <div className="dropdownOptions">
-                        <button id="edit" className="dropdownButton" onClick={() => showEditOptions(key)}>Edit</button>
-                        <button id="delete" className="dropdownButton" onClick={() => handleDeletePost(postIDs[key])}>Delete</button>
-                    </div>}
-                </div>}
-                
-                <div className="postTs">{ts[key]}</div>
-                <div className="postContent">
-                    {(!(showEdit[key])) && val}
-                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) && <input
-                        type="text"
-                        id="content"
-                        autoComplete="off"
-                        value={val ? val : ""}
-                        onChange={(e) => handleEdit(e, key)}
-                        />}
-                </div>
-                <div>
-                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) && <button onClick={() => {handleEditPost(postIDs[key], posts[key], key)}}>Save Changes</button>}
-                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) && <button onClick={() => {handleDiscardChanges(key)}}>Discard Changes</button>}
-                </div>
-                {images[key] ? 
-                    <div className="postImage">
-                        <img src={images[key]} alt="Could not display image"/>
+          {(!(posts === undefined)) ?
+            ((!(friendName === undefined))) ?
+              posts.map((val, key) => {
+
+                return (
+                  <div className="greyBox" key={key}>
+
+                    {/* Show author of each post */}
+                    <Link className="link" to={`/${authors[key]}`}>
+                      {friendName[friendUuid.indexOf(authors[key])] ?
+                        friendName[friendUuid.indexOf(authors[key])] : name}
+                    </Link>
+
+                    {/* Show Dropdown if owner of post */}
+                    {(!friendName[friendUuid.indexOf(authors[key])]) &&
+                      <div className="dropdownContainer" ref={ref}>
+                        {(!(showEdit[key])) &&
+                          <button
+                            className="dropdown"
+                            onClick={() => handleDropdown(key)}>
+                            ⋮
+                          </button>
+                        }
+
+                        {openDD[key] &&
+                          <div className="dropdownOptions">
+                            <button
+                              id="edit"
+                              className="dropdownButton"
+                              onClick={() => showEditOptions(key)}>
+                              Edit
+                            </button>
+
+                            <button
+                              id="delete"
+                              className="dropdownButton"
+                              onClick={() => handleDeletePost(postIDs[key])}>
+                              Delete
+                            </button>
+                          </div>
+                        }
+
+                      </div>
+                    }
+
+                    <div className="postTs"> {ts[key]} </div>
+
+                    <div className="postContent">
+                      {(!(showEdit[key])) && val}
+
+                      {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                        <input
+                          type="text"
+                          id="content"
+                          autoComplete="off"
+                          value={val ? val : ""}
+                          onChange={(e) => handleEdit(e, key)}
+                        />
+                      }
                     </div>
-                : null}
 
+                    <div>
+                      {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                        <button
+                          onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
+                          Save Changes
+                        </button>
+                      }
 
-              <div className="likes">
-                {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], authors[key])}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
-              </div>
+                      {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                        <button
+                          onClick={() => { handleDiscardChanges(key) }}>
+                          Discard Changes
+                        </button>}
+                    </div>
 
-            </div>
-          )}) :
-            <div className="greyBox">
-              No posts yet
-            </div> : null }
+                    {images[key] ?
+                      <div className="postImage">
+                        <img src={images[key]} alt="Could not display image" />
+                      </div> : null
+                    }
+
+                    <div className="likes">
+                      {likeCounts === undefined ? null :
+                        <button
+                          className="tractor"
+                          onClick={() => { updateLikeCount(postIDs[key], authors[key]) }}>
+                          <FaTractor color={liked[key]} />
+                        </button>}
+                      {likeCounts[key]}
+                    </div>
+
+                  </div>
+                )
+              }) :
+              <div className="greyBox">
+                No posts yet
+              </div> : null}
         </div>
       </div>
     </>
