@@ -18,12 +18,14 @@ createPostRoute = require("../controllers/createPostController");
 getPostRoute = require("../controllers/getPostController");
 deleteTextPostRoute = require("../controllers/deleteTextPostController");
 imageUploadRoute = require("../controllers/imageUploadController")
+editTextPostRoute = require("../controllers/editTextPostController");
 
 // post requests
 router.post("/createPost/", createPostRoute.createPostController)
 router.post("/getPosts/", getPostRoute.getPostController)
 router.post("/deleteTextPost/", deleteTextPostRoute.deleteTextPostController)
 router.post("/imageUpload", imageUploadRoute.imageUploadController)
+router.put("/editTextPost/", editTextPostRoute.editTextPostController)
 // info requests
 router.put("/about/phone", editPhoneRoute.editPhoneController)
 router.put("/about/location", editLocationRoute.editLocationController)

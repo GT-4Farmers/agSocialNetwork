@@ -25,7 +25,7 @@ function Header(props) {
 
     // unmount cleanup
     // return () => {};
-  }, []);
+  });
   
   function renderNav() {
     if ( (!(props.location.pathname === '/' || (props.location.pathname === '/register')) && isLoggedIn) ) {

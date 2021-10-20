@@ -40,7 +40,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                     if (images.length == data.length) {
                         // console.log("starting json response")
                         // console.log(posts)
-                        console.log(images)
+                        // console.log(images)
                         res.json({
                             success: true,
                             msg: 'Successfully retrieved posts',

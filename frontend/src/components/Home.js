@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import Axios from 'axios';
 import AuthContext from '../states/AuthContext';
 import { useHistory } from 'react-router';
@@ -12,6 +12,7 @@ function Home() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const { profileDummy, setProfileDummy } = useContext(AuthContext);
   const { user, setUser } = useContext(AuthContext);
+  const ref = useRef(null);
 
   const [name, setName] = useState("");
   const [friendUuid, setFriendUuid] = useState([]);
@@ -26,6 +27,8 @@ function Home() {
   // const [likers, setLikers] = useState([]);
   const [likeCounts, setLikeCounts] = useState([]);
   const [liked, setLiked] = useState([]);
+  const [openDD, setOpenDD] = useState([]);
+  const [showEdit, setShowEdit] = useState([]);
 
   // network state
   const [network, setNetwork] = useState(0);
@@ -40,9 +43,6 @@ function Home() {
       setFriendName(resTwo.data.friendName);
 
       const resThree = await Axios.post("http://localhost:3001/home", {
-        // set to resTwo.data.friendUuid instead of friendUuid
-        // since this is encapsulated within the same fetchData function
-        // and friendUuid isn't updated by the team it reaches this request
         friendUuid: resTwo.data.friendUuid
       });
       setAuthors(resThree.data.authors);
@@ -52,23 +52,22 @@ function Home() {
       setPostIDs(resThree.data.postIDs);
       setLikeCounts(resThree.data.likeCounts);
       setLiked(resThree.data.liked);
-
-      // let lArray = [];
-      // let countArray = [];
-      // for (const p in resThree.data.postIDs) {
-      //   let resFour = await Axios.post("http://localhost:3001/home/likes/getLikes", {
-      //     postID: resThree.data.postIDs[p]
-      //   });
-      //   lArray.push(resFour.data.likers);
-      //   countArray.push(resFour.data.count);
-      // }
-      // setLikers(lArray);
-      // setCounts(countArray);
     }
     fetchData();
 
-    return () => {}
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, [network]);
+
+  const handleClickOutside = (e) => {
+    if (ref.current && !e.target.classList.contains('dropdown')) {
+        // close dropdown
+        setOpenDD([]);
+    }
+  };
 
   const handleDeletePost = (deletedPost) => {
     async function fetchData() {
@@ -80,32 +79,63 @@ function Home() {
       }
     }
     fetchData();
+    
+    setShowEdit([]);
+    setOpenDD([]);
+
+    // rerender
     setNetwork(network + 1);
   }
 
-  // const handleLike = (likePID, author) => {
-  //   async function fetchData() {
-  //     const res = await Axios.post('http://localhost:3001/home/likes', {
-  //       postID: likePID,
-  //       postOwner: author,
-  //       mode: "like"
-  //     });
-  //   }
-  //   fetchData();
-  //   setNetwork(network + 1);
-  // }
+  const handleDropdown = (key) => {
+    let newOpenDD = [...openDD];
+    newOpenDD[key] = (!newOpenDD[key]);
+    setOpenDD(newOpenDD);
+  }
 
-  // const handleDislike = (dislikePID) => {
-  //   async function fetchData() {
-  //     const res = await Axios.post('http://localhost:3001/home/likes', {
-  //       postID: dislikePID,
-  //       uuid: user,
-  //       mode: "dislike"
-  //     });
-  //   }
-  //   fetchData();
-  //   setNetwork(network + 1);
-  // }
+  const handleEditPost = (editedPost, content, key) => {
+    async function fetchData() {
+      const res = await Axios.put('http://localhost:3001/profile/editTextPost', {
+          editedPostID: editedPost,
+          content: content
+      })
+      if (!res.data.success) {
+          alert(res.data.msg);
+      }
+      setNetwork(network + 1);
+    }
+    fetchData();
+    
+    showEditOptions(key);
+    setOpenDD([]);
+    setNetwork(network + 1);
+  }
+
+  const showEditOptions = (key) => {
+    let newShowEdit = [...showEdit];
+    newShowEdit[key] = (!newShowEdit[key]);
+    setShowEdit(newShowEdit);
+    handleDropdown(key);
+  }
+
+  const handleEdit = (e, key) => {
+    let newPosts = [...posts];
+    newPosts[key] = e.target.value;
+    setPosts(newPosts);
+  }
+
+  const handleDiscardChanges = (key) => {
+    async function fetchData() {
+      const res = await Axios.post("http://localhost:3001/home", {
+        friendUuid: friendUuid
+      });
+      setPosts(res.data.posts);
+    }
+    fetchData();
+    
+    showEditOptions(key);
+    setOpenDD([]);
+  }
 
   const updateLikeCount = (postID, postOwner) => {
     async function fetchData() {
@@ -137,18 +167,37 @@ function Home() {
               <Link className="link" to={`/${authors[key]}`}>
                 {friendName[friendUuid.indexOf(authors[key])] ? friendName[friendUuid.indexOf(authors[key])] : name}
               </Link>
-              {(!(authors[key] === user)) ? null : <button onClick={() => {handleDeletePost(postIDs[key])}}>X</button>}
-              <div className="postTs">{ts[key]}</div>
-              <div className="postContent">{val}</div>
-              {/* <div className="likeCounts">{likeCounts[key]}</div> */}
-              {/* <div className="likes">
-                {likeCounts === undefined ? null : <button className="tractor" onClick={() => {!likeCounts[key].includes(user) ? handleLike(postIDs[key]) : handleDislike(postIDs[key])}}>{ likers[key].includes(user) ? <FaTractor color="green"/> : <FaTractor />}</button>} {counts[key]}
-              </div> */}
-              {images[key] ? 
-                  <div className="postImage">
-                      <img src={images[key]} alt="Could not display image"/>
-                  </div>
-              : null}
+              {(!friendName[friendUuid.indexOf(authors[key])]) &&
+                <div className="dropdownContainer" ref={ref}>
+                    {(!(showEdit[key])) && <button className="dropdown" onClick={() => handleDropdown(key)}>⋮</button>}
+                    {openDD[key] && <div className="dropdownOptions">
+                        <button id="edit" className="dropdownButton" onClick={() => showEditOptions(key)}>Edit</button>
+                        <button id="delete" className="dropdownButton" onClick={() => handleDeletePost(postIDs[key])}>Delete</button>
+                    </div>}
+                </div>}
+                
+                <div className="postTs">{ts[key]}</div>
+                <div className="postContent">
+                    {(!(showEdit[key])) && val}
+                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) && <input
+                        type="text"
+                        id="content"
+                        autoComplete="off"
+                        value={val ? val : ""}
+                        onChange={(e) => handleEdit(e, key)}
+                        />}
+                </div>
+                <div>
+                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) && <button onClick={() => {handleEditPost(postIDs[key], posts[key], key)}}>Save Changes</button>}
+                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) && <button onClick={() => {handleDiscardChanges(key)}}>Discard Changes</button>}
+                </div>
+                {images[key] ? 
+                    <div className="postImage">
+                        <img src={images[key]} alt="Could not display image"/>
+                    </div>
+                : null}
+
+
               <div className="likes">
                 {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], authors[key])}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
               </div>
