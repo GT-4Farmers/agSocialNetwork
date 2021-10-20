@@ -196,7 +196,7 @@ function Profile() {
                         image_name = res.data.image_name
                         image_loc = res.data.image_loc
                     }
-                    console.log(res)
+                    // console.log(res)
                 }
                 let url = "http://localhost:3001/profile/createPost/"
                 const res = await Axios.post(url, {

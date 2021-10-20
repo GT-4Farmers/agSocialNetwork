@@ -26,7 +26,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                 likeCounts.push(`${data[key].likeCount}`);
 
                 db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
-                    console.log("did db query, starting callback")
+                    // console.log("did db query, starting callback")
                     if (err) {
                         res.json({
                             success: false,
