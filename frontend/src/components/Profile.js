@@ -318,6 +318,7 @@ function Profile() {
         <input className="postInput"
           type="text"
           autoComplete="off"
+          maxLength="500"
           id="post"
           placeholder="How are you feeling today?"
           value={postContent ? postContent : ""}
