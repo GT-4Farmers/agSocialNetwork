@@ -29,6 +29,10 @@ function Home() {
   const [liked, setLiked] = useState([]);
   const [openDD, setOpenDD] = useState([]);
   const [showEdit, setShowEdit] = useState([]);
+  const [commentContent, setCommentContent] = useState('');
+  const [comments, setComments] = useState([]);
+  const [cTs, setCTs] = useState([]);
+  const [commentIDs, setCommentIDs] = useState([]);
 
   // network state
   const [network, setNetwork] = useState(0);
@@ -68,6 +72,35 @@ function Home() {
       setOpenDD([]);
     }
   };
+
+  const handleCommentContent = (postIDToComment) => {
+    // will users be allowed to post image without text?
+    console.log(postIDToComment);
+    if (commentContent === "") {
+      alert("Please write a comment!");
+    } else {
+      async function fetchData() {
+        let url = "http://localhost:3001/home/createComment"
+        const res = await Axios.post(url, {
+          postID: postIDToComment,
+          content: commentContent
+        }).then((response) => {
+          return response;
+        });
+        if (!res.data.success) {
+          alert(res.data.msg);
+        }
+      }
+      fetchData();
+    }
+    setCommentContent("");
+
+    // prevents keys getting mixed if posting while editing
+    setShowEdit([]);
+    setOpenDD([]);
+
+    setNetwork(network + 1);
+  }
 
   const handleDeletePost = (deletedPost) => {
     async function fetchData() {
@@ -253,6 +286,18 @@ function Home() {
                         </button>}
                       {likeCounts[key]}
                     </div>
+                    <div>
+                  <input className="commentInput"
+                    type="text"
+                    autoComplete="off"
+                    maxLength="500"
+                    id="comment"
+                    placeholder="Write a comment."
+                    value={commentContent ? commentContent : ""}
+                    onChange={(e) => { setCommentContent(e.target.value) }}
+                  />
+                  <button onClick={() => handleCommentContent(postIDs[key])}>Comment</button>
+                </div>
 
                   </div>
                 )
