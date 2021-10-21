@@ -159,6 +159,7 @@ function Profile() {
   const SendFR = () => <button onClick={handleFriendRequest}>Send Friend Request</button>;
 
   const handlePostContent = () => {
+    // will users be allowed to post image without text?
     if (postContent === "") {
       alert("I said HOW ARE YOU FEELING TODAY?");
     } else {
