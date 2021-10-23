@@ -30,14 +30,13 @@ function Home() {
   const [openDD, setOpenDD] = useState([]);
   const [showEdit, setShowEdit] = useState([]);
   const [commentContent, setCommentContent] = useState('');
-  const [comments, setComments] = useState([]);
-  const [cTs, setCTs] = useState([]);
-  const [commentIDs, setCommentIDs] = useState([]);
+  const [comments, setComments] = useState(new Map());
 
   // network state
   const [network, setNetwork] = useState(0);
 
   useEffect(() => {
+    let temp = {};
     async function fetchData() {
       const res = await Axios.get("http://localhost:3001/login");
       setName(`${res.data.firstName} ${res.data.lastName}`);
@@ -56,6 +55,18 @@ function Home() {
       setPostIDs(resThree.data.postIDs);
       setLikeCounts(resThree.data.likeCounts);
       setLiked(resThree.data.liked);
+      temp = new Map(JSON.parse(resThree.data.comments));
+      setComments(temp);
+
+      console.log("postIDs array: ", resThree.data.postIDs);
+      console.log("authors array: ", resThree.data.authors);
+      console.log("timestamps array: ", resThree.data.timestamps);
+      console.log("posts array: ", resThree.data.posts);
+      console.log("likeCounts array: ", resThree.data.likeCounts);
+      console.log("liked array: ", resThree.data.liked);
+      console.log("comments map JSON: ", resThree.data.comments);
+      console.log("comments map: ", temp);
+      console.log("data: ", resThree.data);
     }
     fetchData();
 
@@ -286,18 +297,29 @@ function Home() {
                         </button>}
                       {likeCounts[key]}
                     </div>
+                    <div className="comments">
+                      {!comments.has(postIDs[key]) ? null :
+                        <>
+                        <Link className="link" to={`/${comments.get(postIDs[key])[0].cCreatedBy}`}>
+                          First Commenter
+                        </Link>
+                        <div className="commentTs"> {comments.get(postIDs[key])[0].cCreatedAt} </div>
+                        <div className="commentContent"> {comments.get(postIDs[key])[0].cContent}</div>
+                        </>
+                      }
+                    </div>
                     <div>
-                  <input className="commentInput"
-                    type="text"
-                    autoComplete="off"
-                    maxLength="500"
-                    id="comment"
-                    placeholder="Write a comment."
-                    value={commentContent ? commentContent : ""}
-                    onChange={(e) => { setCommentContent(e.target.value) }}
-                  />
-                  <button onClick={() => handleCommentContent(postIDs[key])}>Comment</button>
-                </div>
+                      <input className="commentInput"
+                        type="text"
+                        autoComplete="off"
+                        maxLength="500"
+                        id="comment"
+                        placeholder="Write a comment."
+                        value={commentContent ? commentContent : ""}
+                        onChange={(e) => { setCommentContent(e.target.value) }}
+                      />
+                      <button onClick={() => handleCommentContent(postIDs[key])}>Comment</button>
+                    </div>
 
                   </div>
                 )
