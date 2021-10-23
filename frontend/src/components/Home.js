@@ -37,6 +37,8 @@ function Home() {
 
   useEffect(() => {
     let temp = {};
+    let tempPhotos = [];
+    let newTempPhotos = [];
     async function fetchData() {
       const res = await Axios.get("http://localhost:3001/login");
       setName(`${res.data.firstName} ${res.data.lastName}`);
@@ -51,22 +53,26 @@ function Home() {
       setAuthors(resThree.data.authors);
       setPosts(resThree.data.posts);
       setTs(resThree.data.timestamps);
-      setImages(resThree.data.images);
       setPostIDs(resThree.data.postIDs);
       setLikeCounts(resThree.data.likeCounts);
       setLiked(resThree.data.liked);
       temp = new Map(JSON.parse(resThree.data.comments));
       setComments(temp);
 
-      console.log("postIDs array: ", resThree.data.postIDs);
-      console.log("authors array: ", resThree.data.authors);
-      console.log("timestamps array: ", resThree.data.timestamps);
-      console.log("posts array: ", resThree.data.posts);
-      console.log("likeCounts array: ", resThree.data.likeCounts);
-      console.log("liked array: ", resThree.data.liked);
-      console.log("comments map JSON: ", resThree.data.comments);
-      console.log("comments map: ", temp);
-      console.log("data: ", resThree.data);
+      tempPhotos = resThree.data.images;
+      let dif = 0;
+      for (let p = 0; p < tempPhotos.length; p++) {
+        if (p > 0) {
+          if (tempPhotos[p] === newTempPhotos[p-1-dif]) {
+            dif++;
+          } else {
+            newTempPhotos[p-dif] = tempPhotos[p];
+          }
+        } else {
+          newTempPhotos[p] = tempPhotos[p];
+        }
+      }
+      setImages(newTempPhotos);
     }
     fetchData();
 
@@ -86,7 +92,6 @@ function Home() {
 
   const handleCommentContent = (postIDToComment) => {
     // will users be allowed to post image without text?
-    console.log(postIDToComment);
     if (commentContent === "") {
       alert("Please write a comment!");
     } else {
@@ -299,13 +304,77 @@ function Home() {
                     </div>
                     <div className="comments">
                       {!comments.has(postIDs[key]) ? null :
-                        <>
-                        <Link className="link" to={`/${comments.get(postIDs[key])[0].cCreatedBy}`}>
-                          First Commenter
-                        </Link>
-                        <div className="commentTs"> {comments.get(postIDs[key])[0].cCreatedAt} </div>
-                        <div className="commentContent"> {comments.get(postIDs[key])[0].cContent}</div>
-                        </>
+                        comments.get(postIDs[key]).map((val, key => {
+
+                          return (
+                            <div>
+                              <Link className="link" to={`/${key.cCreatedBy}`}>
+                                {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
+                                friendName[friendUuid.indexOf(key.cCreatedBy)] : name}
+                              </Link>
+                              {/* {(!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                              <div className="dropdownContainer" ref={ref}>
+                                {(!(showEdit[key])) &&
+                                  <button
+                                    className="dropdown"
+                                    onClick={() => handleDropdown(key)}>
+                                    ⋮
+                                  </button>
+                                }
+
+                                {openDD[key] &&
+                                  <div className="dropdownOptions">
+                                    <button
+                                      id="edit"
+                                      className="dropdownButton"
+                                      onClick={() => showEditOptions(key)}>
+                                      Edit
+                                    </button>
+
+                                    <button
+                                      id="delete"
+                                      className="dropdownButton"
+                                      onClick={() => handleDeletePost(postIDs[key])}>
+                                      Delete
+                                    </button>
+                                  </div>
+                                }
+
+                              </div>
+                              } */}
+                              <div className="commentTs"> {key.cCreatedAt} </div>
+                              {/* <div className="postContent">
+                                {(!(showEdit[key])) && val}
+
+                                {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                                  <input
+                                    type="text"
+                                    id="content"
+                                    autoComplete="off"
+                                    value={val ? val : ""}
+                                    onChange={(e) => handleEdit(e, key)}
+                                  />
+                                }
+                              </div>
+
+                              <div>
+                                {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                                  <button
+                                    onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
+                                    Save Changes
+                                  </button>
+                                }
+
+                                {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                                  <button
+                                    onClick={() => { handleDiscardChanges(key) }}>
+                                    Discard Changes
+                                  </button>}
+                              </div> */}
+                              <div className="commentContent"> {key.cContent}</div>
+                            </div>
+                          )
+                        }))
                       }
                     </div>
                     <div>

@@ -7,7 +7,7 @@ exports.getDashboardTextPostsController = (req, res) => {
     req.body.friendUuid.forEach(friend => friendUuid.push(friend));
 
     //var sql = 'SELECT Posts.postID, Posts.createdBy, createdAt, content, likeCount, Likes.uuid FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy IN (?) ORDER BY createdAt DESC';
-    var sql = 'SELECT Posts.postID, Posts.createdBy AS postCreatedBy, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE Posts.createdBy IN (?) ORDER BY Posts.createdAt DESC';
+    var sql = 'SELECT Posts.postID, Posts.createdBy AS postCreatedBy, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE Posts.createdBy IN (?) ORDER BY Posts.createdAt DESC, Comments.createdAt ASC';
     var input = [user, friendUuid];
     db.query(sql, input, (err, data, fields) => {
         if (data) {
@@ -20,7 +20,6 @@ exports.getDashboardTextPostsController = (req, res) => {
             let liked = [];
             let commentsPost = [];
             let commentsMap = new Map();
-            let dif = 0;
             
             for (const key in data) {
                 if (postIDs[postIDs.length - 1] !== data[key].postID) {
@@ -46,7 +45,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                         liked.push("black");
                     }
                 } else {
-                    commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key+dif].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
+                    commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
                 }
                 db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
                     // console.log("did db query, starting callback")
@@ -61,12 +60,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                     else {images.push(null)}
 
                     if (images.length == data.length) {
-                        // console.log("starting json response")
-                        // console.log(posts)
-                        // console.log(images)
-                        console.log(commentsMap);
-                        let b = JSON.stringify([...commentsMap]);
-                        console.log(b);
+                        let temp = JSON.stringify([...commentsMap]);
                         res.json({
                             success: true,
                             msg: 'Successfully retrieved posts',
@@ -77,7 +71,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                             authors: authors,
                             likeCounts: likeCounts,
                             liked: liked,
-                            comments: b
+                            comments: temp
                         })
                     }
 
