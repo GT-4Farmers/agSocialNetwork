@@ -6,6 +6,7 @@ const cors = require("cors");
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const cookieParser = require('cookie-parser');
+const aws = require('aws-sdk');
 
 const db = mysql.createConnection({
     host: 'haystackdb.cwuhnsyt464r.us-east-1.rds.amazonaws.com',
@@ -60,4 +61,4 @@ app.listen(3001, () => {
     console.log("Backend running on port 3001");
 })
 
-module.exports = db;
+module.exports = db

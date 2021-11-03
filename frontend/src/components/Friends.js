@@ -21,14 +21,8 @@ function Friends() {
                 profileRoute: profileRoute
             })
             if (res.data.success) {
-                setFriendListRoutes(res.data.friendsList[0]);
-
-                const resTwo = await Axios.post("http://localhost:3001/profile/friends/friendslist", {
-                    friendsUuids: res.data.friendsList[0]
-                })
-                if (resTwo.data.success) {
-                    setFriendList(resTwo.data.friendsList[0]);
-                }
+                setFriendListRoutes(res.data.friendsListRoute[0]);
+                setFriendList(res.data.friendsList[0]);
             }
         }
         fetchData();
