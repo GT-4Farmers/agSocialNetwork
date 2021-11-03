@@ -4,8 +4,8 @@ exports.getPostController = (req, res) => {
     let user = req.body.profileRoute;
     let loggedIn = req.session.userID;
 
-    var sql = 'SELECT Likes.uuid, createdAt, content, Posts.postID, likeCount FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy = ? ORDER BY createdAt DESC';
-    //var sql = 'SELECT Posts.postID, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE Posts.createdBy = ? ORDER BY Posts.createdAt DESC, Comments.createdAt ASC';
+    //var sql = 'SELECT Likes.uuid, createdAt, content, Posts.postID, likeCount FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy = ? ORDER BY createdAt DESC';
+    var sql = 'SELECT Posts.postID, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE Posts.createdBy = ? ORDER BY Posts.createdAt DESC, Comments.createdAt ASC';
     var input = [loggedIn, user];
 
     db.query(sql, input, (err, data, fields) => {
@@ -16,11 +16,34 @@ exports.getPostController = (req, res) => {
             let images = [];
             let likeCounts = [];
             let liked = [];
+            let commentsPost = [];
+            let commentsMap = new Map();
 
             for (const key in data) {
-                posts.push(`${data[key].content}`);
-                timestamps.push(`${data[key].createdAt}`);
-                postIDs.push(`${data[key].postID}`);
+                if (postIDs[postIDs.length - 1] !== data[key].postID) {
+                    //console.log(commentsMap);
+                    if (`${data[key].commentContent}` !== null) {
+                        if (commentsPost.length !== 0) {
+                            commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
+                            commentsPost = [];
+                        } else {
+                            if (data[key].commentContent !== null) {
+                                commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
+                            }
+                        }
+                    }
+                    postIDs.push(`${data[key].postID}`);
+                    timestamps.push(`${data[key].postCreatedAt}`);
+                    posts.push(`${data[key].postContent}`);
+                    likeCounts.push(`${data[key].likeCount}`);
+                    if (data[key].uuid === user) {
+                        liked.push("green");
+                    } else {
+                        liked.push("black");
+                    }
+                } else {
+                    commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
+                }
                 db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
                     if (err) {
                         res.json({
@@ -33,7 +56,7 @@ exports.getPostController = (req, res) => {
                     else {images.push(null)}
 
                     if (images.length == data.length) {
-
+                        let temp = JSON.stringify([...commentsMap]);
                         res.json({
                             success: true,
                             msg: 'Successfully retrieved posts',
@@ -42,20 +65,13 @@ exports.getPostController = (req, res) => {
                             postIDs: postIDs,
                             images: images,
                             likeCounts: likeCounts,
-                            liked: liked
+                            liked: liked,
+                            comments: temp
                         })
                     }
                     // console.log(images)
                     
                 });
-
-                likeCounts.push(`${data[key].likeCount}`);
-
-                if (data[key].uuid === user || data[key].uuid !== null) {
-                    liked.push("green");
-                } else {
-                    liked.push("black");
-                }
             }
             
         } else {
@@ -67,7 +83,8 @@ exports.getPostController = (req, res) => {
                 postIDs: [],
                 images: [],
                 likeCounts: [],
-                liked: []
+                liked: [],
+                comments: ''
             })
         }
     });

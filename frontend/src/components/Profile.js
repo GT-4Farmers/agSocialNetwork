@@ -41,9 +41,11 @@ function Profile() {
   const [postIDs, setPostIDs] = useState([]);
   const [images, setImages] = useState([]);
   const [commentContent, setCommentContent] = useState('');
-  const [comments, setComments] = useState([]);
-  const [cTs, setCTs] = useState([]);
-  const [commentIDs, setCommentIDs] = useState([]);
+  const [comments, setComments] = useState(new Map());
+
+  const [name, setName] = useState("");
+  const [friendUuid, setFriendUuid] = useState([]);
+  const [friendName, setFriendName] = useState([]);
 
   const [likeCounts, setLikeCounts] = useState([]);
   const [liked, setLiked] = useState([]);
@@ -63,6 +65,9 @@ function Profile() {
       setPostIDs([]);
       setImages([]);
     }
+    let temp = {};
+    let tempPhotos = [];
+    let newTempPhotos = [];
 
     let profileRoute = (window.location.pathname).substring(1)
     var pathArray = profileRoute.split('/');
@@ -77,15 +82,38 @@ function Profile() {
       setFirstName(res.data.firstName);
       setLastName(res.data.lastName);
 
+      const userNameRes = await Axios.get("http://localhost:3001/profile");
+      setName(`${userNameRes.data.firstName} ${userNameRes.data.lastName}`);
+
+      const resThree = await Axios.get("http://localhost:3001/home/friends");
+      setFriendUuid(resThree.data.friendUuid);
+      setFriendName(resThree.data.friendName);
+
       const resTwo = await Axios.post("http://localhost:3001/profile/getPosts", {
         profileRoute: profileRoute
       });
       setPosts(resTwo.data.posts);
       setTs(resTwo.data.timestamps);
       setPostIDs(resTwo.data.postIDs);
-      setImages(resTwo.data.images);
       setLikeCounts(resTwo.data.likeCounts);
       setLiked(resTwo.data.liked);
+      temp = new Map(JSON.parse(resTwo.data.comments));
+      setComments(temp);
+
+      tempPhotos = resTwo.data.images;
+      let dif = 0;
+      for (let p = 0; p < tempPhotos.length; p++) {
+        if (p > 0) {
+          if (tempPhotos[p] === newTempPhotos[p-1-dif]) {
+            dif++;
+          } else {
+            newTempPhotos[p-dif] = tempPhotos[p];
+          }
+        } else {
+          newTempPhotos[p] = tempPhotos[p];
+        }
+      }
+      setImages(newTempPhotos);
     }
     // Event listener to close dropdown menu when clicking outside
     document.addEventListener('click', handleClickOutside);
@@ -217,7 +245,6 @@ function Profile() {
 
   const handleCommentContent = (postIDToComment) => {
     // will users be allowed to post image without text?
-    console.log(postIDToComment);
     if (commentContent === "") {
       alert("Please write a comment!");
     } else {
@@ -457,6 +484,81 @@ function Profile() {
                     </button>}
                   {likeCounts[key]}
                 </div>
+                <div className="comments">
+                    {!comments.has(postIDs[key]) ? null :
+                      comments.get(postIDs[key]).map((val, key => {
+
+                        return (
+                          <div>
+                            <Link className="link" to={`/${key.cCreatedBy}` } onClick={() => {setProfileDummy(profileDummy+1)}}>
+                              {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
+                              friendName[friendUuid.indexOf(key.cCreatedBy)] : name}
+                            </Link>
+                            {/* {(!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                            <div className="dropdownContainer" ref={ref}>
+                              {(!(showEdit[key])) &&
+                                <button
+                                  className="dropdown"
+                                  onClick={() => handleDropdown(key)}>
+                                  ⋮
+                                </button>
+                              }
+
+                              {openDD[key] &&
+                                <div className="dropdownOptions">
+                                  <button
+                                    id="edit"
+                                    className="dropdownButton"
+                                    onClick={() => showEditOptions(key)}>
+                                    Edit
+                                  </button>
+
+                                  <button
+                                    id="delete"
+                                    className="dropdownButton"
+                                    onClick={() => handleDeletePost(postIDs[key])}>
+                                    Delete
+                                  </button>
+                                </div>
+                              }
+
+                            </div>
+                            } */}
+                            <div className="commentTs"> {key.cCreatedAt} </div>
+                            {/* <div className="postContent">
+                              {(!(showEdit[key])) && val}
+
+                              {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                                <input
+                                  type="text"
+                                  id="content"
+                                  autoComplete="off"
+                                  value={val ? val : ""}
+                                  onChange={(e) => handleEdit(e, key)}
+                                />
+                              }
+                            </div>
+
+                            <div>
+                              {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                                <button
+                                  onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
+                                  Save Changes
+                                </button>
+                              }
+
+                              {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
+                                <button
+                                  onClick={() => { handleDiscardChanges(key) }}>
+                                  Discard Changes
+                                </button>}
+                            </div> */}
+                            <div className="commentContent"> {key.cContent}</div>
+                          </div>
+                        )
+                      }))
+                    }
+                  </div>
                 <div>
                   <input className="commentInput"
                     type="text"
