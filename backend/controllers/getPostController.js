@@ -28,10 +28,13 @@ exports.getPostController = (req, res) => {
                         })
                     }
                 
-                    if (img_data[0]) {images.push(`${img_data[0].File_reference}`)}
+                    if (img_data[0]) {
+                        let file_references = img_data.map((x) => {return x.File_reference})
+                        images.push(file_references)}
                     else {images.push(null)}
 
                     if (images.length == data.length) {
+                        // console.log(images)
 
                         res.json({
                             success: true,

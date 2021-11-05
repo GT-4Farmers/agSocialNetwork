@@ -41,7 +41,7 @@ limits: {filesize : 2000000}, //filesize in bytes, see if what we need to limit 
 filefilter: function(req, file, cb) {
     checkFileType(file, cb);
 }
-}).single('image');
+}).array("images", 5);
 
 // just checks that the file extension matches our allowed types
 // only image file extensions for now

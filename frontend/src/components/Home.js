@@ -145,9 +145,9 @@ function Home() {
                 {likeCounts === undefined ? null : <button className="tractor" onClick={() => {!likeCounts[key].includes(user) ? handleLike(postIDs[key]) : handleDislike(postIDs[key])}}>{ likers[key].includes(user) ? <FaTractor color="green"/> : <FaTractor />}</button>} {counts[key]}
               </div> */}
               {images[key] ? 
-                  <div className="postImage">
-                      <img src={images[key]} alt="Could not display image"/>
-                  </div>
+                    <div className="postImage">
+                        {images[key].map((x) => {return(<img src={x} key={key} alt="Could not display image"/>)})}
+                    </div>
               : null}
               <div className="likes">
                 {likeCounts === undefined ? null : <button className="tractor" onClick={() => {updateLikeCount(postIDs[key], authors[key])}}><FaTractor color={liked[key]}/></button>} {likeCounts[key]}
