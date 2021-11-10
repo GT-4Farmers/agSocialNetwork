@@ -12,6 +12,7 @@ import About from './components/About';
 import Friends from './components/Friends';
 import SearchUser from './components/SearchUser';
 import Notifications from './components/Notifications';
+import Forums from './components/Forums';
 import './css/App.css';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/searchUser" component={SearchUser} />
           <Route path="/register" component={Register} />
           <Route path="/notifications" component={Notifications} />
+          <Route path="/forums" component={Forums} />
           <Route path="/:uid/friends" component={Friends} />
           <Route path="/:uid/about" component={About} />
           <Route path="/:uid" component={Profile} />

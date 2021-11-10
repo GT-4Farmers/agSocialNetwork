@@ -5,7 +5,8 @@ import { useHistory, useParams } from 'react-router';
 import AuthContext from '../states/AuthContext';
 import logo from './logo.png';
 import '../css/header.css';
-import {MdNotificationAdd} from 'react-icons/md';
+import { MdNotificationAdd } from 'react-icons/md';
+import { GoCommentDiscussion } from 'react-icons/go';
 
 function Header(props) {
 
@@ -61,6 +62,12 @@ function Header(props) {
                     <path d="M11 26.8125C12.5125 26.8125 13.75 25.575 13.75 24.0625H8.25C8.25 25.575 9.47375 26.8125 11 26.8125ZM19.25 18.5625V11.6875C19.25 7.46625 16.995 3.9325 13.0625 2.9975V2.0625C13.0625 0.92125 12.1412 0 11 0C9.85875 0 8.9375 0.92125 8.9375 2.0625V2.9975C4.99125 3.9325 2.75 7.4525 2.75 11.6875V18.5625L0 21.3125V22.6875H22V21.3125L19.25 18.5625Z"/>
                     </svg>} Notifications
                   </Link>
+                </div>
+              </li>
+              <li>
+                <div className="navButton">
+                  <Link to='/forums'>
+                  <GoCommentDiscussion /> Forums</Link>
                 </div>
               </li>
               <li>
