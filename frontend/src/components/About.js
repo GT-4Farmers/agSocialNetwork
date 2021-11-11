@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { useHistory, useParams } from 'react-router';
 import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
+import defaultProfilePic from './defaultProfilePic.jpg';
 
 function About() {
     const { isLoggedIn } = useContext(AuthContext);
@@ -160,7 +161,7 @@ function About() {
     <div className="content">
         <h2>About</h2>
         <ul className="greyBox">
-            <li>Profile Picture: {showElement ? null : <img src={profilePicture} alt="No Profile Picture Set" />}
+            <li>Profile Picture: {showElement ? null : <img src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />}
                 {showElement && isProfileOwner ? <div className="imageInput">
                 {/* <label for="post_img">
                     <FcAddImage id="icon" size={40}/>

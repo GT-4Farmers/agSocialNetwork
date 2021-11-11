@@ -7,6 +7,7 @@ import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
 import { FaTractor } from 'react-icons/fa';
 import { FcAddImage } from 'react-icons/fc';
+import defaultProfilePic from './defaultProfilePic.jpg';
 
 function Profile() {
   // login, routing, user states
@@ -365,7 +366,7 @@ function Profile() {
   return (
     <div className="content">
       <div className="greyBox">
-        <img src={profilePicture} alt="No Profile Picture Set" />
+        <img src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />
         <h2>{firstName} {lastName}</h2>
       </div>
 
