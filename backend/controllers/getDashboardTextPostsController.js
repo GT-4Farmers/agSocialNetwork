@@ -6,7 +6,8 @@ exports.getDashboardTextPostsController = (req, res) => {
     friendUuid.push(user);
     req.body.friendUuid.forEach(friend => friendUuid.push(friend));
 
-    var sql = 'SELECT Posts.postID, Posts.createdBy, createdAt, content, likeCount, Likes.uuid FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy IN (?) ORDER BY createdAt DESC';
+    //var sql = 'SELECT Posts.postID, Posts.createdBy, createdAt, content, likeCount, Likes.uuid FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy IN (?) ORDER BY createdAt DESC';
+    var sql = 'SELECT Posts.postID, Posts.createdBy AS postCreatedBy, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE Posts.createdBy IN (?) ORDER BY Posts.createdAt DESC, Comments.createdAt ASC';
     var input = [user, friendUuid];
     db.query(sql, input, (err, data, fields) => {
         if (data) {
@@ -17,14 +18,35 @@ exports.getDashboardTextPostsController = (req, res) => {
             let authors = [];
             let likeCounts = [];
             let liked = [];
-
+            let commentsPost = [];
+            let commentsMap = new Map();
+            
             for (const key in data) {
-                postIDs.push(`${data[key].postID}`);
-                authors.push(`${data[key].createdBy}`);
-                timestamps.push(`${data[key].createdAt}`);
-                posts.push(`${data[key].content}`);
-                likeCounts.push(`${data[key].likeCount}`);
-
+                if (postIDs[postIDs.length - 1] !== data[key].postID) {
+                    //console.log(commentsMap);
+                    if (`${data[key].commentContent}` !== null) {
+                        if (commentsPost.length !== 0) {
+                            commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
+                            commentsPost = [];
+                        } else {
+                            if (data[key].commentContent !== null) {
+                                commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
+                            }
+                        }
+                    }
+                    postIDs.push(`${data[key].postID}`);
+                    authors.push(`${data[key].postCreatedBy}`);
+                    timestamps.push(`${data[key].postCreatedAt}`);
+                    posts.push(`${data[key].postContent}`);
+                    likeCounts.push(`${data[key].likeCount}`);
+                    if (data[key].uuid === user) {
+                        liked.push("green");
+                    } else {
+                        liked.push("black");
+                    }
+                } else {
+                    commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
+                }
                 db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
                     if (err) {
                         res.json({
@@ -39,9 +61,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                     else {images.push(null)}
 
                     if (images.length == data.length) {
-                        // console.log("starting json response")
-                        // console.log(posts)
-                        // console.log(images)
+                        let temp = JSON.stringify([...commentsMap]);
                         res.json({
                             success: true,
                             msg: 'Successfully retrieved posts',
@@ -51,20 +71,19 @@ exports.getDashboardTextPostsController = (req, res) => {
                             images: images,
                             authors: authors,
                             likeCounts: likeCounts,
-                            liked: liked
+                            liked: liked,
+                            comments: temp
                         })
                     }
+
                     // console.log(images)
                     
                 });
 
-                if (data[key].uuid === user) {
-                    liked.push("green");
-                } else {
-                    liked.push("black");
-                }
+                
             }
         } else {
+            let b = JSON.stringify([...commentsMap]);
             res.json({
                 success: false,
                 msg:'An error occurred while getting posts.',
@@ -74,7 +93,8 @@ exports.getDashboardTextPostsController = (req, res) => {
                 images: [],
                 authors: [],
                 likeCounts: [],
-                liked: []
+                liked: [],
+                comments: b
             })
         }
     });

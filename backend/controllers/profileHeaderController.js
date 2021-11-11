@@ -4,7 +4,9 @@ exports.profileHeaderController = (req, res) => {
     db.query("SELECT * FROM Users WHERE uuid = ?", req.session.userID, (err, data) => {
         if (data) {
             res.json({
-                uuid: data[0].uuid
+                uuid: data[0].uuid,
+                firstName: data[0].firstName,
+                lastName: data[0].lastName
             })
         } else {
             res.json({

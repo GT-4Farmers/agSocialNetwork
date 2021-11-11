@@ -10,6 +10,7 @@
   background-image: linear-gradient(-60deg, #32925a, #1ecc66);
 
   border-radius: 0 1em 1em 0;
+  box-shadow: 0 3px 7px rgb(83, 83, 83);
 }
   
 .navButton {
@@ -39,6 +40,7 @@
   font-size: 1.5em;
   width: 100%;
   text-align: left;
+  box-shadow: 0 0 0px;
 }
   
 .navButton:hover {

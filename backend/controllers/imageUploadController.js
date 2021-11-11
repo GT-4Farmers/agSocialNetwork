@@ -1,6 +1,8 @@
 exports.imageUploadController = (req, res) => {
 
     const post_media_upload = require("../upload")
+    const db = require("../server");
+    let uuid = req.session.userID;
     
     post_media_upload(req, res, (error) => {
         if (error) {
@@ -23,10 +25,23 @@ exports.imageUploadController = (req, res) => {
 
         // console.log("req files")
         // console.log(req.files)
+
+        var sql = `INSERT INTO Media (File_reference, uuid) VALUES (?, ?)`;
         
         for (const f of req.files) {
             image_locs.push(f.location);
             image_names.push(f.key);
+
+            var cols = [f.location, uuid];
+
+            db.query(sql, cols, (err, data) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        error: error
+                    })
+                }
+            })
         }
 
         // console.log(image_names)

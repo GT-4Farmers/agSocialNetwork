@@ -12,7 +12,7 @@ const router = express.Router();
 
 aws.config.loadFromPath('./aws.json'); //Set this up and make sure it's in gitignore
 
-console.log(config.accessKeyId)
+// console.log(config.accessKeyId)
 
 const s3 = new aws.S3({
     signatureVersion: 'v4',

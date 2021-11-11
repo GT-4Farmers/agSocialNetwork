@@ -35,3 +35,7 @@
     padding: .5em 1.5em;
     font-size: 1.7rem;
 }
+
+.showHide {
+    box-shadow: 0 0 0;
+}

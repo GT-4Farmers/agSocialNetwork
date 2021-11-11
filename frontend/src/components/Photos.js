@@ -6,23 +6,21 @@ import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
 
-function Friends() {
+function Photos() {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const history = useHistory();
-    const [friendList, setFriendList] = useState([])
-    const [friendListRoutes, setFriendListRoutes] = useState([])
+    const [photos, setPhotos] = useState([]);
     let profileRoute = (window.location.pathname).substring(1)
     var pathArray = profileRoute.split('/');
     profileRoute = (pathArray[0]);
 
     useEffect(() => {
         async function fetchData() {
-            const res = await Axios.post("http://localhost:3001/profile/friends", {
+            const res = await Axios.post("http://localhost:3001/profile/photos", {
                 profileRoute: profileRoute
             })
             if (res.data.success) {
-                setFriendListRoutes(res.data.friendsListRoute[0]);
-                setFriendList(res.data.friendsList[0]);
+                setPhotos(res.data.photos)
             }
         }
         fetchData();
@@ -43,24 +41,25 @@ function Friends() {
     return (
         <div className="content">
             <div>
-                <h2> Friends </h2>
+                <h2> Photos </h2>
             </div>
             <div>
                 <button onClick={() => {history.goBack()}}>Back</button>
             </div>
             <div className="block">
-            {(!(friendList.length === 0)) ? friendList.map((val, key) => {
+            {(!(photos.length === 0)) ? photos.map((val, key) => {
                 return(
                     <div className="greyBox">
-                        <Link className="link" key={key} to={`/${friendListRoutes[key]}`}>
+                        <img src={val} alt="Cannot Display Image" />
+                        {/* <Link className="link" key={key} to={`/${friendListRoutes[key]}`}>
                             {val}
-                        </Link>
+                        </Link> */}
                     </div>
                 )
-            }) : <div>User has no friends... :(</div>}
+            }) : <div>User has no photos... :(</div>}
             </div>
         </div>
     )
 }
 
-export default Friends; 
+export default Photos; 
