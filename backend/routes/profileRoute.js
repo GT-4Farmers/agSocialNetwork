@@ -6,6 +6,7 @@ profileRoute = require("../controllers/profileController");
 profileHeaderRoute = require("../controllers/profileHeaderController");
 aboutRoute = require("../controllers/getAboutController");
 friendsRoute = require("../controllers/getFriendsController");
+editProfilePictureRoute = require("../controllers/editProfilePictureController");
 editBioRoute = require("../controllers/editBioController");
 editBirthdateRoute = require("../controllers/editBirthdateController");
 editLocationRoute = require("../controllers/editLocationController");
@@ -18,6 +19,7 @@ getPostRoute = require("../controllers/getPostController");
 deleteTextPostRoute = require("../controllers/deleteTextPostController");
 imageUploadRoute = require("../controllers/imageUploadController")
 editTextPostRoute = require("../controllers/editTextPostController");
+getPhotosRoute = require("../controllers/getPhotosController");
 
 // post requests
 router.post("/createPost/", createPostRoute.createPostController)
@@ -26,11 +28,13 @@ router.post("/deleteTextPost/", deleteTextPostRoute.deleteTextPostController)
 router.post("/imageUpload", imageUploadRoute.imageUploadController)
 router.put("/editTextPost/", editTextPostRoute.editTextPostController)
 // info requests
+router.put("/about/profilePicture", editProfilePictureRoute.editProfilePictureController)
 router.put("/about/phone", editPhoneRoute.editPhoneController)
 router.put("/about/location", editLocationRoute.editLocationController)
 router.put("/about/birthdate", editBirthdateRoute.editBirthdateController)
 router.put("/about/bio", editBioRoute.editBioController)
 router.post("/about/", aboutRoute.getAboutController)
+router.post("/photos/", getPhotosRoute.getPhotosController)
 // friends requests
 router.post("/friends/friendRequest", friendRequestRoute.friendRequestController)
 router.get("/friends/incomingRequests", incomingRequestsRoute.getFriendRequestController)
