@@ -8,8 +8,9 @@ function About() {
     const { isLoggedIn } = useContext(AuthContext);
 
     const history = useHistory();
-    let {uid} = useParams()
+    let {uid} = useParams();
     const [email, setEmail] = useState("");
+    const [profilePicture, setProfilePicture] = useState("");
     const [bio, setBio] = useState("");
     const [birthdate, setBirthdate] = useState("");
     const [location, setLocation] = useState("");
@@ -24,6 +25,7 @@ function About() {
             const res = await Axios.post("http://localhost:3001/profile/about", {
                 profileRoute: uid
             })
+            setProfilePicture(res.data.profilePicture);
             setPhone(res.data.phone);
             setEmail(res.data.email)
             setBio(res.data.bio);
@@ -59,6 +61,35 @@ function About() {
         //     setIsFriend(false);
         // }
     }, [uid]);
+
+    const editProfilePicture = () => {
+        async function fetchData() {
+            let image_loc = ""
+            if (profilePicture) {
+                console.log("here");
+                let formData = new FormData();
+                formData.append("image", profilePicture);
+                let url = "http://localhost:3001/profile/imageUpload/"
+                const res = await Axios.post(url, formData, {
+                    headers: {
+                    "Content-Type": "multipart/form-data",
+                    }
+                }).then((response) => {
+                    return response;
+                });
+                if (!res.data.success) {
+                    alert(res.data.msg);
+                } else {
+                    image_loc = res.data.image_loc
+                }
+                // console.log(res)
+            }
+            const res = await Axios.put('http://localhost:3001/profile/about/profilePicture', {
+                profilePicture: image_loc
+            })
+        }
+        fetchData();
+    };
 
     const editBio = () => {
         async function fetchData() {
@@ -97,6 +128,7 @@ function About() {
     };
 
     const handleButton = () => {
+        editProfilePicture();
         editBio();
         editBirthdate();
         editLocation();
@@ -127,6 +159,22 @@ function About() {
     <div className="content">
         <h2>About</h2>
         <ul className="greyBox">
+            <li>Profile Picture: {showElement ? null : <img src={profilePicture} alt="No Profile Picture Set" />}
+                {showElement && isProfileOwner ? <div className="imageInput">
+                {/* <label for="post_img">
+                    <FcAddImage id="icon" size={40}/>
+                </label> */}
+
+                <input 
+                    type="file"
+                    accept="image/*"
+                    id="post_img"
+                    // placeholder="Upload Image"
+                    onChange={(e) => { setProfilePicture(e.target.files[0]) }}
+                />
+                </div> : null}
+                {/* {showElement && isProfileOwner ? <BioButton /> : null} */}
+            </li>
             <li>Bio: {showElement ? null : bio}
                 {showElement && isProfileOwner ? <input
                     type="text"

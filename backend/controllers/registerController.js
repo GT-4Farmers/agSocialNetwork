@@ -40,9 +40,10 @@ exports.registerController = (req, res) => {
                     var bio = '';
                     var birthdate = '';
                     var location = '';
-                    var phone = ''
-                    var sql = `INSERT INTO Profiles (uuid, email, bio, birthdate, location, phone) VALUES (?, ?, ?, ?, ?, ?)`;
-                    var cols = [uuid, email, bio, birthdate, location, phone];
+                    var phone = '';
+                    var profilePicture = '';
+                    var sql = `INSERT INTO Profiles (uuid, email, bio, birthdate, location, phone, profilePicture) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+                    var cols = [uuid, email, bio, birthdate, location, phone, profilePicture];
                     db.query(sql, cols, function (err, data) {
                         if (err) {
                             res.json({

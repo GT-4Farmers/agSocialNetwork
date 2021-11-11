@@ -4,6 +4,7 @@ exports.getAboutController = (req, res) => {
     db.query("SELECT * FROM Profiles WHERE uuid = ?", same, (err, data) => {
         if (data) {
             res.json({
+                profilePicture: data[0].profilePicture,
                 email: data[0].email,
                 bio: data[0].bio,
                 birthdate: data[0].birthdate,

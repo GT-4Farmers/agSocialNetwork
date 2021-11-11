@@ -35,7 +35,8 @@ function Profile() {
 
   // post states
   const [postContent, setPostContent] = useState('');
-  const [postImage, setPostImage] = useState('')
+  const [postImage, setPostImage] = useState('');
+  const [profilePicture, setProfilePicture] = useState("");
   const [posts, setPosts] = useState([]);
   const [ts, setTs] = useState([]);
   const [postIDs, setPostIDs] = useState([]);
@@ -81,6 +82,11 @@ function Profile() {
       setEmail(res.data.email);
       setFirstName(res.data.firstName);
       setLastName(res.data.lastName);
+
+      const resFour = await Axios.post("http://localhost:3001/profile/about", {
+        profileRoute: profileRoute
+      })
+      setProfilePicture(resFour.data.profilePicture);
 
       const userNameRes = await Axios.get("http://localhost:3001/profile");
       setName(`${userNameRes.data.firstName} ${userNameRes.data.lastName}`);
@@ -359,6 +365,7 @@ function Profile() {
   return (
     <div className="content">
       <div className="greyBox">
+        <img src={profilePicture} alt="No Profile Picture Set" />
         <h2>{firstName} {lastName}</h2>
       </div>
 
