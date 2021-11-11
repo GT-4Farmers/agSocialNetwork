@@ -12,6 +12,7 @@ import About from './components/About';
 import Friends from './components/Friends';
 import SearchUser from './components/SearchUser';
 import Notifications from './components/Notifications';
+import Photos from './components/Photos';
 import './css/App.css';
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
           <Route path="/notifications" component={Notifications} />
           <Route path="/:uid/friends" component={Friends} />
           <Route path="/:uid/about" component={About} />
+          <Route path="/:uid/photos" component={Photos} />
           <Route path="/:uid" component={Profile} />
         </Switch>
       </AuthContext.Provider>

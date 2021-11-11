@@ -19,6 +19,7 @@ getPostRoute = require("../controllers/getPostController");
 deleteTextPostRoute = require("../controllers/deleteTextPostController");
 imageUploadRoute = require("../controllers/imageUploadController")
 editTextPostRoute = require("../controllers/editTextPostController");
+getPhotosRoute = require("../controllers/getPhotosController");
 
 // post requests
 router.post("/createPost/", createPostRoute.createPostController)
@@ -33,6 +34,7 @@ router.put("/about/location", editLocationRoute.editLocationController)
 router.put("/about/birthdate", editBirthdateRoute.editBirthdateController)
 router.put("/about/bio", editBioRoute.editBioController)
 router.post("/about/", aboutRoute.getAboutController)
+router.post("/photos/", getPhotosRoute.getPhotosController)
 // friends requests
 router.post("/friends/friendRequest", friendRequestRoute.friendRequestController)
 router.get("/friends/incomingRequests", incomingRequestsRoute.getFriendRequestController)

@@ -374,7 +374,7 @@ function Profile() {
       <div className="">
         <button onClick={() => history.push(`/${uuid}/about`)}>About</button>
         {/* <button onClick={handlePhotos}>Photos</button> */}
-        <button>Photos</button>
+        <button onClick={() => history.push(`/${uuid}/photos`)}>Photos</button>
         <button onClick={() => history.push(`/${uuid}/friends`)}>Friends</button>
         <br></br>
         {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}

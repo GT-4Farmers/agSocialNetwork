@@ -66,7 +66,6 @@ function About() {
         async function fetchData() {
             let image_loc = ""
             if (profilePicture) {
-                console.log("here");
                 let formData = new FormData();
                 formData.append("image", profilePicture);
                 let url = "http://localhost:3001/profile/imageUpload/"
@@ -128,7 +127,9 @@ function About() {
     };
 
     const handleButton = () => {
-        editProfilePicture();
+        if (profilePicture.name) {
+            editProfilePicture();
+        }
         editBio();
         editBirthdate();
         editLocation();
