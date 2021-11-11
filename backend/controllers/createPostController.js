@@ -4,8 +4,8 @@ exports.createPostController = (req, res) => {
     const uuid = require("uuid")
     
     let content = req.body.content;
-    let image_name = req.body.image_name;
-    let image_loc = req.body.image_loc;
+    let image_names = req.body.image_names;
+    let image_locs = req.body.image_locs;
     let user = req.session.userID;
     let post_id = uuid.v4();
 
@@ -20,29 +20,31 @@ exports.createPostController = (req, res) => {
             })
             return;
         } else {
-            if (!image_name) {
+            if (!image_names) {
                 res.json({
                 success: true,
                 msg:'Successfully created post with no image.'
                 })
                 return;
             } else {
-                db.query("INSERT INTO Images (File_reference, Filename, postID) VALUES (?, ?, ?)", [image_loc, image_name, post_id], (err, data, fields) => { 
-                    if (err) {
-                        res.json({
-                            success: false,
-                            msg: err
-                        })
-                        return;
-                    } else {
-                        res.json({
-                            success: true,
-                            msg:'Successfully created post with an image.'
-                        })
-                        return;
-                    }
-                            
+                for (let i = 0; i < image_names.length; i++) {
+                    db.query("INSERT INTO Images (File_reference, Filename, postID) VALUES (?, ?, ?)", [image_locs[i], image_names[i], post_id], (err, data, fields) => { 
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: err
+                            })
+                            return;
+                        }
+                                
+                    })
+                }
+                res.json({
+                    success: true,
+                    msg:'Successfully created post with image(s).'
                 })
+                return;
+                
             }
                 
         }

@@ -48,7 +48,6 @@ exports.getDashboardTextPostsController = (req, res) => {
                     commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
                 }
                 db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
-                    // console.log("did db query, starting callback")
                     if (err) {
                         res.json({
                             success: false,
@@ -56,7 +55,9 @@ exports.getDashboardTextPostsController = (req, res) => {
                         })
                     }
                 
-                    if (img_data[0]) {images.push(`${img_data[0].File_reference}`)}
+                    if (img_data[0]) {
+                        let file_references = img_data.map((x) => {return x.File_reference})
+                        images.push(file_references)}
                     else {images.push(null)}
 
                     if (images.length == data.length) {

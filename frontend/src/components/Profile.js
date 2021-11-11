@@ -36,7 +36,7 @@ function Profile() {
 
   // post states
   const [postContent, setPostContent] = useState('');
-  const [postImage, setPostImage] = useState('');
+  const [postImages, setPostImages] = useState([]);
   const [profilePicture, setProfilePicture] = useState("");
   const [posts, setPosts] = useState([]);
   const [ts, setTs] = useState([]);
@@ -203,12 +203,12 @@ function Profile() {
       alert("I said HOW ARE YOU FEELING TODAY?");
     } else {
       async function fetchData() {
-        let image_name = ""
-        let image_loc = ""
+        let image_names = ""
+        let image_locs = ""
         // console.log(postImage)
-        if (postImage) {
+        if (postImages.length > 0) {
           let formData = new FormData();
-          formData.append("image", postImage);
+          for (const image of postImages) formData.append("images", image);
           let url = "http://localhost:3001/profile/imageUpload/"
           const res = await Axios.post(url, formData, {
             headers: {
@@ -220,16 +220,16 @@ function Profile() {
           if (!res.data.success) {
             alert(res.data.msg);
           } else {
-            image_name = res.data.image_name
-            image_loc = res.data.image_loc
+            image_names = res.data.image_names
+            image_locs = res.data.image_locs
           }
           // console.log(res)
         }
         let url = "http://localhost:3001/profile/createPost/"
         const res = await Axios.post(url, {
           content: postContent,
-          image_name: image_name,
-          image_loc: image_loc
+          image_names: image_names,
+          image_locs: image_locs
         }).then((response) => {
           // console.log(response)
           return response;
@@ -241,7 +241,7 @@ function Profile() {
       fetchData();
     }
     setPostContent("");
-    setPostImage("")
+    setPostImages([])
 
     // prevents keys getting mixed if posting while editing
     setShowEdit([]);
@@ -401,9 +401,10 @@ function Profile() {
           <input 
             type="file"
             accept="image/*"
+            multiple="multiple"
             id="post_img"
             // placeholder="Upload Image"
-            onChange={(e) => { setPostImage(e.target.files[0]) }}
+            onChange={(e) => { setPostImages(e.target.files) }}
           />
         </div>
 
@@ -479,7 +480,7 @@ function Profile() {
 
                 {images[key] &&
                   <div className="postImage">
-                    <img src={images[key]} alt="Could not display image" />
+                    {images[key].map((x) => {return(<img src={x} key={key} alt="Could not display image"/>)})}
                   </div>
                 }
 
