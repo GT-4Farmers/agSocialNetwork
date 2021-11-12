@@ -121,7 +121,6 @@ function Profile() {
         }
       }
       setImages(newTempPhotos);
-      console.log(newTempPhotos);
     }
     // Event listener to close dropdown menu when clicking outside
     document.addEventListener('click', handleClickOutside);
