@@ -466,6 +466,25 @@ function Profile() {
                       onChange={(e) => handleEdit(e, key)}
                     />
                   }
+                  
+                  <div>
+                    {showEdit[key] && isProfileOwner &&
+                      <button
+                        onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
+                        Save Changes
+                      </button>}
+                    {showEdit[key] && isProfileOwner &&
+                      <button onClick={() => { handleDiscardChanges(key) }}>
+                        Discard Changes
+                      </button>}
+                  </div>    
+                   
+                  {images[key] &&
+                    <div className="postImage">
+                      <img src={images[key]} alt="Could not display image" />
+                    </div>
+                  }
+                </div>
                 
                 <div>
                   {showEdit[key] && isProfileOwner &&
@@ -485,7 +504,6 @@ function Profile() {
                   </div>
                 }
 
-                </div>
                 <div className="likes">
                   {likeCounts === undefined ? null :
                     <button
