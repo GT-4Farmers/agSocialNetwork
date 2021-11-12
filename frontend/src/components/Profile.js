@@ -409,38 +409,40 @@ function Profile() {
 
             return (
               <div className="greyBox" key={key}>
-                <Link className="link" to={`/${uuid}`}>
-                  {firstName} {lastName}
-                </Link>
+                <div className="flexContainer">
+                  <Link className="postName" to={`/${uuid}`}>
+                    {firstName} {lastName}
+                  </Link>
 
-                {isProfileOwner &&
-                  <div className="dropdownContainer" ref={ref}>
-                    {(!(showEdit[key])) &&
-                      <button
-                        className="dropdown"
-                        onClick={() => handleDropdown(key)}>
-                        ⋮
-                      </button>
-                    }
+                  {isProfileOwner &&
+                    <div className="dropdownContainer" ref={ref}>
+                      {(!(showEdit[key])) &&
+                        <button
+                          className="dropdown"
+                          onClick={() => handleDropdown(key)}>
+                          ⋮
+                        </button>
+                      }
 
-                    {openDD[key] &&
-                      <div className="dropdownOptions">
-                        <button
-                          id="edit"
-                          className="dropdownButton"
-                          onClick={() => showEditOptions(key)}>
-                          Edit
-                        </button>
-                        <button
-                          id="delete"
-                          className="dropdownButton"
-                          onClick={() => handleDeletePost(postIDs[key])}>
-                          Delete
-                        </button>
-                      </div>
-                    }
-                  </div>
-                }
+                      {openDD[key] &&
+                        <div className="dropdownOptions">
+                          <button
+                            id="edit"
+                            className="dropdownButton"
+                            onClick={() => showEditOptions(key)}>
+                            Edit
+                          </button>
+                          <button
+                            id="delete"
+                            className="dropdownButton"
+                            onClick={() => handleDeletePost(postIDs[key])}>
+                            Delete
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
 
                 <div className="postTs">{ts[key]}</div>
 
@@ -455,25 +457,25 @@ function Profile() {
                       onChange={(e) => handleEdit(e, key)}
                     />
                   }
+                  
+                  <div>
+                    {showEdit[key] && isProfileOwner &&
+                      <button
+                        onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
+                        Save Changes
+                      </button>}
+                    {showEdit[key] && isProfileOwner &&
+                      <button onClick={() => { handleDiscardChanges(key) }}>
+                        Discard Changes
+                      </button>}
+                  </div>    
+                   
+                  {images[key] &&
+                    <div className="postImage">
+                      <img src={images[key]} alt="Could not display image" />
+                    </div>
+                  }
                 </div>
-                
-                <div>
-                  {showEdit[key] && isProfileOwner &&
-                    <button
-                      onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
-                      Save Changes
-                    </button>}
-                  {showEdit[key] && isProfileOwner &&
-                    <button onClick={() => { handleDiscardChanges(key) }}>
-                      Discard Changes
-                    </button>}
-                </div>
-
-                {images[key] &&
-                  <div className="postImage">
-                    <img src={images[key]} alt="Could not display image" />
-                  </div>
-                }
 
                 <div className="likes">
                   {likeCounts === undefined ? null :
@@ -489,7 +491,7 @@ function Profile() {
                       comments.get(postIDs[key]).map((val, key => {
 
                         return (
-                          <div>
+                          <div className="postContent">
                             <Link className="link" to={`/${key.cCreatedBy}` } onClick={() => {setProfileDummy(profileDummy+1)}}>
                               {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
                               friendName[friendUuid.indexOf(key.cCreatedBy)] : name}

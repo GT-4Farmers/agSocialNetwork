@@ -207,9 +207,6 @@ function Home() {
     <>
       <div className="content">
         <h2>Home</h2>
-        <p>Hey {name}! :-D</p>
-        <p>Dashboard displayed here.</p>
-
         <div className="posts">
           {(!(posts === undefined)) ?
             ((!(friendName === undefined))) ?
@@ -217,44 +214,46 @@ function Home() {
 
                 return (
                   <div className="greyBox" key={key}>
+                   
+                    <div className="flexContainer">
 
-                    {/* Show author of each post */}
-                    <Link className="link" to={`/${authors[key]}`}>
-                      {friendName[friendUuid.indexOf(authors[key])] ?
-                        friendName[friendUuid.indexOf(authors[key])] : name}
-                    </Link>
+                      {/* Show author of each post */}
+                      <Link className="postName" to={`/${authors[key]}`}>
+                        {friendName[friendUuid.indexOf(authors[key])] ?
+                          friendName[friendUuid.indexOf(authors[key])] : name}
+                      </Link>
 
-                    {/* Show Dropdown if owner of post */}
-                    {(!friendName[friendUuid.indexOf(authors[key])]) &&
-                      <div className="dropdownContainer" ref={ref}>
-                        {(!(showEdit[key])) &&
-                          <button
-                            className="dropdown"
-                            onClick={() => handleDropdown(key)}>
-                            ⋮
-                          </button>
-                        }
-
-                        {openDD[key] &&
-                          <div className="dropdownOptions">
+                      {/* Show Dropdown if owner of post */}
+                      {(!friendName[friendUuid.indexOf(authors[key])]) &&
+                        <div className="dropdownContainer" ref={ref}>
+                          {(!(showEdit[key])) &&
                             <button
-                              id="edit"
-                              className="dropdownButton"
-                              onClick={() => showEditOptions(key)}>
-                              Edit
+                              className="dropdown"
+                              onClick={() => handleDropdown(key)}>
+                              ⋮
                             </button>
+                          }
 
-                            <button
-                              id="delete"
-                              className="dropdownButton"
-                              onClick={() => handleDeletePost(postIDs[key])}>
-                              Delete
-                            </button>
-                          </div>
-                        }
+                          {openDD[key] &&
+                            <div className="dropdownOptions">
+                              <button
+                                id="edit"
+                                className="dropdownButton"
+                                onClick={() => showEditOptions(key)}>
+                                Edit
+                              </button>
 
-                      </div>
-                    }
+                              <button
+                                id="delete"
+                                className="dropdownButton"
+                                onClick={() => handleDeletePost(postIDs[key])}>
+                                Delete
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
 
                     <div className="postTs"> {ts[key]} </div>
 
@@ -270,7 +269,6 @@ function Home() {
                           onChange={(e) => handleEdit(e, key)}
                         />
                       }
-                    </div>
 
                     <div>
                       {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
@@ -292,6 +290,7 @@ function Home() {
                         <img src={images[key]} alt="Could not display image" />
                       </div> : null
                     }
+                    </div>
 
                     <div className="likes">
                       {likeCounts === undefined ? null :
@@ -302,12 +301,14 @@ function Home() {
                         </button>}
                       {likeCounts[key]}
                     </div>
+
+
                     <div className="comments">
                       {!comments.has(postIDs[key]) ? null :
                         comments.get(postIDs[key]).map((val, key => {
 
                           return (
-                            <div>
+                            <div className="postContent">
                               <Link className="link" to={`/${key.cCreatedBy}`}>
                                 {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
                                 friendName[friendUuid.indexOf(key.cCreatedBy)] : name}

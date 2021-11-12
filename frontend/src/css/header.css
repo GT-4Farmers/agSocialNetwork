@@ -13,6 +13,10 @@
   box-shadow: 0 3px 7px rgb(83, 83, 83);
 }
   
+#logo {
+  max-width: 100%;
+}
+
 .navButton {
   display: block;
   padding: 1.5em 1.5em;

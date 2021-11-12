@@ -35,7 +35,7 @@ function Header(props) {
             <ul className="navBox">
               <li>
                 <div id="headerLogo">
-                  <img alt='Haystack Logo' src={logo}/>
+                  <img id="logo" alt='Haystack Logo' src={logo}/>
                   <h1>HAYSTACK</h1>
                 </div>
               </li>
