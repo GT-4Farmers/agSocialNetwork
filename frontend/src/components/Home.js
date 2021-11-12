@@ -63,7 +63,7 @@ function Home() {
       let dif = 0;
       for (let p = 0; p < tempPhotos.length; p++) {
         if (p > 0) {
-          if (tempPhotos[p] === newTempPhotos[p-1-dif]) {
+          if (JSON.stringify(tempPhotos[p]) === JSON.stringify((newTempPhotos[p-1-dif]))) {
             dif++;
           } else {
             newTempPhotos[p-dif] = tempPhotos[p];

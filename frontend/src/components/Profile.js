@@ -111,7 +111,7 @@ function Profile() {
       let dif = 0;
       for (let p = 0; p < tempPhotos.length; p++) {
         if (p > 0) {
-          if (tempPhotos[p] === newTempPhotos[p-1-dif]) {
+          if (JSON.stringify(tempPhotos[p]) === JSON.stringify((newTempPhotos[p-1-dif]))) {
             dif++;
           } else {
             newTempPhotos[p-dif] = tempPhotos[p];
@@ -121,6 +121,7 @@ function Profile() {
         }
       }
       setImages(newTempPhotos);
+      console.log(newTempPhotos);
     }
     // Event listener to close dropdown menu when clicking outside
     document.addEventListener('click', handleClickOutside);
@@ -481,28 +482,10 @@ function Profile() {
                    
                   {images[key] &&
                     <div className="postImage">
-                      <img src={images[key]} alt="Could not display image" />
+                      {images[key].map((x) => {return(<img src={x} key={key} alt="Could not display image"/>)})}
                     </div>
                   }
                 </div>
-                
-                <div>
-                  {showEdit[key] && isProfileOwner &&
-                    <button
-                      onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
-                      Save Changes
-                    </button>}
-                  {showEdit[key] && isProfileOwner &&
-                    <button onClick={() => { handleDiscardChanges(key) }}>
-                      Discard Changes
-                    </button>}
-                </div>
-
-                {images[key] &&
-                  <div className="postImage">
-                    {images[key].map((x) => {return(<img src={x} key={key} alt="Could not display image"/>)})}
-                  </div>
-                }
 
                 <div className="likes">
                   {likeCounts === undefined ? null :
