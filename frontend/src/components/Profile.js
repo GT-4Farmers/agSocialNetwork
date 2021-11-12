@@ -7,6 +7,7 @@ import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
 import { FaTractor } from 'react-icons/fa';
 import { FcAddImage } from 'react-icons/fc';
+import defaultProfilePic from './defaultProfilePic.jpg';
 
 function Profile() {
   // login, routing, user states
@@ -35,7 +36,8 @@ function Profile() {
 
   // post states
   const [postContent, setPostContent] = useState('');
-  const [postImage, setPostImage] = useState('')
+  const [postImages, setPostImages] = useState([]);
+  const [profilePicture, setProfilePicture] = useState("");
   const [posts, setPosts] = useState([]);
   const [ts, setTs] = useState([]);
   const [postIDs, setPostIDs] = useState([]);
@@ -81,6 +83,11 @@ function Profile() {
       setEmail(res.data.email);
       setFirstName(res.data.firstName);
       setLastName(res.data.lastName);
+
+      const resFour = await Axios.post("http://localhost:3001/profile/about", {
+        profileRoute: profileRoute
+      })
+      setProfilePicture(resFour.data.profilePicture);
 
       const userNameRes = await Axios.get("http://localhost:3001/profile");
       setName(`${userNameRes.data.firstName} ${userNameRes.data.lastName}`);
@@ -196,12 +203,12 @@ function Profile() {
       alert("I said HOW ARE YOU FEELING TODAY?");
     } else {
       async function fetchData() {
-        let image_name = ""
-        let image_loc = ""
+        let image_names = ""
+        let image_locs = ""
         // console.log(postImage)
-        if (postImage) {
+        if (postImages.length > 0) {
           let formData = new FormData();
-          formData.append("image", postImage);
+          for (const image of postImages) formData.append("images", image);
           let url = "http://localhost:3001/profile/imageUpload/"
           const res = await Axios.post(url, formData, {
             headers: {
@@ -213,16 +220,16 @@ function Profile() {
           if (!res.data.success) {
             alert(res.data.msg);
           } else {
-            image_name = res.data.image_name
-            image_loc = res.data.image_loc
+            image_names = res.data.image_names
+            image_locs = res.data.image_locs
           }
           // console.log(res)
         }
         let url = "http://localhost:3001/profile/createPost/"
         const res = await Axios.post(url, {
           content: postContent,
-          image_name: image_name,
-          image_loc: image_loc
+          image_names: image_names,
+          image_locs: image_locs
         }).then((response) => {
           // console.log(response)
           return response;
@@ -234,7 +241,7 @@ function Profile() {
       fetchData();
     }
     setPostContent("");
-    setPostImage("")
+    setPostImages([])
 
     // prevents keys getting mixed if posting while editing
     setShowEdit([]);
@@ -359,6 +366,7 @@ function Profile() {
   return (
     <div className="content">
       <div className="greyBox">
+        <img src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />
         <h2>{firstName} {lastName}</h2>
       </div>
 
@@ -367,7 +375,7 @@ function Profile() {
       <div className="">
         <button onClick={() => history.push(`/${uuid}/about`)}>About</button>
         {/* <button onClick={handlePhotos}>Photos</button> */}
-        <button>Photos</button>
+        <button onClick={() => history.push(`/${uuid}/photos`)}>Photos</button>
         <button onClick={() => history.push(`/${uuid}/friends`)}>Friends</button>
         <br></br>
         {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
@@ -393,9 +401,10 @@ function Profile() {
           <input 
             type="file"
             accept="image/*"
+            multiple="multiple"
             id="post_img"
             // placeholder="Upload Image"
-            onChange={(e) => { setPostImage(e.target.files[0]) }}
+            onChange={(e) => { setPostImages(e.target.files) }}
           />
         </div>
 
@@ -457,26 +466,26 @@ function Profile() {
                       onChange={(e) => handleEdit(e, key)}
                     />
                   }
-                  
-                  <div>
-                    {showEdit[key] && isProfileOwner &&
-                      <button
-                        onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
-                        Save Changes
-                      </button>}
-                    {showEdit[key] && isProfileOwner &&
-                      <button onClick={() => { handleDiscardChanges(key) }}>
-                        Discard Changes
-                      </button>}
-                  </div>    
-                   
-                  {images[key] &&
-                    <div className="postImage">
-                      <img src={images[key]} alt="Could not display image" />
-                    </div>
-                  }
+                
+                <div>
+                  {showEdit[key] && isProfileOwner &&
+                    <button
+                      onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
+                      Save Changes
+                    </button>}
+                  {showEdit[key] && isProfileOwner &&
+                    <button onClick={() => { handleDiscardChanges(key) }}>
+                      Discard Changes
+                    </button>}
                 </div>
 
+                {images[key] &&
+                  <div className="postImage">
+                    {images[key].map((x) => {return(<img src={x} key={key} alt="Could not display image"/>)})}
+                  </div>
+                }
+
+                </div>
                 <div className="likes">
                   {likeCounts === undefined ? null :
                     <button

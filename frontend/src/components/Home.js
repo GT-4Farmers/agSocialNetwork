@@ -287,7 +287,7 @@ function Home() {
 
                     {images[key] ?
                       <div className="postImage">
-                        <img src={images[key]} alt="Could not display image" />
+                        {images[key].map((x) => {return(<img src={x} key={key} alt="Could not display image"/>)})}
                       </div> : null
                     }
                     </div>
