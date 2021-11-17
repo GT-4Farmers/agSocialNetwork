@@ -12,13 +12,24 @@ function Forums() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const { profileDummy, setProfileDummy } = useContext(AuthContext);
   const { user, setUser } = useContext(AuthContext);
+  const { tags, setTags } = useContext(AuthContext);
   const ref = useRef(null);
 
   const [name, setName] = useState("");
   const [friendUuid, setFriendUuid] = useState([]);
   const [friendName, setFriendName] = useState([]);
 
+  // States for tags and tag popups
+  const [displayedTags, setDisplayedTags] = useState([]);
+  const [tagFilter, setTagFilter] = useState(null);
+  const [filterArray, setFilterArray] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenPost, setIsOpenPost] = useState(false);
+  const [tagFilterPost, setTagFilterPost] = useState(null);
+  const [filterArrayPost, setFilterArrayPost] = useState([]);
+
   // post states
+  const [postContent, setPostContent] = useState('');
   const [posts, setPosts] = useState([]);
   const [ts, setTs] = useState([]);
   const [images, setImages] = useState([]);
@@ -42,6 +53,11 @@ function Forums() {
     async function fetchData() {
       const res = await Axios.get("http://localhost:3001/login");
       setName(`${res.data.firstName} ${res.data.lastName}`);
+
+      const tagRes = await Axios.post("http://localhost:3001/forums/getTags", {
+        filter: tagFilter
+      });
+      setDisplayedTags(tagRes.data.tags);
 
       const resTwo = await Axios.get("http://localhost:3001/home/friends");
       setFriendUuid(resTwo.data.friendUuid);
@@ -74,6 +90,8 @@ function Forums() {
       }
       setImages(newTempPhotos);
     }
+    console.log("tagFilter: ", tagFilter);
+    console.log("filterArray: ", filterArray);
     fetchData();
 
     document.addEventListener('click', handleClickOutside);
@@ -202,12 +220,209 @@ function Forums() {
       <AuthService />
     )
   }
+  
+  // Popup for sorting
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  }
+
+  const Popup = props => {
+    return (
+      <div className="popup-box">
+        <div className="box">
+          <span className="close-icon" onClick={props.handleClose}>x</span>
+          {props.content}
+        </div>
+      </div>
+    );
+  };
+
+  // Popup for creating discussion
+  const togglePopupPost = () => {
+    setIsOpenPost(!isOpenPost);
+  }
+
+  const PopupPost = props => {
+    return (
+      <div className="popup-box">
+        <div className="box">
+          <span className="close-icon" onClick={props.handleClose}>x</span>
+          {props.content}
+        </div>
+      </div>
+    );
+  };
+
+  // Toggle tags for sorting
+  const toggleTag = (tagValue) => {
+    console.log("tagValue: ", tagValue);
+    if (filterArray.includes(tagValue)) {
+      let index = filterArray.indexOf(tagValue);
+      filterArray.splice(index, 1);
+    } else {
+      filterArray.push(tagValue);
+    }
+    console.log("tagFilter in tag function: ", tagFilter);
+  }
+
+  // Update tag filter for sorting
+  const updateFilter = () => {
+    console.log("updating")
+    setTagFilter(filterArray);
+    setNetwork(network + 1);
+  }
+
+  // Clear filter for sorting
+  const clearFilter = () => {
+    console.log("clearing");
+    setFilterArray([]);
+  }
+
+  // Toggle tags for creating discussion
+  const toggleTagPost = (tagValuePost) => {
+    console.log("tagValue: ", tagValuePost);
+    if (filterArrayPost.includes(tagValuePost)) {
+      let index = filterArrayPost.indexOf(tagValuePost);
+      filterArrayPost.splice(index, 1);
+    } else {
+      filterArrayPost.push(tagValuePost);
+    }
+    console.log("tagFilter in tag function: ", tagFilterPost);
+  }
+
+  // Update tag filter for creating discussion
+  const updateFilterPost = () => {
+    console.log("updating")
+    setTagFilterPost(filterArrayPost);
+    setNetwork(network + 1);
+  }
+
+  const handlePostContent = () => {
+    // will users be allowed to post image without text?
+    if (postContent === "") {
+      alert("Please title what you want to discuss.");
+    } else if (!tagFilterPost) {
+      alert("Please select at least one tag.");
+    } else {
+      async function fetchData() {
+        let url = "http://localhost:3001/forums/createDiscussion"
+        const res = await Axios.post(url, {
+          content: postContent,
+          tags: tagFilterPost
+        }).then((response) => {
+          // console.log(response)
+          return response;
+        });
+        if (!res.data.success) {
+          alert(res.data.msg);
+        }
+      }
+      fetchData();
+    }
+    setPostContent("");
+    setFilterArrayPost([]);
+    setTagFilterPost(null);
+
+    // prevents keys getting mixed if posting while editing
+    setShowEdit([]);
+    setOpenDD([]);
+
+    setNetwork(network + 1);
+  }
 
   return (
     <>
       <div className="content">
         <h2>Forums</h2>
         <p>Forum posts displayed here.</p>
+
+        <button onClick={togglePopup}>Sort Discussions By Tag</button>
+
+        {isOpen && <Popup
+          content={<>
+          <div className="tags">
+            <p>Select tags to sort by:</p>
+            {tags.map((val, key) => {
+              return (
+                <button className="tagButton" key={key} onClick={() => toggleTag(val)}>
+                  {val}
+                </button>
+              )
+            })}
+          </div>
+          <div className="greyBox">
+            <button onClick = {() => updateFilter()}>
+              Confirm
+            </button>
+            <button onClick = {() => clearFilter()}>
+              Clear Filter
+            </button>
+          </div>
+          </>}
+          handleClose={togglePopup}
+        />}
+
+        {tagFilter && tagFilter.length > 0 ?
+          <div className="greyBox">
+            <p>
+              Filtering by: {tagFilter.map((val, key) => {
+                return (
+                  <h3 className="inline-flex">{val}</h3>
+                )
+              })}
+            </p>
+          </div> :
+        null}
+
+        <div className="greyBox">
+          <input className="postInput"
+            type="text"
+            autoComplete="off"
+            maxLength="500"
+            id="post"
+            placeholder="What do you want to talk about?"
+            value={postContent ? postContent : ""}
+            onChange={(e) => { setPostContent(e.target.value) }}
+          />
+
+          {/* JSX for popups for discussion creation */}
+          {isOpenPost && <PopupPost
+            content={<>
+            <div className="tags">
+              <p>Please select up to three tags:</p>
+              {tags.map((val, key) => {
+                return (
+                  <button className="tagButton" key={key} onClick={() => toggleTagPost(val)}>
+                    {val}
+                  </button>
+                )
+              })}
+            </div>
+            <div className="greyBox">
+              <button onClick = {() => updateFilterPost()}>
+                Confirm
+              </button>
+            </div>
+            </>}
+            handleClose={togglePopupPost}
+          />}
+
+          {tagFilterPost && tagFilterPost.length > 0 ?
+            <div className="greyBox">
+              <p>
+                {tagFilterPost.map((val, key) => {
+                  return (
+                    <h3 className="inline-flex">{val}</h3>
+                  )
+                })}
+              </p>
+            </div> :
+          null}
+
+          <button onClick={handlePostContent}>Create</button>
+
+          <button onClick = {togglePopupPost}>Tag</button>
+        </div>
 
         <div className="posts">
           {(!(posts === undefined)) ?
@@ -337,7 +552,7 @@ function Forums() {
                 )
               }) :
               <div className="greyBox">
-                No posts yet
+                No discussions yet
               </div> : null}
         </div>
       </div>

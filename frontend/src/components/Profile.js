@@ -400,7 +400,7 @@ function Profile() {
         </div>
 
         <button onClick={handlePostContent}>Post</button>
-        </div> : null}
+      </div> : null}
 
       <div className="posts">
         {(!(posts === undefined)) &&

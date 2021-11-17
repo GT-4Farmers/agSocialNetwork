@@ -2,6 +2,7 @@ exports.getPostController = (req, res) => {
     const db = require("../server");
     
     let user = req.body.profileRoute;
+    let signedInUser = req.session.userID;
     let loggedIn = req.session.userID;
 
     //var sql = 'SELECT Likes.uuid, createdAt, content, Posts.postID, likeCount FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy = ? ORDER BY createdAt DESC';
@@ -36,7 +37,7 @@ exports.getPostController = (req, res) => {
                     timestamps.push(`${data[key].postCreatedAt}`);
                     posts.push(`${data[key].postContent}`);
                     likeCounts.push(`${data[key].likeCount}`);
-                    if (data[key].uuid === user) {
+                    if (data[key].uuid === signedInUser) {
                         liked.push("green");
                     } else {
                         liked.push("black");
