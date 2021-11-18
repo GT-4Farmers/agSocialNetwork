@@ -3,11 +3,10 @@ exports.getPostController = (req, res) => {
     
     let user = req.body.profileRoute;
     let signedInUser = req.session.userID;
-    let loggedIn = req.session.userID;
 
     //var sql = 'SELECT Likes.uuid, createdAt, content, Posts.postID, likeCount FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy = ? ORDER BY createdAt DESC';
     var sql = 'SELECT Posts.postID, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE Posts.createdBy = ? ORDER BY Posts.createdAt DESC, Comments.createdAt ASC';
-    var input = [loggedIn, user];
+    var input = [signedInUser, user];
 
     db.query(sql, input, (err, data, fields) => {
         if (data[0]) {

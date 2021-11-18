@@ -8,12 +8,6 @@ exports.createDiscussionController = (req, res) => {
     let tag2 = req.body.tags[1] ? req.body.tags[1] : null;
     let tag3 = req.body.tags[2] ? req.body.tags[2] : null;
     let discussion_id = uuid.v4();
-    console.log("discussion_id: ", discussion_id);
-    console.log("user: ", user);
-    console.log("content: ", content);
-    console.log("tag1: ", tag1);
-    console.log("tag2: ", tag2);
-    console.log("tag3: ", tag3);
 
     var sql = `INSERT INTO Discussions (discussionID, createdBy, content, tag_1, tag_2, tag_3) VALUES (?, ?, ?, ?, ?, ?)`;
     var input = [discussion_id, user, content, tag1, tag2, tag3];

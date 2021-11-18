@@ -14,10 +14,9 @@ exports.getTagsController = (req, res) => {
         }
         sql += filter;
     }
-    console.log(filter);
-    console.log(sql);
+    // console.log(filter);
+    // console.log(sql);
     db.query(sql, (err, data) => {
-        console.log(data);
         if (data[0]) {
             let tags = [];
             for (const key in data) {

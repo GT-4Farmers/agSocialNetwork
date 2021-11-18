@@ -5,19 +5,15 @@ import { useHistory } from 'react-router';
 import '../css/App.css';
 import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
-import { FaTractor } from 'react-icons/fa';
 
 function Forums() {
   let history = useHistory();
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
-  const { profileDummy, setProfileDummy } = useContext(AuthContext);
   const { user, setUser } = useContext(AuthContext);
   const { tags, setTags } = useContext(AuthContext);
   const ref = useRef(null);
 
   const [name, setName] = useState("");
-  const [friendUuid, setFriendUuid] = useState([]);
-  const [friendName, setFriendName] = useState([]);
 
   // States for tags and tag popups
   const [displayedTags, setDisplayedTags] = useState([]);
@@ -29,27 +25,19 @@ function Forums() {
   const [filterArrayPost, setFilterArrayPost] = useState([]);
 
   // post states
-  const [postContent, setPostContent] = useState('');
-  const [posts, setPosts] = useState([]);
+  const [discussionContent, setDiscussionContent] = useState('');
+  const [discussions, setDiscussions] = useState([]);
   const [ts, setTs] = useState([]);
-  const [images, setImages] = useState([]);
-  const [postIDs, setPostIDs] = useState([]);
+  const [discussionIDs, setDiscussionIDs] = useState([]);
   const [authors, setAuthors] = useState([]);
-  // const [likers, setLikers] = useState([]);
-  const [likeCounts, setLikeCounts] = useState([]);
-  const [liked, setLiked] = useState([]);
+  const [authorNames, setAuthorsNames] = useState([]);
   const [openDD, setOpenDD] = useState([]);
   const [showEdit, setShowEdit] = useState([]);
-  const [commentContent, setCommentContent] = useState('');
-  const [comments, setComments] = useState(new Map());
 
   // network state
   const [network, setNetwork] = useState(0);
 
   useEffect(() => {
-    let temp = {};
-    let tempPhotos = [];
-    let newTempPhotos = [];
     async function fetchData() {
       const res = await Axios.get("http://localhost:3001/login");
       setName(`${res.data.firstName} ${res.data.lastName}`);
@@ -59,39 +47,15 @@ function Forums() {
       });
       setDisplayedTags(tagRes.data.tags);
 
-      const resTwo = await Axios.get("http://localhost:3001/home/friends");
-      setFriendUuid(resTwo.data.friendUuid);
-      setFriendName(resTwo.data.friendName);
-
-      const resThree = await Axios.post("http://localhost:3001/home", {
-        friendUuid: resTwo.data.friendUuid
+      const resThree = await Axios.post("http://localhost:3001/forums/getDiscussions", {
+        displayedTags: tagRes.data.tags
       });
       setAuthors(resThree.data.authors);
-      setPosts(resThree.data.posts);
+      setDiscussions(resThree.data.discussions);
       setTs(resThree.data.timestamps);
-      setPostIDs(resThree.data.postIDs);
-      setLikeCounts(resThree.data.likeCounts);
-      setLiked(resThree.data.liked);
-      temp = new Map(JSON.parse(resThree.data.comments));
-      setComments(temp);
-
-      tempPhotos = resThree.data.images;
-      let dif = 0;
-      for (let p = 0; p < tempPhotos.length; p++) {
-        if (p > 0) {
-          if (tempPhotos[p] === newTempPhotos[p-1-dif]) {
-            dif++;
-          } else {
-            newTempPhotos[p-dif] = tempPhotos[p];
-          }
-        } else {
-          newTempPhotos[p] = tempPhotos[p];
-        }
-      }
-      setImages(newTempPhotos);
+      setDiscussionIDs(resThree.data.discussionIDs);
+      setAuthorsNames(resThree.data.authorNames);
     }
-    console.log("tagFilter: ", tagFilter);
-    console.log("filterArray: ", filterArray);
     fetchData();
 
     document.addEventListener('click', handleClickOutside);
@@ -108,34 +72,7 @@ function Forums() {
     }
   };
 
-  const handleCommentContent = (postIDToComment) => {
-    // will users be allowed to post image without text?
-    if (commentContent === "") {
-      alert("Please write a comment!");
-    } else {
-      async function fetchData() {
-        let url = "http://localhost:3001/home/createComment"
-        const res = await Axios.post(url, {
-          postID: postIDToComment,
-          content: commentContent
-        }).then((response) => {
-          return response;
-        });
-        if (!res.data.success) {
-          alert(res.data.msg);
-        }
-      }
-      fetchData();
-    }
-    setCommentContent("");
-
-    // prevents keys getting mixed if posting while editing
-    setShowEdit([]);
-    setOpenDD([]);
-
-    setNetwork(network + 1);
-  }
-
+  // TODO: MODIFY THIS TO DELETE DISCUSSIONS AND NOT POSTS
   const handleDeletePost = (deletedPost) => {
     async function fetchData() {
       const res = await Axios.post('http://localhost:3001/profile/deleteTextPost', {
@@ -160,6 +97,7 @@ function Forums() {
     setOpenDD(newOpenDD);
   }
 
+  // TODO: MODIFY THIS TO EDIT DISCUSSIONS AND NOT POSTS
   const handleEditPost = (editedPost, content, key) => {
     async function fetchData() {
       const res = await Axios.put('http://localhost:3001/profile/editTextPost', {
@@ -186,33 +124,22 @@ function Forums() {
   }
 
   const handleEdit = (e, key) => {
-    let newPosts = [...posts];
-    newPosts[key] = e.target.value;
-    setPosts(newPosts);
+    let newDiscussions = [...discussions];
+    newDiscussions[key] = e.target.value;
+    setDiscussions(newDiscussions);
   }
 
   const handleDiscardChanges = (key) => {
     async function fetchData() {
-      const res = await Axios.post("http://localhost:3001/home", {
-        friendUuid: friendUuid
+      const res = await Axios.post("http://localhost:3001/forums/getDiscussions", {
+        displayedTags: displayedTags
       });
-      setPosts(res.data.posts);
+      setDiscussions(res.data.discussions);
     }
     fetchData();
 
     showEditOptions(key);
     setOpenDD([]);
-  }
-
-  const updateLikeCount = (postID, postOwner) => {
-    async function fetchData() {
-      const res = await Axios.post('http://localhost:3001/home/updateLikeCount', {
-        postID: postID,
-        postOwner: postOwner
-      });
-    }
-    fetchData();
-    setNetwork(network + 1);
   }
 
   if (!isLoggedIn) {
@@ -297,17 +224,19 @@ function Forums() {
     setNetwork(network + 1);
   }
 
-  const handlePostContent = () => {
+  const handleDiscussionContent = () => {
     // will users be allowed to post image without text?
-    if (postContent === "") {
+    if (discussionContent === "") {
       alert("Please title what you want to discuss.");
     } else if (!tagFilterPost) {
       alert("Please select at least one tag.");
+    } else if (tagFilterPost.length > 3) {
+      alert("Too many tags selected.");
     } else {
       async function fetchData() {
         let url = "http://localhost:3001/forums/createDiscussion"
         const res = await Axios.post(url, {
-          content: postContent,
+          content: discussionContent,
           tags: tagFilterPost
         }).then((response) => {
           // console.log(response)
@@ -318,10 +247,10 @@ function Forums() {
         }
       }
       fetchData();
+      setDiscussionContent("");
+      setFilterArrayPost([]);
+      setTagFilterPost(null);
     }
-    setPostContent("");
-    setFilterArrayPost([]);
-    setTagFilterPost(null);
 
     // prevents keys getting mixed if posting while editing
     setShowEdit([]);
@@ -333,7 +262,7 @@ function Forums() {
   return (
     <>
       <div className="content">
-        <h2>Forums</h2>
+        <h2>Forum</h2>
         <p>Forum posts displayed here.</p>
 
         <button onClick={togglePopup}>Sort Discussions By Tag</button>
@@ -381,15 +310,15 @@ function Forums() {
             maxLength="500"
             id="post"
             placeholder="What do you want to talk about?"
-            value={postContent ? postContent : ""}
-            onChange={(e) => { setPostContent(e.target.value) }}
+            value={discussionContent ? discussionContent : ""}
+            onChange={(e) => { setDiscussionContent(e.target.value) }}
           />
 
           {/* JSX for popups for discussion creation */}
           {isOpenPost && <PopupPost
             content={<>
             <div className="tags">
-              <p>Please select up to three tags:</p>
+              <p>Please select one to three tags for your discussion:</p>
               {tags.map((val, key) => {
                 return (
                   <button className="tagButton" key={key} onClick={() => toggleTagPost(val)}>
@@ -419,141 +348,95 @@ function Forums() {
             </div> :
           null}
 
-          <button onClick={handlePostContent}>Create</button>
+          <button onClick={handleDiscussionContent}>Create</button>
 
           <button onClick = {togglePopupPost}>Tag</button>
         </div>
 
         <div className="posts">
-          {(!(posts === undefined)) ?
-            ((!(friendName === undefined))) ?
-              posts.map((val, key) => {
+          {(!(discussions === undefined)) ?
+            discussions.map((val, key) => {
 
-                return (
-                  <div className="greyBox" key={key}>
+              return (
+                <div className="greyBox" key={key}>
 
-                    {/* Show author of each post */}
-                    <Link className="link" to={`/${authors[key]}`}>
-                      {friendName[friendUuid.indexOf(authors[key])] ?
-                        friendName[friendUuid.indexOf(authors[key])] : name}
-                    </Link>
+                  <h2>
+                    {val}
+                  </h2>
 
-                    {/* Show Dropdown if owner of post */}
-                    {(!friendName[friendUuid.indexOf(authors[key])]) &&
-                      <div className="dropdownContainer" ref={ref}>
-                        {(!(showEdit[key])) &&
-                          <button
-                            className="dropdown"
-                            onClick={() => handleDropdown(key)}>
-                            ⋮
-                          </button>
-                        }
+                  {/* Show author of each post */}
+                  <Link className="link" to={`/${authors[key]}`}>
+                    {authorNames[key]}
+                  </Link>
 
-                        {openDD[key] &&
-                          <div className="dropdownOptions">
-                            <button
-                              id="edit"
-                              className="dropdownButton"
-                              onClick={() => showEditOptions(key)}>
-                              Edit
-                            </button>
-
-                            <button
-                              id="delete"
-                              className="dropdownButton"
-                              onClick={() => handleDeletePost(postIDs[key])}>
-                              Delete
-                            </button>
-                          </div>
-                        }
-
-                      </div>
-                    }
-
-                    <div className="postTs"> {ts[key]} </div>
-
-                    <div className="postContent">
-                      {(!(showEdit[key])) && val}
-
-                      {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
-                        <input
-                          type="text"
-                          id="content"
-                          autoComplete="off"
-                          value={val ? val : ""}
-                          onChange={(e) => handleEdit(e, key)}
-                        />
-                      }
-                    </div>
-
-                    <div>
-                      {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                  {/* Show Dropdown if owner of post */}
+                  {/* {(!friendName[friendUuid.indexOf(authors[key])]) &&
+                    <div className="dropdownContainer" ref={ref}>
+                      {(!(showEdit[key])) &&
                         <button
-                          onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
-                          Save Changes
+                          className="dropdown"
+                          onClick={() => handleDropdown(key)}>
+                          ⋮
                         </button>
                       }
 
-                      {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
-                        <button
-                          onClick={() => { handleDiscardChanges(key) }}>
-                          Discard Changes
-                        </button>}
-                    </div>
+                      {openDD[key] &&
+                        <div className="dropdownOptions">
+                          <button
+                            id="edit"
+                            className="dropdownButton"
+                            onClick={() => showEditOptions(key)}>
+                            Edit
+                          </button>
 
-                    {images[key] ?
-                      <div className="postImage">
-                        <img src={images[key]} alt="Could not display image" />
-                      </div> : null
+                          <button
+                            id="delete"
+                            className="dropdownButton"
+                            onClick={() => handleDeletePost(discussionIDs[key])}>
+                            Delete
+                          </button>
+                        </div>
+                      }
+
+                    </div>
+                  } */}
+
+                  <div className="postTs"> {ts[key]} </div>
+
+                  {/* <div className="postContent">
+                    {(!(showEdit[key])) && val}
+
+                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                      <input
+                        type="text"
+                        id="content"
+                        autoComplete="off"
+                        value={val ? val : ""}
+                        onChange={(e) => handleEdit(e, key)}
+                      />
+                    }
+                  </div> */}
+
+                  {/* <div>
+                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                      <button
+                        onClick={() => { handleEditPost(discussionIDs[key], discussions[key], key) }}>
+                        Save Changes
+                      </button>
                     }
 
-                    <div className="likes">
-                      {likeCounts === undefined ? null :
-                        <button
-                          className="tractor"
-                          onClick={() => { updateLikeCount(postIDs[key], authors[key]) }}>
-                          <FaTractor color={liked[key]} />
-                        </button>}
-                      {likeCounts[key]}
-                    </div>
-                    <div className="comments">
-                      {!comments.has(postIDs[key]) ? null :
-                        comments.get(postIDs[key]).map((val, key => {
-
-                          return (
-                            <div>
-                              <Link className="link" to={`/${key.cCreatedBy}`}>
-                                {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
-                                friendName[friendUuid.indexOf(key.cCreatedBy)] : name}
-                              </Link>
-                              
-                              <div className="commentTs"> {key.cCreatedAt} </div>
-                              
-                              <div className="commentContent"> {key.cContent}</div>
-                            </div>
-                          )
-                        }))
-                      }
-                    </div>
-                    <div>
-                      <input className="commentInput"
-                        type="text"
-                        autoComplete="off"
-                        maxLength="500"
-                        id="comment"
-                        placeholder="Write a comment."
-                        value={commentContent ? commentContent : ""}
-                        onChange={(e) => { setCommentContent(e.target.value) }}
-                      />
-                      <button onClick={() => handleCommentContent(postIDs[key])}>Comment</button>
-                    </div>
-
-                  </div>
-                )
-              }) :
-              <div className="greyBox">
-                No discussions yet
-              </div> : null}
+                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                      <button
+                        onClick={() => { handleDiscardChanges(key) }}>
+                        Discard Changes
+                      </button>}
+                  </div> */}
+                </div>
+              )
+            }) :
+            <div className="greyBox">
+              No discussions yet
+            </div>}
         </div>
       </div>
     </>

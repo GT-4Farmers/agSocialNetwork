@@ -67,7 +67,7 @@ function Header(props) {
               <li>
                 <div className="navButton">
                   <Link to='/forums'>
-                  <GoCommentDiscussion /> Forums</Link>
+                  <GoCommentDiscussion /> Forum</Link>
                 </div>
               </li>
               <li>
