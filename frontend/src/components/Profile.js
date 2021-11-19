@@ -365,21 +365,21 @@ function Profile() {
 
   return (
     <div className="content">
-      <div className="greyBox">
-        <img src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />
-        <h2>{firstName} {lastName}</h2>
+      <div className="profileHeader">
+        <img className="profilePic" src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />
+        <div>
+          <div className="greyBox"><h2>{firstName} {lastName}</h2></div>
+          <div className="row">
+            <button onClick={() => history.push(`/${uuid}/about`)}>About</button>
+            {/* <button onClick={handlePhotos}>Photos</button> */}
+            <button onClick={() => history.push(`/${uuid}/photos`)}>Photos</button>
+            <button onClick={() => history.push(`/${uuid}/friends`)}>Friends</button>
+            <br></br>
+            {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
+          </div>
+        </div>
       </div>
 
-      {/* <h3>This is a user's bio.</h3> */}
-
-      <div className="">
-        <button onClick={() => history.push(`/${uuid}/about`)}>About</button>
-        {/* <button onClick={handlePhotos}>Photos</button> */}
-        <button onClick={() => history.push(`/${uuid}/photos`)}>Photos</button>
-        <button onClick={() => history.push(`/${uuid}/friends`)}>Friends</button>
-        <br></br>
-        {(interactFR || isProfileOwner || isFriend) ? null : isPending ? <FRSent /> : reversePending ? <ReversePendingNotif /> : <SendFR />}
-      </div>
 
       {isProfileOwner ?
       <div className="greyBox">

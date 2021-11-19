@@ -49,7 +49,7 @@ header {
 }
 
 img {
-  max-width: 50%;
+  max-width: 48.5%;
   height: auto;
 }
 
@@ -82,7 +82,7 @@ h1 {
 h2 {
   color: #166C3B;
   text-align: left;
-  padding: 0em;
+  padding: auto;
   font-size: 2.5em;
   margin: 0% 0;
 }
@@ -310,6 +310,20 @@ button:hover {
 
 .greyBox .likes {
   font-size: 1.7rem;
+}
+
+.profileHeader{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.profilePic {
+  max-width: 11vw;
+  height: 11vw;
+  background-position:center;
+  border-radius: 100%;
+  margin: 1%;
 }
 
 .imageInput>input {
