@@ -14,6 +14,7 @@ import SearchUser from './components/SearchUser';
 import Notifications from './components/Notifications';
 import Forums from './components/Forums';
 import Discussion from './components/Discussion';
+import Photos from './components/Photos';
 import './css/App.css';
 
 function App() {
