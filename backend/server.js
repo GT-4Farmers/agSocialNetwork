@@ -56,6 +56,7 @@ app.use("/register/", require("./routes/registerRoute"));
 app.use("/login/", require("./routes/loginRoute"));
 app.use("/logout/", require("./routes/logoutRoute"));
 app.use("/searchUser/", require("./routes/searchUserRoute"));
+app.use("/forums/", require("./routes/forumRoute"));
 
 app.listen(3001, () => {
     console.log("Backend running on port 3001");

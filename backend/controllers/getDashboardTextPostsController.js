@@ -24,15 +24,12 @@ exports.getDashboardTextPostsController = (req, res) => {
             for (const key in data) {
                 if (postIDs[postIDs.length - 1] !== data[key].postID) {
                     //console.log(commentsMap);
-                    if (`${data[key].commentContent}` !== null) {
-                        if (commentsPost.length !== 0) {
-                            commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
-                            commentsPost = [];
-                        } else {
-                            if (data[key].commentContent !== null) {
-                                commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
-                            }
-                        }
+                    if (commentsPost.length !== 0) {
+                        commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
+                        commentsPost = [];
+                    }
+                    if (data[key].commentContent !== null) {
+                        commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
                     }
                     postIDs.push(`${data[key].postID}`);
                     authors.push(`${data[key].postCreatedBy}`);
@@ -79,8 +76,10 @@ exports.getDashboardTextPostsController = (req, res) => {
                     // console.log(images)
                     
                 });
-
-                
+            }
+            if (commentsPost.length !== 0) {
+                commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
+                commentsPost = [];
             }
         } else {
             let b = JSON.stringify([...commentsMap]);

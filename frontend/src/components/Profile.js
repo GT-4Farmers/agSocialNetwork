@@ -259,7 +259,8 @@ function Profile() {
         let url = "http://localhost:3001/home/createComment"
         const res = await Axios.post(url, {
           postID: postIDToComment,
-          content: commentContent
+          content: commentContent,
+          isDiscussion: 0
         }).then((response) => {
           return response;
         });
@@ -409,7 +410,7 @@ function Profile() {
         </div>
 
         <button onClick={handlePostContent}>Post</button>
-        </div> : null}
+      </div> : null}
 
       <div className="posts">
         {(!(posts === undefined)) &&

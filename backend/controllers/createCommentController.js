@@ -6,8 +6,18 @@ exports.createCommentController = (req, res) => {
     let user = req.session.userID;
     let post_id = req.body.postID;
     let reply_id = uuid.v4();
+    let isDiscussion = req.body.isDiscussion;
+    let table = "";
+    let typeOfPost = "";
+    if (isDiscussion == 1) {
+        table += "DiscussionComments"
+        typeOfPost += "PagePostID"
+    } else {
+        table += "Comments"
+        typeOfPost += "postID"
+    }
 
-    var sql = `INSERT INTO Comments (postID, replyID, createdBy, content) VALUES (?, ?, ?, ?)`;
+    var sql = `INSERT INTO ` + table + ` (` + typeOfPost + `, replyID, createdBy, content) VALUES (?, ?, ?, ?)`;
     var input = [post_id, reply_id, user, content];
 
     db.query(sql, input, (err, data) => {
