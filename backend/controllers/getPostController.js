@@ -22,15 +22,12 @@ exports.getPostController = (req, res) => {
             for (const key in data) {
                 if (postIDs[postIDs.length - 1] !== data[key].postID) {
                     //console.log(commentsMap);
-                    if (`${data[key].commentContent}` !== null) {
-                        if (commentsPost.length !== 0) {
-                            commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
-                            commentsPost = [];
-                        } else {
-                            if (data[key].commentContent !== null) {
-                                commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
-                            }
-                        }
+                    if (commentsPost.length !== 0) {
+                        commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
+                        commentsPost = [];
+                    }
+                    if (data[key].commentContent !== null) {
+                        commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
                     }
                     postIDs.push(`${data[key].postID}`);
                     timestamps.push(`${data[key].postCreatedAt}`);
@@ -73,7 +70,10 @@ exports.getPostController = (req, res) => {
                     
                 });
             }
-            
+            if (commentsPost.length !== 0) {
+                commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
+                commentsPost = [];
+            }
         } else {
             res.json({
                 success: false,

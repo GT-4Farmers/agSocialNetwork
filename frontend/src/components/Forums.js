@@ -31,6 +31,7 @@ function Forums() {
   const [discussionIDs, setDiscussionIDs] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [authorNames, setAuthorsNames] = useState([]);
+  const [tagsOnPost, setTagsOnPost] = useState([]);
   const [openDD, setOpenDD] = useState([]);
   const [showEdit, setShowEdit] = useState([]);
 
@@ -55,6 +56,7 @@ function Forums() {
       setTs(resThree.data.timestamps);
       setDiscussionIDs(resThree.data.discussionIDs);
       setAuthorsNames(resThree.data.authorNames);
+      setTagsOnPost(resThree.data.tags);
     }
     fetchData();
 
@@ -182,44 +184,37 @@ function Forums() {
 
   // Toggle tags for sorting
   const toggleTag = (tagValue) => {
-    console.log("tagValue: ", tagValue);
     if (filterArray.includes(tagValue)) {
       let index = filterArray.indexOf(tagValue);
       filterArray.splice(index, 1);
     } else {
       filterArray.push(tagValue);
     }
-    console.log("tagFilter in tag function: ", tagFilter);
   }
 
   // Update tag filter for sorting
   const updateFilter = () => {
-    console.log("updating")
     setTagFilter(filterArray);
     setNetwork(network + 1);
   }
 
   // Clear filter for sorting
   const clearFilter = () => {
-    console.log("clearing");
     setFilterArray([]);
   }
 
   // Toggle tags for creating discussion
   const toggleTagPost = (tagValuePost) => {
-    console.log("tagValue: ", tagValuePost);
     if (filterArrayPost.includes(tagValuePost)) {
       let index = filterArrayPost.indexOf(tagValuePost);
       filterArrayPost.splice(index, 1);
     } else {
       filterArrayPost.push(tagValuePost);
     }
-    console.log("tagFilter in tag function: ", tagFilterPost);
   }
 
   // Update tag filter for creating discussion
   const updateFilterPost = () => {
-    console.log("updating")
     setTagFilterPost(filterArrayPost);
     setNetwork(network + 1);
   }
@@ -360,9 +355,18 @@ function Forums() {
               return (
                 <div className="greyBox" key={key}>
 
-                  <h2>
-                    {val}
-                  </h2>
+                  <div>
+                    <Link className="discussionName" to={`/forums/${discussionIDs[key]}`}>
+                      {val}
+                    </Link>
+                  </div>
+                  <div>
+                    {tagsOnPost[key] ? tagsOnPost[key].map((val2, key2) => {
+                      return (
+                        <h3 className="inline-flex">{tagsOnPost[key][key2]}</h3>
+                      )
+                    }) : null}
+                  </div>
 
                   {/* Show author of each post */}
                   <Link className="link" to={`/${authors[key]}`}>
@@ -370,7 +374,7 @@ function Forums() {
                   </Link>
 
                   {/* Show Dropdown if owner of post */}
-                  {/* {(!friendName[friendUuid.indexOf(authors[key])]) &&
+                  {/* {authors[key] == user &&
                     <div className="dropdownContainer" ref={ref}>
                       {(!(showEdit[key])) &&
                         <button
@@ -404,9 +408,8 @@ function Forums() {
                   <div className="postTs"> {ts[key]} </div>
 
                   {/* <div className="postContent">
-                    {(!(showEdit[key])) && val}
 
-                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                    {showEdit[key] && (authors[key] == user) &&
                       <input
                         type="text"
                         id="content"
@@ -415,17 +418,17 @@ function Forums() {
                         onChange={(e) => handleEdit(e, key)}
                       />
                     }
-                  </div> */}
+                  </div>
 
-                  {/* <div>
-                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                  <div>
+                    {showEdit[key] && (authors[key] == user) &&
                       <button
                         onClick={() => { handleEditPost(discussionIDs[key], discussions[key], key) }}>
                         Save Changes
                       </button>
                     }
 
-                    {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
+                    {showEdit[key] && (authors[key] == user) &&
                       <button
                         onClick={() => { handleDiscardChanges(key) }}>
                         Discard Changes

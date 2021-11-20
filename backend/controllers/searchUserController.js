@@ -3,7 +3,7 @@ exports.searchUserController = (req, res) => {
     
     let userToSearch = (req.body.userToSearch === "" ? "" : '%' + req.body.userToSearch + '%');
 
-    db.query('SELECT * FROM `Users` WHERE (LOWER(`firstName`) LIKE LOWER(?)) OR (LOWER(`lastName`) LIKE LOWER(?)) LIMIT 5', [userToSearch, userToSearch], (err, data, fields) => {
+    db.query('SELECT * FROM `Users` WHERE (LOWER(`firstName`) LIKE LOWER(?)) OR (LOWER(`lastName`) LIKE LOWER(?)) LIMIT 10', [userToSearch, userToSearch], (err, data, fields) => {
 
         // if at least 1 user exists
         if (data[0]) {

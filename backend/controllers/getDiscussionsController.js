@@ -21,6 +21,8 @@ exports.getDiscussionsController = (req, res) => {
             let discussionIDs = [];
             let authors = [];
             let authorNames = [];
+            let tags = [];
+            let subTags = [];
 
             for (const key in data) {
                 if (discussionIDs[discussionIDs.length - 1] !== data[key].discussionID) {
@@ -28,7 +30,16 @@ exports.getDiscussionsController = (req, res) => {
                     timestamps.push(`${data[key].createdAt}`);
                     discussions.push(`${data[key].content}`);
                     authors.push(`${data[key].createdBy}`);
-                    authorNames.push(`${data[key].firstName} ${data[key].lastName}`)
+                    authorNames.push(`${data[key].firstName} ${data[key].lastName}`);
+                    subTags.push(`${data[key].tag_1}`)
+                    if (data[key].tag_2) {
+                        subTags.push(`${data[key].tag_2}`);
+                        if (data[key].tag_3) {
+                            subTags.push(`${data[key].tag_3}`);
+                        }
+                    }
+                    tags.push(subTags);
+                    subTags = [];
                 }
             }
             res.json({
@@ -36,19 +47,19 @@ exports.getDiscussionsController = (req, res) => {
                 timestamps: timestamps,
                 discussionIDs: discussionIDs,
                 authors: authors,
-                authorNames: authorNames
+                authorNames: authorNames,
+                tags: tags
             })
         } else {
             res.json({
                 success: false,
                 msg:'An error occurred while getting discussions.',
-                posts: [],
+                discussions: [],
                 timestamps: [],
-                postIDs: [],
-                images: [],
-                likeCounts: [],
-                liked: [],
-                comments: ''
+                discussionIDs: [],
+                authors: [],
+                authorNames: [],
+                tags: []
             })
         }
     });

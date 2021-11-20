@@ -7,7 +7,7 @@ import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
 import { FaTractor } from 'react-icons/fa';
 
-function Home() {
+function Discussion() {
   let history = useHistory();
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const { profileDummy, setProfileDummy } = useContext(AuthContext);
@@ -15,42 +15,46 @@ function Home() {
   const ref = useRef(null);
 
   const [name, setName] = useState("");
-  const [friendUuid, setFriendUuid] = useState([]);
-  const [friendName, setFriendName] = useState([]);
 
   // post states
   const [posts, setPosts] = useState([]);
   const [ts, setTs] = useState([]);
-  const [images, setImages] = useState([]);
   const [postIDs, setPostIDs] = useState([]);
   const [authors, setAuthors] = useState([]);
+  const [authorNames, setAuthorNames] = useState([]);
   // const [likers, setLikers] = useState([]);
   const [likeCounts, setLikeCounts] = useState([]);
   const [liked, setLiked] = useState([]);
   const [openDD, setOpenDD] = useState([]);
   const [showEdit, setShowEdit] = useState([]);
+  const [postContent, setPostContent] = useState('');
   const [commentContent, setCommentContent] = useState('');
+  const [commentNames, setCommentNames] = useState(new Map());
   const [comments, setComments] = useState(new Map());
+  const [title, setTitle] = useState('');
+  const [mainAuthor, setMainAuthor] = useState('');
+  const [mainAuthorRoute, setMainAuthorRoute] = useState('');
+  const [mainTime, setMainTime] = useState(null);
+
+  let discussionRoute = (window.location.pathname).substring(1)
+  var pathArray = discussionRoute.split('/');
+  discussionRoute = (pathArray[1]);
 
   // network state
   const [network, setNetwork] = useState(0);
 
   useEffect(() => {
     let temp = {};
-    let tempPhotos = [];
-    let newTempPhotos = [];
+    let temp3 = {};
     async function fetchData() {
       const res = await Axios.get("http://localhost:3001/login");
       setName(`${res.data.firstName} ${res.data.lastName}`);
 
-      const resTwo = await Axios.get("http://localhost:3001/home/friends");
-      setFriendUuid(resTwo.data.friendUuid);
-      setFriendName(resTwo.data.friendName);
-
-      const resThree = await Axios.post("http://localhost:3001/home", {
-        friendUuid: resTwo.data.friendUuid
+      const resThree = await Axios.post("http://localhost:3001/forums/getDiscussionPage", {
+        discussionID: discussionRoute
       });
       setAuthors(resThree.data.authors);
+      setAuthorNames(resThree.data.authorNames);
       setPosts(resThree.data.posts);
       setTs(resThree.data.timestamps);
       setPostIDs(resThree.data.postIDs);
@@ -58,21 +62,17 @@ function Home() {
       setLiked(resThree.data.liked);
       temp = new Map(JSON.parse(resThree.data.comments));
       setComments(temp);
+      setTitle(resThree.data.dContent);
+      setMainAuthor(resThree.data.dCreatedBy);
+      setMainAuthorRoute(resThree.data.dCreatedByRoute);
+      setMainTime(resThree.data.dCreatedAt);
 
-      tempPhotos = resThree.data.images;
-      let dif = 0;
-      for (let p = 0; p < tempPhotos.length; p++) {
-        if (p > 0) {
-          if (tempPhotos[p] === newTempPhotos[p-1-dif]) {
-            dif++;
-          } else {
-            newTempPhotos[p-dif] = tempPhotos[p];
-          }
-        } else {
-          newTempPhotos[p] = tempPhotos[p];
-        }
-      }
-      setImages(newTempPhotos);
+
+      const resNames = await Axios.post("http://localhost:3001/forums/getNames", {
+        profileRoute: resThree.data.cAuthors
+      });
+      temp3 = new Map(JSON.parse(resNames.data.nameMap));
+      setCommentNames(temp3);
     }
     fetchData();
 
@@ -90,6 +90,35 @@ function Home() {
     }
   };
 
+  const handlePostContent = () => {
+    // will users be allowed to post image without text?
+    if (postContent === "") {
+      alert("Please fill in what you would like to post.");
+    } else {
+      async function fetchData() {
+        let url = "http://localhost:3001/forums/createPost"
+        const res = await Axios.post(url, {
+          content: postContent,
+          discussionID: discussionRoute
+        }).then((response) => {
+          // console.log(response)
+          return response;
+        });
+        if (!res.data.success) {
+          alert(res.data.msg);
+        }
+      }
+      fetchData();
+      setPostContent("");
+    }
+
+    // prevents keys getting mixed if posting while editing
+    setShowEdit([]);
+    setOpenDD([]);
+
+    setNetwork(network + 1);
+  }
+
   const handleCommentContent = (postIDToComment) => {
     // will users be allowed to post image without text?
     if (commentContent === "") {
@@ -100,7 +129,7 @@ function Home() {
         const res = await Axios.post(url, {
           postID: postIDToComment,
           content: commentContent,
-          isDiscussion: 0
+          isDiscussion: 1
         }).then((response) => {
           return response;
         });
@@ -143,6 +172,7 @@ function Home() {
     setOpenDD(newOpenDD);
   }
 
+  //TODO: CHANGE FOR DISCUSSION USE
   const handleEditPost = (editedPost, content, key) => {
     async function fetchData() {
       const res = await Axios.put('http://localhost:3001/profile/editTextPost', {
@@ -161,6 +191,7 @@ function Home() {
     setNetwork(network + 1);
   }
 
+
   const showEditOptions = (key) => {
     let newShowEdit = [...showEdit];
     newShowEdit[key] = (!newShowEdit[key]);
@@ -176,8 +207,8 @@ function Home() {
 
   const handleDiscardChanges = (key) => {
     async function fetchData() {
-      const res = await Axios.post("http://localhost:3001/home", {
-        friendUuid: friendUuid
+      const res = await Axios.post("http://localhost:3001/forums/getDiscussionPage", {
+        discussionID: discussionRoute
       });
       setPosts(res.data.posts);
     }
@@ -187,9 +218,10 @@ function Home() {
     setOpenDD([]);
   }
 
+  // CHANGE FOR FORUM PURPOSES
   const updateLikeCount = (postID, postOwner) => {
     async function fetchData() {
-      const res = await Axios.post('http://localhost:3001/home/updateLikeCount', {
+      const res = await Axios.post('http://localhost:3001/forums/updateLikeCount', {
         postID: postID,
         postOwner: postOwner
       });
@@ -207,13 +239,26 @@ function Home() {
   return (
     <>
       <div className="content">
-        <h2>Home</h2>
-        <p>Hey {name}! :-D</p>
-        <p>Dashboard displayed here.</p>
+        <h2>{title}</h2>
+        <Link to={`/${mainAuthorRoute}`} className="link">{mainAuthor}</Link>
+        <div className="postTs">{mainTime}</div>
+
+        <div className="greyBox">
+          <input className="postInput"
+            type="text"
+            autoComplete="off"
+            maxLength="500"
+            id="post"
+            placeholder="What do you want to talk about?"
+            value={postContent ? postContent : ""}
+            onChange={(e) => { setPostContent(e.target.value) }}
+          />
+
+          <button onClick={handlePostContent}>Post</button>
+        </div>
 
         <div className="posts">
-          {(!(posts === undefined)) ?
-            ((!(friendName === undefined))) ?
+          {(!(posts.length == 0)) ?
               posts.map((val, key) => {
 
                 return (
@@ -221,12 +266,11 @@ function Home() {
 
                     {/* Show author of each post */}
                     <Link className="link" to={`/${authors[key]}`}>
-                      {friendName[friendUuid.indexOf(authors[key])] ?
-                        friendName[friendUuid.indexOf(authors[key])] : name}
+                      {authorNames[key]}
                     </Link>
 
                     {/* Show Dropdown if owner of post */}
-                    {(!friendName[friendUuid.indexOf(authors[key])]) &&
+                    {/* {(!friendName[friendUuid.indexOf(authors[key])]) &&
                       <div className="dropdownContainer" ref={ref}>
                         {(!(showEdit[key])) &&
                           <button
@@ -255,11 +299,15 @@ function Home() {
                         }
 
                       </div>
-                    }
+                    } */}
 
                     <div className="postTs"> {ts[key]} </div>
 
                     <div className="postContent">
+                      {val}
+                    </div>
+
+                    {/* <div className="postContent">
                       {(!(showEdit[key])) && val}
 
                       {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
@@ -271,9 +319,9 @@ function Home() {
                           onChange={(e) => handleEdit(e, key)}
                         />
                       }
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                       {showEdit[key] && (!friendName[friendUuid.indexOf(authors[key])]) &&
                         <button
                           onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
@@ -286,13 +334,7 @@ function Home() {
                           onClick={() => { handleDiscardChanges(key) }}>
                           Discard Changes
                         </button>}
-                    </div>
-
-                    {images[key] ?
-                      <div className="postImage">
-                        <img src={images[key]} alt="Could not display image" />
-                      </div> : null
-                    }
+                    </div> */}
 
                     <div className="likes">
                       {likeCounts === undefined ? null :
@@ -306,12 +348,12 @@ function Home() {
                     <div className="comments">
                       {!comments.has(postIDs[key]) ? null :
                         comments.get(postIDs[key]).map((val, key => {
-
+                          let route = key.cCreatedBy
+                          // key.cCreatedBy = commentAuthors[i][j];
                           return (
                             <div>
-                              <Link className="link" to={`/${key.cCreatedBy}`}>
-                                {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
-                                friendName[friendUuid.indexOf(key.cCreatedBy)] : name}
+                              <Link className="link" to={`/${route}`}>
+                                {commentNames.get(route)}
                               </Link>
                               {/* {(!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
                               <div className="dropdownContainer" ref={ref}>
@@ -396,11 +438,11 @@ function Home() {
               }) :
               <div className="greyBox">
                 No posts yet
-              </div> : null}
+              </div>}
         </div>
       </div>
     </>
   )
 }
 
-export default Home
+export default Discussion

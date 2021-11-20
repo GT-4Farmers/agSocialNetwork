@@ -5,13 +5,14 @@ exports.createTextPostController = (req, res) => {
     let content = req.body.content;
     let user = req.session.userID;
     let postID = uuidv4();
+    let discussionID = req.body.discussionID
 
     // console.log(content);
     // console.log(user);
     // console.log(postID);
 
-    var sql = `INSERT INTO Posts (postID, createdBy, content) VALUES (?, ?, ?)`;
-    var input = [postID, user, content];
+    var sql = `INSERT INTO Pages (DiscussionID, PagePostID, createdBy, content) VALUES (?, ?, ?, ?)`;
+    var input = [discussionID, postID, user, content];
 
     db.query(sql, input, (err, data) => {
         if (err) {
