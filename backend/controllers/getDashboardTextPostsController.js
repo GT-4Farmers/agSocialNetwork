@@ -7,7 +7,7 @@ exports.getDashboardTextPostsController = (req, res) => {
     req.body.friendUuid.forEach(friend => friendUuid.push(friend));
 
     //var sql = 'SELECT Posts.postID, Posts.createdBy, createdAt, content, likeCount, Likes.uuid FROM Posts left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE createdBy IN (?) ORDER BY createdAt DESC';
-    var sql = 'SELECT Posts.postID, Posts.createdBy AS postCreatedBy, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? WHERE Posts.createdBy IN (?) ORDER BY Posts.createdAt DESC, Comments.createdAt ASC';
+    var sql = 'SELECT Posts.postID, Posts.createdBy AS postCreatedBy, Posts.createdAt AS postCreatedAt, Posts.content AS postContent, likeCount, Likes.uuid, Comments.replyID, Comments.content AS commentContent, Comments.createdAt AS commentCreatedAt, Comments.createdBy AS commentCreatedBy, Profiles.profilePicture FROM Posts left join Comments ON Posts.postID = Comments.postID left join Likes ON Posts.postID = Likes.postID AND uuid = ? left join Profiles ON Profiles.uuid = Posts.createdBy WHERE Posts.createdBy IN (?) ORDER BY Posts.createdAt DESC, Comments.createdAt ASC';
     var input = [user, friendUuid];
     db.query(sql, input, (err, data, fields) => {
         if (data) {
@@ -20,10 +20,10 @@ exports.getDashboardTextPostsController = (req, res) => {
             let liked = [];
             let commentsPost = [];
             let commentsMap = new Map();
+            let profilePictures = [];
             
             for (const key in data) {
                 if (postIDs[postIDs.length - 1] !== data[key].postID) {
-                    //console.log(commentsMap);
                     if (commentsPost.length !== 0) {
                         commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
                         commentsPost = [];
@@ -36,6 +36,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                     timestamps.push(`${data[key].postCreatedAt}`);
                     posts.push(`${data[key].postContent}`);
                     likeCounts.push(`${data[key].likeCount}`);
+                    profilePictures.push(`${data[key].profilePicture}`)
                     if (data[key].uuid === user) {
                         liked.push("green");
                     } else {
@@ -69,7 +70,8 @@ exports.getDashboardTextPostsController = (req, res) => {
                             authors: authors,
                             likeCounts: likeCounts,
                             liked: liked,
-                            comments: temp
+                            comments: temp,
+                            profilePictures: profilePictures
                         })
                     }
 
@@ -93,7 +95,8 @@ exports.getDashboardTextPostsController = (req, res) => {
                 authors: [],
                 likeCounts: [],
                 liked: [],
-                comments: b
+                comments: b,
+                profilePictures: []
             })
         }
     });

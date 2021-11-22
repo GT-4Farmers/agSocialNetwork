@@ -6,6 +6,7 @@ import '../css/App.css';
 import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
 import { FaTractor } from 'react-icons/fa';
+import defaultProfilePic from './defaultProfilePic.jpg';
 
 function Home() {
   let history = useHistory();
@@ -31,6 +32,7 @@ function Home() {
   const [showEdit, setShowEdit] = useState([]);
   const [commentContent, setCommentContent] = useState('');
   const [comments, setComments] = useState(new Map());
+  const [profilePictures, setProfilePictures] = useState([]);
 
   // network state
   const [network, setNetwork] = useState(0);
@@ -58,6 +60,7 @@ function Home() {
       setLiked(resThree.data.liked);
       temp = new Map(JSON.parse(resThree.data.comments));
       setComments(temp);
+      setProfilePictures(resThree.data.profilePictures);
 
       tempPhotos = resThree.data.images;
       let dif = 0;
@@ -73,6 +76,11 @@ function Home() {
         }
       }
       setImages(newTempPhotos);
+      
+      // const profPicRes = await Axios.post("http://localhost:3001/home/getProfilePictures", {
+      //   friendUuid = resTwo.data.friendUuid
+      // });
+      // setProfilePictures(profPicRes.data.pics);
     }
     fetchData();
 
@@ -217,6 +225,8 @@ function Home() {
                   <div className="greyBox" key={key}>
                    
                     <div className="flexContainer">
+
+                      <img className="profilePicPost" src={profilePictures[key] ? profilePictures[key] : defaultProfilePic} alt="Could not display image" />
 
                       {/* Show author of each post */}
                       <Link className="postName" to={`/${authors[key]}`}>

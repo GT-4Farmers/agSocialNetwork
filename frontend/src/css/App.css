@@ -343,6 +343,14 @@ button:hover {
   margin: 1%;
 }
 
+.profilePicPost {
+  max-width: 11vw;
+  height: 11vw;
+  background-position:center;
+  border-radius: 100%;
+  margin: 1%;
+}
+
 .imageInput>input {
   box-sizing: border-box;
   outline: none;
