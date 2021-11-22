@@ -68,11 +68,11 @@ function About() {
             let image_loc = ""
             if (profilePicture) {
                 let formData = new FormData();
-                formData.append("image", profilePicture);
+                formData.append("images", profilePicture);
                 let url = "http://localhost:3001/profile/imageUpload/"
                 const res = await Axios.post(url, formData, {
                     headers: {
-                    "Content-Type": "multipart/form-data",
+                        "Content-Type": "multipart/form-data",
                     }
                 }).then((response) => {
                     return response;
@@ -80,7 +80,7 @@ function About() {
                 if (!res.data.success) {
                     alert(res.data.msg);
                 } else {
-                    image_loc = res.data.image_loc
+                    image_loc = res.data.image_locs
                 }
                 // console.log(res)
             }
