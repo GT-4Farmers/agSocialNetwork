@@ -57,6 +57,7 @@ function Profile() {
   // network state
   const [network, setNetwork] = useState(0);
 
+  // UseEffect that renders all of the parts of the Profile component.
   useEffect(() => {
     // When coming from another person's profile, reset all states
     if (uuid !== uid) {
@@ -71,10 +72,12 @@ function Profile() {
     let tempPhotos = [];
     let newTempPhotos = [];
 
+    // Grabs the uuid of the user whose profile is being viewed
     let profileRoute = (window.location.pathname).substring(1)
     var pathArray = profileRoute.split('/');
     profileRoute = (pathArray[0]);
 
+    // Fetches relevent profile data for the profile page being viewed
     async function fetchData() {
       const res = await Axios.post("http://localhost:3001/profile", {
         profileRoute: profileRoute
@@ -84,18 +87,22 @@ function Profile() {
       setFirstName(res.data.firstName);
       setLastName(res.data.lastName);
 
+      // Fetches the profile picture of the profile being viewed
       const resFour = await Axios.post("http://localhost:3001/profile/about", {
         profileRoute: profileRoute
       })
       setProfilePicture(resFour.data.profilePicture);
 
+      // Fetches the name of the user whose profile is being viewed
       const userNameRes = await Axios.get("http://localhost:3001/profile");
       setName(`${userNameRes.data.firstName} ${userNameRes.data.lastName}`);
 
+      // Fetches all of the friends of the user whose profile is being viewed
       const resThree = await Axios.get("http://localhost:3001/home/friends");
       setFriendUuid(resThree.data.friendUuid);
       setFriendName(resThree.data.friendName);
 
+      // Fetches all of the post information that will be displayed on the user's profile
       const resTwo = await Axios.post("http://localhost:3001/profile/getPosts", {
         profileRoute: profileRoute
       });
@@ -107,6 +114,7 @@ function Profile() {
       temp = new Map(JSON.parse(resTwo.data.comments));
       setComments(temp);
 
+      // Adjusts images array to account for multiple returns from sql
       tempPhotos = resTwo.data.images;
       let dif = 0;
       for (let p = 0; p < tempPhotos.length; p++) {
@@ -122,6 +130,7 @@ function Profile() {
       }
       setImages(newTempPhotos);
     }
+
     // Event listener to close dropdown menu when clicking outside
     document.addEventListener('click', handleClickOutside);
 
@@ -134,6 +143,7 @@ function Profile() {
     };
   }, [profileDummy, network]);
 
+  // Will close dropdown menu when clicking outside of the dropdown menu
   const handleClickOutside = (e) => {
     if (ref.current && !e.target.classList.contains('dropdown')) {
       // close dropdown
@@ -141,6 +151,8 @@ function Profile() {
     }
   };
 
+  // Runs a check to see if the user viewing the profile is friends with user whose
+  // profile is being viewed
   const checkButton = () => {
     async function fetchData() {
       const res = await Axios.post("http://localhost:3001/profile/uuidIsUserOrFriend", {
@@ -154,6 +166,7 @@ function Profile() {
     fetchData();
   }
 
+  // Handles sending a friend request to the user whose profile is being viewed
   const handleFriendRequest = () => {
     async function fetchData() {
       const res = await Axios.post("http://localhost:3001/profile/friends/friendRequest", {
@@ -165,6 +178,7 @@ function Profile() {
     fetchData();
   }
 
+  // Handles accepting the friend request from the user whose profile is being viewed
   const handleAccept = (route) => {
     async function fetchData() {
       const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
@@ -176,6 +190,7 @@ function Profile() {
     fetchData();
   }
 
+  // Handles rejecting the friend request from the user whose profile is being viewed
   const handleReject = (route) => {
     async function fetchData() {
       const res = Axios.post("http://localhost:3001/profile/friends/friendRequest", {
@@ -187,6 +202,7 @@ function Profile() {
     fetchData();
   }
 
+  // Handles displaying friend request information depending on the status of the friend request
   const ReversePendingNotif = () =>
     <div className="greyBox">
       <p className="inline">{firstName} {lastName} has sent you a friend request.</p>
@@ -197,17 +213,17 @@ function Profile() {
   const FRSent = () => <button onClick={handleFriendRequest}>Friend Request Sent</button>;
   const SendFR = () => <button onClick={handleFriendRequest}>Send Friend Request</button>;
 
+  // Takes the inputted text and possible attached images and creates a post with that information
   const handlePostContent = () => {
-    // will users be allowed to post image without text?
     if (postContent === "") {
       alert("I said HOW ARE YOU FEELING TODAY?");
     } else {
       async function fetchData() {
         let image_names = ""
         let image_locs = ""
-        // console.log(postImage)
         if (postImages.length > 0) {
           let formData = new FormData();
+          // Loops through attached images and uploads each one to S3 image bucket
           for (const image of postImages) formData.append("images", image);
           let url = "http://localhost:3001/profile/imageUpload/"
           const res = await Axios.post(url, formData, {
@@ -223,15 +239,14 @@ function Profile() {
             image_names = res.data.image_names
             image_locs = res.data.image_locs
           }
-          // console.log(res)
         }
+        // Makes call to create the post with the content and image information
         let url = "http://localhost:3001/profile/createPost/"
         const res = await Axios.post(url, {
           content: postContent,
           image_names: image_names,
           image_locs: image_locs
         }).then((response) => {
-          // console.log(response)
           return response;
         });
         if (!res.data.success) {
@@ -250,8 +265,8 @@ function Profile() {
     setNetwork(network + 1);
   }
 
+  // Handles creating a comment for a post
   const handleCommentContent = (postIDToComment) => {
-    // will users be allowed to post image without text?
     if (commentContent === "") {
       alert("Please write a comment!");
     } else {
@@ -279,6 +294,7 @@ function Profile() {
     setNetwork(network + 1);
   }
 
+  // Handles deleting a post
   const handleDeletePost = (deletedPost) => {
     async function fetchData() {
       const res = await Axios.post('http://localhost:3001/profile/deleteTextPost', {
@@ -296,6 +312,7 @@ function Profile() {
     setNetwork(network + 1);
   }
 
+  // Updates the like count of a post
   const updateLikeCount = (postID, postOwner) => {
     async function fetchData() {
       const res = await Axios.post('http://localhost:3001/home/updateLikeCount', {
@@ -308,12 +325,14 @@ function Profile() {
     setNetwork(network + 1);
   }
 
+  // Handles opening the edit dropdown menu for a post
   const handleDropdown = (key) => {
     let newOpenDD = [...openDD];
     newOpenDD[key] = (!newOpenDD[key]);
     setOpenDD(newOpenDD);
   }
 
+  // Handles editing a posts text
   const handleEditPost = (editedPost, content, key) => {
     async function fetchData() {
       const res = await Axios.put('http://localhost:3001/profile/editTextPost', {
@@ -339,12 +358,14 @@ function Profile() {
     handleDropdown(key);
   }
 
+  // Saves the changes for editing a post
   const handleEdit = (e, key) => {
     let newPosts = [...posts];
     newPosts[key] = e.target.value;
     setPosts(newPosts);
   }
 
+  // Discards the changes made while editing a post
   const handleDiscardChanges = (key) => {
     async function fetchData() {
       const res = await Axios.post("http://localhost:3001/profile/getTextPosts", {
@@ -358,12 +379,14 @@ function Profile() {
     setOpenDD([]);
   }
 
+  // Runs a check to see if the user is still logged in to Haystack
   if (!isLoggedIn) {
     return (
       <AuthService />
     )
   }
 
+  // JSX code for how the webpage will be rendered
   return (
     <div className="content">
       <div className="profileHeader">
@@ -404,7 +427,6 @@ function Profile() {
             accept="image/*"
             multiple="multiple"
             id="post_img"
-            // placeholder="Upload Image"
             onChange={(e) => { setPostImages(e.target.files) }}
           />
         </div>
@@ -506,65 +528,7 @@ function Profile() {
                               {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
                               friendName[friendUuid.indexOf(key.cCreatedBy)] : name}
                             </Link>
-                            {/* {(!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
-                            <div className="dropdownContainer" ref={ref}>
-                              {(!(showEdit[key])) &&
-                                <button
-                                  className="dropdown"
-                                  onClick={() => handleDropdown(key)}>
-                                  ⋮
-                                </button>
-                              }
-
-                              {openDD[key] &&
-                                <div className="dropdownOptions">
-                                  <button
-                                    id="edit"
-                                    className="dropdownButton"
-                                    onClick={() => showEditOptions(key)}>
-                                    Edit
-                                  </button>
-
-                                  <button
-                                    id="delete"
-                                    className="dropdownButton"
-                                    onClick={() => handleDeletePost(postIDs[key])}>
-                                    Delete
-                                  </button>
-                                </div>
-                              }
-
-                            </div>
-                            } */}
                             <div className="commentTs"> {key.cCreatedAt} </div>
-                            {/* <div className="postContent">
-                              {(!(showEdit[key])) && val}
-
-                              {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
-                                <input
-                                  type="text"
-                                  id="content"
-                                  autoComplete="off"
-                                  value={val ? val : ""}
-                                  onChange={(e) => handleEdit(e, key)}
-                                />
-                              }
-                            </div>
-
-                            <div>
-                              {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
-                                <button
-                                  onClick={() => { handleEditPost(postIDs[key], posts[key], key) }}>
-                                  Save Changes
-                                </button>
-                              }
-
-                              {showEdit[key] && (!friendName[friendUuid.indexOf(key.cCreatedBy)]) &&
-                                <button
-                                  onClick={() => { handleDiscardChanges(key) }}>
-                                  Discard Changes
-                                </button>}
-                            </div> */}
                             <div className="commentContent"> {key.cContent}</div>
                           </div>
                         )

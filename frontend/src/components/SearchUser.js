@@ -27,12 +27,6 @@ function SearchUser() {
     }
     fetchData();
 
-    // unmount cleanup
-    // return () => {
-    //   setFoundUser([]);
-    //   setFoundUserIds([]);
-    // }
-
   }, [userToSearch]);
 
   const handleChange = (e) => {
