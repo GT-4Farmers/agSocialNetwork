@@ -6,7 +6,6 @@ import AuthContext from '../states/AuthContext';
 import AuthService from '../auth/AuthService';
 import { Link } from "react-router-dom";
 import { FaTractor } from 'react-icons/fa';
-import { FcAddImage } from 'react-icons/fc';
 import defaultProfilePic from './defaultProfilePic.jpg';
 
 function Profile() {
@@ -57,7 +56,7 @@ function Profile() {
   // network state
   const [network, setNetwork] = useState(0);
 
-  // UseEffect that renders all of the parts of the Profile component.
+  // UseEffect that grabs all of the necessary information for the Profile component.
   useEffect(() => {
     // When coming from another person's profile, reset all states
     if (uuid !== uid) {
