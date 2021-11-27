@@ -77,6 +77,11 @@ function Profile() {
     profileRoute = (pathArray[0]);
 
     // Fetches relevent profile data for the profile page being viewed
+    //////////////////////////////////////////////////////////////////
+    ////////////////////// THIS AXIOS CALL ///////////////////////////
+    // HERE IS WHERE profileController.js IS BEING CALLED ////////////
+    //////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////
     async function fetchData() {
       const res = await Axios.post("http://localhost:3001/profile", {
         profileRoute: profileRoute
@@ -240,6 +245,11 @@ function Profile() {
           }
         }
         // Makes call to create the post with the content and image information
+        //////////////////////////////////////////////////////////////////
+        ////////////////////// THIS AXIOS CALL ///////////////////////////
+        // HERE IS WHERE createPostController.js IS BEING CALLED /////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
         let url = "http://localhost:3001/profile/createPost/"
         const res = await Axios.post(url, {
           content: postContent,
