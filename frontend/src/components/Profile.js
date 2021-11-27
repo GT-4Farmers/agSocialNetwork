@@ -397,6 +397,7 @@ function Profile() {
 
   // JSX code for how the webpage will be rendered
   return (
+    // Defines upper portion of profile including users name, profile picture, profile tabs, and posting interface
     <div className="content">
       <div className="profileHeader">
         <img className="profilePic" src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />
@@ -404,7 +405,6 @@ function Profile() {
           <div className="greyBox"><h2>{firstName} {lastName}</h2></div>
           <div className="row">
             <button onClick={() => history.push(`/${uuid}/about`)}>About</button>
-            {/* <button onClick={handlePhotos}>Photos</button> */}
             <button onClick={() => history.push(`/${uuid}/photos`)}>Photos</button>
             <button onClick={() => history.push(`/${uuid}/friends`)}>Friends</button>
             <br></br>
@@ -413,7 +413,7 @@ function Profile() {
         </div>
       </div>
 
-
+      {/* Checks if on logged in users profile or not to determine if posting interface should be displayed */}
       {isProfileOwner ?
       <div className="greyBox">
         <input className="postInput"
@@ -426,11 +426,8 @@ function Profile() {
           onChange={(e) => { setPostContent(e.target.value) }}
         />
 
+        {/* Image Input of Posting Interface */}
         <div className="imageInput">
-          {/* <label for="post_img">
-            <FcAddImage id="icon" size={40}/>
-          </label> */}
-
           <input 
             type="file"
             accept="image/*"
@@ -440,9 +437,11 @@ function Profile() {
           />
         </div>
 
+        {/* Post Button of Posting Interface */}
         <button onClick={handlePostContent}>Post</button>
       </div> : null}
 
+      {/* Loops through all of the fetched posts made by the user and constructs posts from that information */}
       <div className="posts">
         {(!(posts === undefined)) &&
           (!(posts.length === 0)) ?
@@ -451,10 +450,12 @@ function Profile() {
             return (
               <div className="greyBox" key={key}>
                 <div className="flexContainer">
+                  {/* Renders name of the author of post (in the case of profile.js, the profile owner) */}
                   <Link className="postName" to={`/${uuid}`}>
                     {firstName} {lastName}
                   </Link>
 
+                  {/* Renders the edit post dropdown menu if the logged in user's profile is being viewed */}
                   {isProfileOwner &&
                     <div className="dropdownContainer" ref={ref}>
                       {(!(showEdit[key])) &&
@@ -485,8 +486,10 @@ function Profile() {
                   }
                 </div>
 
+                {/* Renders the timestamp of each post */}
                 <div className="postTs">{ts[key]}</div>
 
+                {/* Renders the text content of the post */}
                 <div className="postContent">
                   {(!(showEdit[key])) && val}
                   {showEdit[key] && isProfileOwner &&
@@ -498,7 +501,8 @@ function Profile() {
                       onChange={(e) => handleEdit(e, key)}
                     />
                   }
-                  
+
+                  {/* Edit post menu for users editing their own profiles posts */}
                   <div>
                     {showEdit[key] && isProfileOwner &&
                       <button
@@ -510,7 +514,8 @@ function Profile() {
                         Discard Changes
                       </button>}
                   </div>    
-                   
+
+                  {/* Renders Image(s) of the post */}
                   {images[key] &&
                     <div className="postImage">
                       {images[key].map((x) => {return(<img src={x} key={key} alt="Could not display image"/>)})}
@@ -518,6 +523,7 @@ function Profile() {
                   }
                 </div>
 
+                {/* Renders the like count as well as the like tractor graphic for each post */}
                 <div className="likes">
                   {likeCounts === undefined ? null :
                     <button
@@ -527,17 +533,25 @@ function Profile() {
                     </button>}
                   {likeCounts[key]}
                 </div>
+
+                {/* Loops through all of the comments for each post and maps relevent information to each comment */}
                 <div className="comments">
                     {!comments.has(postIDs[key]) ? null :
                       comments.get(postIDs[key]).map((val, key => {
 
                         return (
                           <div className="postContent">
+
+                            {/* Renders the name of the author for each comment */}
                             <Link className="link" to={`/${key.cCreatedBy}` } onClick={() => {setProfileDummy(profileDummy+1)}}>
                               {friendName[friendUuid.indexOf(key.cCreatedBy)] ?
                               friendName[friendUuid.indexOf(key.cCreatedBy)] : name}
                             </Link>
+
+                            {/* Renders the timestamp of each comment */}
                             <div className="commentTs"> {key.cCreatedAt} </div>
+
+                            {/* Renders the text content of each comment */}
                             <div className="commentContent"> {key.cContent}</div>
                           </div>
                         )
@@ -545,6 +559,7 @@ function Profile() {
                     }
                   </div>
                 <div>
+                  {/* Renders the commenting input interface for each post */}
                   <input className="commentInput"
                     type="text"
                     autoComplete="off"
@@ -559,6 +574,7 @@ function Profile() {
               </div>
             )
           }) :
+          // If no posts have been made by the user yet, display "No posts yet"
           <div className="greyBox">
             No posts yet
           </div>
