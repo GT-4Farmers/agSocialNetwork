@@ -3,20 +3,50 @@ exports.deleteTextPostController = (req, res) => {
     
     let deletedPostID = req.body.deletedPostID;
 
-    var sql = 'DELETE FROM `Posts` WHERE postID = ?';
     var input = [deletedPostID];
+    
+    var sql = 'DELETE FROM `Comments` WHERE postID = ?';
+    db.query(sql, input, (err, data, fields) => {
+        if (err) {
+            res.json({
+                success: false,
+                msg: 'An error occurred while deleting comments from post.'
+            })
+        }
+    });
 
+    var sql = 'DELETE FROM `Images` WHERE postID = ?';
+    db.query(sql, input, (err, data, fields) => {
+        if (err) {
+            res.json({
+                success: false,
+                msg: 'An error occurred while deleting images from post.'
+            })
+        }
+    });
+
+    var sql = 'DELETE FROM `Likes` WHERE postID = ?';
+    db.query(sql, input, (err, data, fields) => {
+        if (err) {
+            res.json({
+                success: false,
+                msg: 'An error occurred while deleting likes from post.'
+            })
+        }
+    });
+
+    var sql = 'DELETE FROM `Posts` WHERE postID = ?';
     db.query(sql, input, (err, data, fields) => {
         if (err) {
             res.json({
                 success: false,
                 msg: 'An error occurred while deleting post.'
             })
-        } else {
-            res.json({
-                success: true,
-                msg:'Successfully deleted post.'
-            })
         }
     });
+
+    res.json({
+        success: true,
+        msg:'Successfully deleted post.'
+    })
 }
