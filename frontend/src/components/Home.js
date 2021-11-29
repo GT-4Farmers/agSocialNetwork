@@ -63,19 +63,7 @@ function Home() {
       setProfilePictures(resThree.data.profilePictures);
 
       tempPhotos = resThree.data.images;
-      let dif = 0;
-      for (let p = 0; p < tempPhotos.length; p++) {
-        if (p > 0) {
-          if (JSON.stringify(tempPhotos[p]) === JSON.stringify((newTempPhotos[p-1-dif]))) {
-            dif++;
-          } else {
-            newTempPhotos[p-dif] = tempPhotos[p];
-          }
-        } else {
-          newTempPhotos[p] = tempPhotos[p];
-        }
-      }
-      setImages(newTempPhotos);
+      setImages(tempPhotos);
       
       // const profPicRes = await Axios.post("http://localhost:3001/home/getProfilePictures", {
       //   friendUuid = resTwo.data.friendUuid
@@ -274,6 +262,7 @@ function Home() {
                         <input
                           type="text"
                           id="content"
+                          maxLength="500"
                           autoComplete="off"
                           value={val ? val : ""}
                           onChange={(e) => handleEdit(e, key)}

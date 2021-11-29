@@ -13,6 +13,7 @@ import Friends from './components/Friends';
 import SearchUser from './components/SearchUser';
 import Notifications from './components/Notifications';
 import Forums from './components/Forums';
+import Settings from './components/Settings';
 import Discussion from './components/Discussion';
 import Photos from './components/Photos';
 import './css/App.css';
@@ -55,6 +56,7 @@ function App() {
           <Route path="/notifications" component={Notifications} />
           <Route path="/forums/:did" component={Discussion} />
           <Route path="/forums" component={Forums} />
+          <Route path="/settings" component={Settings} />
           <Route path="/:uid/friends" component={Friends} />
           <Route path="/:uid/about" component={About} />
           <Route path="/:uid/photos" component={Photos} />

@@ -38,45 +38,45 @@ exports.getPostController = (req, res) => {
                     } else {
                         liked.push("black");
                     }
+                    db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: "Database error"
+                            })
+                        }
+                    
+                        if (img_data[0]) {
+                            let file_references = img_data.map((x) => {return x.File_reference})
+                            images.push(file_references)}
+                        else {images.push(null)}
+    
+                        if (images.length == posts.length) {
+                            let temp = JSON.stringify([...commentsMap]);
+                            res.json({
+                                success: true,
+                                msg: 'Successfully retrieved posts',
+                                posts: posts,
+                                timestamps: timestamps,
+                                postIDs: postIDs,
+                                images: images,
+                                likeCounts: likeCounts,
+                                liked: liked,
+                                comments: temp
+                            })
+                        }
+                        // console.log(images)
+                    });
                 } else {
                     commentsPost.push({cContent: `${data[key].commentContent}`, cCreatedBy: `${data[key].commentCreatedBy}`, cCreatedAt: `${data[key].commentCreatedAt}`});
                 }
-                db.query("SELECT File_reference FROM Images WHERE postID = ?", [data[key].postID], (err, img_data) => {
-                    if (err) {
-                        res.json({
-                            success: false,
-                            msg: "Database error"
-                        })
-                    }
-                
-                    if (img_data[0]) {
-                        let file_references = img_data.map((x) => {return x.File_reference})
-                        images.push(file_references)}
-                    else {images.push(null)}
-
-                    if (images.length == data.length) {
-                        let temp = JSON.stringify([...commentsMap]);
-                        res.json({
-                            success: true,
-                            msg: 'Successfully retrieved posts',
-                            posts: posts,
-                            timestamps: timestamps,
-                            postIDs: postIDs,
-                            images: images,
-                            likeCounts: likeCounts,
-                            liked: liked,
-                            comments: temp
-                        })
-                    }
-                    // console.log(images)
-                    
-                });
             }
             if (commentsPost.length !== 0) {
                 commentsMap.set(postIDs[postIDs.length - 1], commentsPost);
                 commentsPost = [];
             }
         } else {
+            let b = JSON.stringify([...commentsMap]);
             res.json({
                 success: false,
                 msg:'An error occurred while getting posts.',
@@ -86,7 +86,7 @@ exports.getPostController = (req, res) => {
                 images: [],
                 likeCounts: [],
                 liked: [],
-                comments: ''
+                comments: b
             })
         }
     });
