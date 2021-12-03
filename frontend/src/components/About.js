@@ -160,8 +160,8 @@ function About() {
     return ( //Bio is visible to all, other fields visible to profile owner/friends only, editing is only for the profile owner
     <div className="content">
         <h2>About</h2>
-        <ul className="greyBox">
-            <li>Profile Picture: {showElement ? null : <img src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />}
+        <div className="column">
+        {showElement ? null : <img className="bioPic" src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />}
                 {showElement && isProfileOwner ? <div className="imageInput">
                 {/* <label for="post_img">
                     <FcAddImage id="icon" size={40}/>
@@ -176,50 +176,52 @@ function About() {
                 />
                 </div> : null}
                 {/* {showElement && isProfileOwner ? <BioButton /> : null} */}
-            </li>
-            <li>Bio: {showElement ? null : bio}
-                {showElement && isProfileOwner ? <input
-                    type="text"
-                    id="bio"
-                    value={bio ? bio : ""}
-                    onChange={(e) => { setBio(e.target.value)}}
-                /> : null}
-                {/* {showElement && isProfileOwner ? <BioButton /> : null} */}
-            </li>
-            {isProfileOwner || isFriend ?
-            <li>Birthday: {showElement ? null : birthdate}
-                {showElement && isProfileOwner ? <input
-                    type="text"
-                    id="birthdate"
-                    value={birthdate ? birthdate : ""}
-                    onChange={(e) => {setBirthdate(e.target.value)}}
-                /> : null}
-                {/* {showElement && isProfileOwner ? <BirthdayButton /> : null} */}
-            </li> : null}
-            {isProfileOwner || isFriend ?
-            <li>Location: {showElement ? null : location}
-                {showElement && isProfileOwner ? <input
-                    type="text"
-                    id="location"
-                    value={location ? location : ""}
-                    onChange={(e) => {setLocation(e.target.value)}}
-                /> : null}
-                {/* {showElement ? <LocationButton /> : null} */}
-            </li> : null}
-            {isProfileOwner || isFriend ?
-            <li>Phone: {showElement ? null : phone}
-                {showElement&& isProfileOwner ? <input
-                    type="text"
-                    id="phone"
-                    value={phone ? phone : ""}
-                    onChange={(e) => {setPhone(e.target.value)}}
-                /> : null}
-                {/* {showElement && isProfileOwner ? <PhoneButton /> : null} */}
-            </li> : null}
-        <div>
-            {showElement && isProfileOwner ? <SaveButton /> : null}
+            <ul className="greyBox">
+                <li><p><b>Bio:</b> {showElement ? null : bio}
+                    {showElement && isProfileOwner ? <input
+                        type="text"
+                        id="bio"
+                        value={bio ? bio : ""}
+                        onChange={(e) => { setBio(e.target.value)}}
+                    /> : null}
+                    {/* {showElement && isProfileOwner ? <BioButton /> : null} */}
+                </p></li>
+                {isProfileOwner || isFriend ?
+                <li><p><b>Birthday:</b> {showElement ? null : birthdate}
+                    {showElement && isProfileOwner ? <input
+                        type="text"
+                        id="birthdate"
+                        value={birthdate ? birthdate : ""}
+                        onChange={(e) => {setBirthdate(e.target.value)}}
+                    /> : null}
+                    {/* {showElement && isProfileOwner ? <BirthdayButton /> : null} */}
+                </p></li> : null}
+                {isProfileOwner || isFriend ?
+                <li><p><b>Location:</b> {showElement ? null : location}
+                    {showElement && isProfileOwner ? <input
+                        type="text"
+                        id="location"
+                        value={location ? location : ""}
+                        onChange={(e) => {setLocation(e.target.value)}}
+                    /> : null}
+                    {/* {showElement ? <LocationButton /> : null} */}
+                </p></li> : null}
+                {isProfileOwner || isFriend ?
+                <li><p><b>Phone:</b> {showElement ? null : phone}
+                    {showElement&& isProfileOwner ? <input
+                        type="text"
+                        id="phone"
+                        value={phone ? phone : ""}
+                        onChange={(e) => {setPhone(e.target.value)}}
+                    /> : null}
+                    {/* {showElement && isProfileOwner ? <PhoneButton /> : null} */}
+                </p></li> : null}
+            <div>
+                {showElement && isProfileOwner ? <SaveButton /> : null}
+            </div>
+            </ul>
         </div>
-        </ul>
+
         <div>
             {isProfileOwner ? <button onClick={onClick}>{value}</button> : null}
         </div>

@@ -399,9 +399,9 @@ function Profile() {
   return (
     // Defines upper portion of profile including users name, profile picture, profile tabs, and posting interface
     <div className="content">
-      <div className="profileHeader">
+      <div className="rowCenteredLeft" >
         <img className="profilePic" src={profilePicture ? profilePicture : defaultProfilePic} alt="Could not display image" />
-        <div>
+        <div className="grow">
           <div className="greyBox"><h2>{firstName} {lastName}</h2></div>
           <div className="row">
             <button onClick={() => history.push(`/${uuid}/about`)}>About</button>

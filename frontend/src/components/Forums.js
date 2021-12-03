@@ -258,13 +258,12 @@ function Forums() {
     <>
       <div className="content">
         <h2>Forum</h2>
-        <p>Forum posts displayed here.</p>
-
         <button onClick={togglePopup}>Sort Discussions By Tag</button>
 
         {isOpen && <Popup
-          content={<>
-          <div className="tags">
+          content={
+          <>
+          <div className="tags greyBox">
             <p>Select tags to sort by:</p>
             {tags.map((val, key) => {
               return (
@@ -360,18 +359,20 @@ function Forums() {
                       {val}
                     </Link>
                   </div>
-                  <div>
+                  <div className="row">
                     {tagsOnPost[key] ? tagsOnPost[key].map((val2, key2) => {
                       return (
-                        <h3 className="inline-flex">{tagsOnPost[key][key2]}</h3>
+                        <h3 className="tag">{tagsOnPost[key][key2]}</h3>
                       )
                     }) : null}
                   </div>
 
                   {/* Show author of each post */}
-                  <Link className="link" to={`/${authors[key]}`}>
-                    {authorNames[key]}
-                  </Link>
+                  
+                    <p className="inline">Created by </p>
+                    <Link npclassName="link" to={`/${authors[key]}`}>
+                      {authorNames[key]}
+                    </Link>
 
                   {/* Show Dropdown if owner of post */}
                   {/* {authors[key] == user &&

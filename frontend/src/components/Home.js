@@ -227,10 +227,13 @@ function Home() {
                     <div className="flexContainer">
 
                       {/* Show author of each post */}
-                      <Link className="postName" to={`/${authors[key]}`}>
-                        {friendName[friendUuid.indexOf(authors[key])] ?
-                          friendName[friendUuid.indexOf(authors[key])] : name}
-                      </Link>
+                      <div className="rowCenteredLeft">
+                        <img className="profilePicPost" src={profilePictures[key] ? profilePictures[key] : defaultProfilePic} alt="Could not display image" />
+                        <Link className="postName" to={`/${authors[key]}`}>
+                          {friendName[friendUuid.indexOf(authors[key])] ?
+                            friendName[friendUuid.indexOf(authors[key])] : name}
+                        </Link>
+                      </div>
 
                       {/* Show Dropdown if owner of post */}
                       {(!friendName[friendUuid.indexOf(authors[key])]) &&
@@ -263,7 +266,7 @@ function Home() {
                         </div>
                       }
                     </div>
-                    <img className="profilePicPost" src={profilePictures[key] ? profilePictures[key] : defaultProfilePic} alt="Could not display image" />
+                    
 
                     <div className="postTs"> {ts[key]} </div>
 

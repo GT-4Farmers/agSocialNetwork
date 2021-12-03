@@ -46,11 +46,11 @@ function Photos() {
             <div>
                 <button onClick={() => {history.goBack()}}>Back</button>
             </div>
-            <div className="block">
+            <div className="flexContainer">
             {(!(photos.length === 0)) ? photos.map((val, key) => {
                 return(
-                    <div className="greyBox">
-                        <img src={val} alt="Cannot Display Image" />
+                    <div className="greyBox limitedPadding">
+                        <img style={{padding: 0}}src={val} alt="Cannot Display Image" />
                         {/* <Link className="link" key={key} to={`/${friendListRoutes[key]}`}>
                             {val}
                         </Link> */}
