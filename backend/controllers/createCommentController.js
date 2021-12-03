@@ -24,7 +24,7 @@ exports.createCommentController = (req, res) => {
         if (err) {
             res.json({
                 success: false,
-                msg: 'An error occurred while making comment.'
+                msg: 'Please write a comment!'
             })
             return;
         } else {
