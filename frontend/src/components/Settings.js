@@ -71,10 +71,10 @@ function Settings() {
 
     const RadioButton = ({ label, value, onChange }) => {
         return (
-          <label>
-            <input type="radio" checked={value} onChange={onChange} />
+          <h3>
             {label}
-          </label>
+            <input className="RadioButton" type="radio" checked={value} onChange={onChange} />
+          </h3>
         );
       };
   
@@ -127,7 +127,7 @@ function Settings() {
 
             <div>
                 <h1>Profile Visibility</h1>
-                <div>
+                <div className="greyBox">
                     <RadioButton
                         label="Private"
                         value={privacy === "1"}

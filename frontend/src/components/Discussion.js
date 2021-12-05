@@ -246,7 +246,10 @@ function Discussion() {
     <>
       <div className="content">
         <h2>{title}</h2>
-        <Link to={`/${mainAuthorRoute}`} className="link">{mainAuthor}</Link>
+        <p className="inline">Created by </p>
+          <Link npclassName="link" to={`/${mainAuthorRoute}`}>
+            {mainAuthor}
+          </Link>
         <div className="postTs">{mainTime}</div>
 
         <div className="greyBox">
