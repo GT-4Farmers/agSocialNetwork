@@ -84,7 +84,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                 commentsPost = [];
             }
         } else {
-            let b = JSON.stringify([...commentsMap]);
+            // let b = JSON.stringify([...commentsMap]);
             res.json({
                 success: false,
                 msg:'An error occurred while getting posts.',
@@ -95,7 +95,7 @@ exports.getDashboardTextPostsController = (req, res) => {
                 authors: [],
                 likeCounts: [],
                 liked: [],
-                comments: b,
+                comments: "",
                 profilePictures: []
             })
         }

@@ -76,7 +76,7 @@ exports.getPostController = (req, res) => {
                 commentsPost = [];
             }
         } else {
-            let b = JSON.stringify([...commentsMap]);
+            // let b = JSON.stringify([...commentsMap]);
             res.json({
                 success: false,
                 msg:'An error occurred while getting posts.',
@@ -86,7 +86,7 @@ exports.getPostController = (req, res) => {
                 images: [],
                 likeCounts: [],
                 liked: [],
-                comments: b
+                comments: ""
             })
         }
     });
