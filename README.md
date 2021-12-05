@@ -8,27 +8,27 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## New Software Features
 
-Register and create a new user Profile on Haystack
-Search for other users, view their profiles, and send friend requests
-Create posts on their profiles and attach media to those posts
-View a custom Home screen that shows posts from all of the user’s friends
-Browse and participate in forum discussions by means of creating their own discussions as well as replying to discussions other users have created
-Adjust simple privacy settings such as updating login credentials and making the user account private and consequently unsearchable by users that are not already friends with the user.
+* Register and create a new user Profile on Haystack
+* Search for other users, view their profiles, and send friend requests
+* Create posts on their profiles and attach media to those posts
+* View a custom Home screen that shows posts from all of the user’s friends
+* Browse and participate in forum discussions by means of creating their own discussions as well as replying to discussions other users have created
+* Adjust simple privacy settings such as updating login credentials and making the user account private and consequently unsearchable by users that are not already friends with the user.
 
 ## Bug Fixes
 
-User with null data can create a user profile
-Friends list is not alphabetized
-Picture upload size is not limited
-Profile doesn’t refresh after creating a new post with image attached
-Posting/Commenting Input does not acknowledge the character limit set in the SQL table
-If a user likes a different user’s post, the like indicator is not green when viewing the post on the other user’s profile
-While typing a comment, all comment input fields on the page are updated
+* User with null data can create a user profile
+* Friends list is not alphabetized
+* Picture upload size is not limited
+* Profile doesn’t refresh after creating a new post with image attached
+* Posting/Commenting Input does not acknowledge the character limit set in the SQL table
+* If a user likes a different user’s post, the like indicator is not green when viewing the post on the other user’s profile
+* While typing a comment, all comment input fields on the page are updated
 
 ## Known Bugs and Defects
 
-Deleting a post with an image deletes the post data from Haystack but fails to delete the image from the Amazon S3 image bucket
-Login via Google/Facebook has yet to be implemented
+* Deleting a post with an image deletes the post data from Haystack but fails to delete the image from the Amazon S3 image bucket
+* Login via Google/Facebook has yet to be implemented
 
 # Install and Run Guide
 
