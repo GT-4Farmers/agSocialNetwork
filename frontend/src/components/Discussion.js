@@ -28,7 +28,7 @@ function Discussion() {
   const [openDD, setOpenDD] = useState([]);
   const [showEdit, setShowEdit] = useState([]);
   const [postContent, setPostContent] = useState('');
-  const [commentContent, setCommentContent] = useState('');
+  const [commentContent, setCommentContent] = useState([]);
   const [commentNames, setCommentNames] = useState(new Map());
   const [comments, setComments] = useState(new Map());
   const [title, setTitle] = useState('');
@@ -119,16 +119,16 @@ function Discussion() {
     setNetwork(network + 1);
   }
 
-  const handleCommentContent = (postIDToComment) => {
+  const handleCommentContent = (postIDToComment, key) => {
     // will users be allowed to post image without text?
-    if (commentContent === "") {
+    if (commentContent[key] === "") {
       alert("Please write a comment!");
     } else {
       async function fetchData() {
         let url = "http://localhost:3001/home/createComment"
         const res = await Axios.post(url, {
           postID: postIDToComment,
-          content: commentContent,
+          content: commentContent[key],
           isDiscussion: 1
         }).then((response) => {
           return response;
@@ -139,13 +139,19 @@ function Discussion() {
       }
       fetchData();
     }
-    setCommentContent("");
+    setCommentContent([]);
 
     // prevents keys getting mixed if posting while editing
     setShowEdit([]);
     setOpenDD([]);
 
     setNetwork(network + 1);
+  }
+
+  const handleComment = (content, key) => {
+    let newComment = [...commentContent];
+    newComment[key] = content;
+    setCommentContent(newComment);
   }
 
   const handleDeletePost = (deletedPost) => {
@@ -351,7 +357,7 @@ function Discussion() {
                           let route = key.cCreatedBy
                           // key.cCreatedBy = commentAuthors[i][j];
                           return (
-                            <div>
+                            <div className="postContent">
                               <Link className="link" to={`/${route}`}>
                                 {commentNames.get(route)}
                               </Link>
@@ -427,10 +433,10 @@ function Discussion() {
                         maxLength="500"
                         id="comment"
                         placeholder="Write a comment."
-                        value={commentContent ? commentContent : ""}
-                        onChange={(e) => { setCommentContent(e.target.value) }}
+                        value={commentContent[key] ? commentContent[key] : ""}
+                        onChange={(e) => handleComment(e.target.value, key)}
                       />
-                      <button onClick={() => handleCommentContent(postIDs[key])}>Comment</button>
+                      <button onClick={() => handleCommentContent(postIDs[key], key)}>Comment</button>
                     </div>
 
                   </div>

@@ -41,7 +41,7 @@ function Profile() {
   const [ts, setTs] = useState([]);
   const [postIDs, setPostIDs] = useState([]);
   const [images, setImages] = useState([]);
-  const [commentContent, setCommentContent] = useState('');
+  const [commentContent, setCommentContent] = useState([]);
   const [comments, setComments] = useState(new Map());
 
   const [name, setName] = useState("");
@@ -120,19 +120,7 @@ function Profile() {
 
       // Adjusts images array to account for multiple returns from sql
       tempPhotos = resTwo.data.images;
-      let dif = 0;
-      for (let p = 0; p < tempPhotos.length; p++) {
-        if (p > 0) {
-          if (JSON.stringify(tempPhotos[p]) === JSON.stringify((newTempPhotos[p-1-dif]))) {
-            dif++;
-          } else {
-            newTempPhotos[p-dif] = tempPhotos[p];
-          }
-        } else {
-          newTempPhotos[p] = tempPhotos[p];
-        }
-      }
-      setImages(newTempPhotos);
+      setImages(tempPhotos);
     }
 
     // Event listener to close dropdown menu when clicking outside
@@ -275,15 +263,15 @@ function Profile() {
   }
 
   // Handles creating a comment for a post
-  const handleCommentContent = (postIDToComment) => {
-    if (commentContent === "") {
+  const handleCommentContent = (postIDToComment, key) => {
+    if (commentContent[key] === "") {
       alert("Please write a comment!");
     } else {
       async function fetchData() {
         let url = "http://localhost:3001/home/createComment"
         const res = await Axios.post(url, {
           postID: postIDToComment,
-          content: commentContent,
+          content: commentContent[key],
           isDiscussion: 0
         }).then((response) => {
           return response;
@@ -294,13 +282,19 @@ function Profile() {
       }
       fetchData();
     }
-    setCommentContent("");
+    setCommentContent([]);
 
     // prevents keys getting mixed if posting while editing
     setShowEdit([]);
     setOpenDD([]);
 
     setNetwork(network + 1);
+  }
+
+  const handleComment = (content, key) => {
+    let newComment = [...commentContent];
+    newComment[key] = content;
+    setCommentContent(newComment);
   }
 
   // Handles deleting a post
@@ -496,6 +490,7 @@ function Profile() {
                     <input
                       type="text"
                       id="content"
+                      maxLength="500"
                       autoComplete="off"
                       value={val ? val : ""}
                       onChange={(e) => handleEdit(e, key)}
@@ -566,10 +561,10 @@ function Profile() {
                     maxLength="500"
                     id="comment"
                     placeholder="Write a comment."
-                    value={commentContent ? commentContent : ""}
-                    onChange={(e) => { setCommentContent(e.target.value) }}
+                    value={commentContent[key] ? commentContent[key] : ""}
+                    onChange={(e) => handleComment(e.target.value, key)}
                   />
-                  <button onClick={() => handleCommentContent(postIDs[key])}>Comment</button>
+                  <button onClick={() => handleCommentContent(postIDs[key], key)}>Comment</button>
                 </div>
               </div>
             )
