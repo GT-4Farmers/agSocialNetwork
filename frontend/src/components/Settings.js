@@ -71,12 +71,16 @@ function Settings() {
 
     const RadioButton = ({ label, value, onChange }) => {
         return (
-          <h3>
-            {label}
-            <input className="RadioButton" type="radio" checked={value} onChange={onChange} />
-          </h3>
+            <div className="RadioButtonContainer">
+                <div>
+                    <input type="radio" checked={value} onChange={onChange} />
+                </div>
+                <div className="RadioButtonLabel"> 
+                    {label}
+                </div>
+            </div>
         );
-      };
+    };
   
     if (!isLoggedIn) {
         return (
@@ -90,10 +94,10 @@ function Settings() {
                 <h2>Settings</h2>
             </div>
             <div>
-                <h1>Update email or password</h1>
+                <h1 style={{paddingTop: "1em", paddingBottom: "1em"}}>Update email or password</h1>
             </div>
-            <div>
-                <button onClick={() => {setEditEmail(!editEmail)}}>Update Email</button>
+            <div style={{paddingBottom: "1em"}}>
+                <button onClick={() => {setEditEmail(!editEmail)}} >Update Email</button>
             </div>
             {editEmail ? 
                 <div className="greyBox">
@@ -108,7 +112,7 @@ function Settings() {
                     <button onClick={() => {handleUpdateEmail(newEmail)}}>Save Changes</button>
                 </div> : 
             null}
-            <div>
+            <div style={{paddingBottom: "1em"}}>
                 <button onClick={() => {setEditPassword(!editPassword)}}>Update Password</button>
             </div>
             {editPassword ? 
@@ -126,8 +130,8 @@ function Settings() {
             null}
 
             <div>
-                <h1>Profile Visibility</h1>
-                <div className="greyBox">
+                <h1 style={{paddingTop: "2em", paddingBottom: "1em"}}>Profile Visibility</h1>
+                <div style={{paddingBottom: "1em"}}>
                     <RadioButton
                         label="Private"
                         value={privacy === "1"}

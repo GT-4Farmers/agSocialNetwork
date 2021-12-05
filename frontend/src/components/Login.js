@@ -39,7 +39,7 @@ function Login() {
         <div>
             <header>
                 <img alt='Haystack Logo' src={logo} />
-                <h1>HAYSTACK</h1>
+                <h1 style={{marginLeft: '1%'}}>HAYSTACK</h1>
             </header>
             <h2 className="loginText">Login</h2>
             <div className="column">

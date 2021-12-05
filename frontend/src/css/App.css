@@ -425,8 +425,31 @@ button:hover {
   transition: all 0.3s ease-in;
 } */
 
-.RadioButton {
-  margin-left: 0em;
-  align-items: left;
-  align-content: left;
-} 
+.RadioButtonContainer {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.RadioButtonContainer input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0em 0em 0em white
+}
+
+.RadioButtonLabel {
+  padding-top: 10px
+}

@@ -212,7 +212,7 @@ function Home() {
         <h2>Home</h2>
         <div className="posts">
           {(!(posts === undefined)) ?
-            ((!(friendName === undefined))) ?
+            ((!(friendName.length === 0))) ?
               posts.map((val, key) => {
 
                 return (
