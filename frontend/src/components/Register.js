@@ -50,7 +50,7 @@ function Register() {
         <div className="App">
             <header>
                 <img alt='Haystack Logo' src={logo}/>
-                <h1>HAYSTACK</h1>
+                <h1 style={{marginLeft: '1%'}}>HAYSTACK</h1>
             </header>
             <h2 className="loginText">Sign Up</h2>
             <div className = "column">
