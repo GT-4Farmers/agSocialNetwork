@@ -4,7 +4,6 @@ import '../css/App.css';
 import AuthContext from '../states/AuthContext';
 import { useHistory } from 'react-router';
 import AuthService from '../auth/AuthService';
-import { Link } from "react-router-dom";
 
 function Settings() {
 
@@ -17,19 +16,19 @@ function Settings() {
     const [newEmail, setNewEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
-//   useEffect(() => {
-//     async function fetchData() {
-//       const res = await Axios.post("http://localhost:3001/searchUser", {
-//         userToSearch: userToSearch
-//       })
-//       if (res.data.success) {
-//         setFoundUser(res.data.users[0]);
-//         setFoundUserIds(res.data.uniqueIds[0])
-//       }
-//     }
-//     fetchData();
+    const [privacy, setPrivacy] = useState("0");
 
-//   }, [userToSearch]);
+    useEffect(() => {
+        async function fetchData() {
+        const res = await Axios.get("http://localhost:3001/settings/getPrivacy")
+            if (res.data.success) {
+                setPrivacy(res.data.isPrivate);
+            }
+            console.log(res.data.isPrivate)
+        }
+        fetchData();
+
+    }, [privacy]);
 
     const handleUpdateEmail = (newE) => {
         if (newE.length < 1) {
@@ -54,6 +53,30 @@ function Settings() {
         setEditPassword(!editPassword);
         alert("Password Updated Successfully")
     }
+
+    const updatePrivacy = () => {
+        const res = Axios.post("http://localhost:3001/settings/updatePrivacy", {
+            isPrivate: privacy
+        })
+        alert("Privacy Settings Updated Successfully")
+    }
+
+    const handlePrivateChange = () => {
+        setPrivacy("1");
+      };
+    
+      const handlePublicChange = () => {
+        setPrivacy("0");
+      };
+
+    const RadioButton = ({ label, value, onChange }) => {
+        return (
+          <label>
+            <input type="radio" checked={value} onChange={onChange} />
+            {label}
+          </label>
+        );
+      };
   
     if (!isLoggedIn) {
         return (
@@ -104,10 +127,19 @@ function Settings() {
 
             <div>
                 <h1>Profile Visibility</h1>
-            </div>
-
-            <div>
-                <h1>Language and Region</h1>
+                <div>
+                    <RadioButton
+                        label="Private"
+                        value={privacy === "1"}
+                        onChange={handlePrivateChange}
+                    />
+                    <RadioButton
+                        label="Public"
+                        value={privacy === "0"}
+                        onChange={handlePublicChange}
+                    />
+                </div>
+                <button onClick={() => {updatePrivacy()}}>Save Changes</button>
             </div>
         </div>
     )
